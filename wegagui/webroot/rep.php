@@ -11,18 +11,22 @@ if (empty($_GET['wsdt'])){$_GET['wsdt']=date("Y-m-d",strtotime($_GET['days']))."
 if (empty($_GET['wpdt'])){$_GET['wpdt']=date("Y-m-d")." 23:59:59";}
 if (empty($_GET['limit'])){$_GET['limit']="100000";}
 
+include "../config/".$ns.".conf.php";
 
-
+echo "<h1>".$namesys;
+echo "</h1>";
+echo $comment;
+echo "<br>";
 
 
 $wsdt=$_GET['wsdt'];
 $wpdt=$_GET['wpdt'];
 $limit=$_GET['limit'];
 
-echo '<a href=rep.php?ns='.$ns.'&days=-7%20days>Неделя</a><br>';
-echo '<a href=rep.php?ns='.$ns.'&days=-14%20days>2 недели</a><br>';
-echo '<a href=rep.php?ns='.$ns.'&days=-2%20days>2 дня</a><br>';
-echo '<a href=rep.php?ns='.$ns.'&days=-2%20hours>2 часа</a><br>';
+echo '<a href=rep.php?ns='.$ns.'&days=-1%20days>1 день</a>';
+echo '  <a href=rep.php?ns='.$ns.'&days=-2%20days>2 дня</a>';
+echo '  <a href=rep.php?ns='.$ns.'&days=-7%20days>Неделя</a>';
+echo '  <a href=rep.php?ns='.$ns.'&days=-14%20days>2 недели</a><br>';
 
 echo '
 <form action="" method="get">
@@ -35,7 +39,6 @@ echo '
 </form>';
 
 
-include "../config/".$ns.".conf.php";
 
 // Подключаемся к базе
 $link = mysqli_connect("$dbhost", "$login", "$password", "$my_db");
