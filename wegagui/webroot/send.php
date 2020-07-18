@@ -67,15 +67,21 @@ echo ("<br>Это: <b>".round($Soiln,2)." грамм</b> солей или по 
 
 // Отправка в телеграм
 
-//if  ( $argv[1] != "" ) 
 
-//{
+	if ( $lasttime > 3600 )
+  	   { tme( $namesys."\n нет свежих данных уже: ".$lasttime." сек. С ".$row[0]); }
 
-	if ( $lasttime > 3600 ) 	{ tme($namesys."\n нет свежих данных уже: ".$lasttime." сек. С ".$row[0]); }
-	if ( $AirTemp < 10 or $AirTemp > 28 ) 	{ tme($namesys."\nТемпература воздуха: ".$AirTemp."°C"); }
+	if ( $AirTemp < 10 or $AirTemp > 29 ) 	
+           { tme($namesys." (".$row[0].")"
+                 ."\nТемпература воздуха: ".$AirTemp."°C"
+                 ."\nТемпература в баке: ".$WaterTempEC."°C"
+                 ."\nОстаток в баке: ".round($Level,1)." Литров"
+                 ."\nEC= ".round($EC,3)." мСм/см"
+                   ); 
+            }
+
 	if ( $L2 > 10)	{ tme($namesys."\nДля получения ЕС=".$ECPlan." мСм/см нужно долить: ". round($L2,1)."л. до уровня ".($LevelFull-$La).", \nЭто: ".round($Soiln,2)." грамм солей"); }
 
-//}
 
 
 
