@@ -1,6 +1,6 @@
 #!/bin/bash
 git add *
-git update-index --assume-unchanged db.php telegram.php
+git update-index --assume-unchanged db.php
 git commit -a
 git pull
 git push
