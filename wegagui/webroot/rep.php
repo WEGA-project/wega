@@ -61,8 +61,8 @@ dt,												# 1
 @EcTempRaw:=".$EcTempRaw.",
 @LightRaw:=".$LightRaw.",
 @dist:=if(".$dist."<".$distz.",".$distz."-".$dist.",null),
-@A1:=if(".$A1."<1023,".$A1.",null),
-@A2:=if(".$A2.">10,".$A2.",null),
+@A1:=".$A1.",
+@A2:=".$A2.",
 @aTemp2:=".$pa."*pow(@EcTempRaw,2) + ".$pb."*@EcTempRaw + ".$pc.",
 @R2p:=(((-@A2*".$R1."-@A2*".$Rx1."+".$R1."*".$Dr."+".$Rx1."*".$Dr.")/@A2)),			#10
 @R2n:=(-(-(@A1)*".$R1."-(@A1)*".$Rx2."+".$Rx2."*".$Dr.")/(-(@A1)+".$Dr.")),
@@ -79,7 +79,6 @@ where dt  >  '".$wsdt."'
  and isnull(".$A1.") = false
  and isnull(".$A2.") = false
  and isnull(".$dist.") = false
- and isnull(thermistor_1_raw) = false
 order by dt limit $limit";
 
 
