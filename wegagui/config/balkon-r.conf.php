@@ -115,8 +115,9 @@ $f_lev="levmin(".$la."*pow(@dist,".$lb."))";
 
 $f_soil="(@lev+".$LevelAdd.")*@ECt*".$Slk;
 
-
-//@SoilAll:=if(relay1=1,(@lev+".$LevelAdd.")*@ECt*".$Slk.",null)
+// Формула расчета pH
+//$f_ph=".$aph."+".$bph."*".$phraw.";
+$f_ph="null";
 
 $csv="s.csv";
 $gnups="s.gnuplot";
