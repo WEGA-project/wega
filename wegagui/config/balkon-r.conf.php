@@ -115,9 +115,15 @@ $f_lev="levmin(".$la."*pow(@dist,".$lb."))";
 
 $f_soil="(@lev+".$LevelAdd.")*@ECt*".$Slk;
 
+// Функция калибровки ЕС
+$f_ec=$ea."*pow(@R2,".$eb.")";
+
 // Формула расчета pH
 //$f_ph=".$aph."+".$bph."*".$phraw.";
 $f_ph="null";
+
+// Функция калибровки аналогово сенсора для компенсации ЕС
+$f_atemp=$pa."*pow(@EcTempRaw,2) + ".$pb."*@EcTempRaw + ".$pc;
 
 $csv="s.csv";
 $gnups="s.gnuplot";

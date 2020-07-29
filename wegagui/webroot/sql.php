@@ -22,11 +22,11 @@ dt,												# 1
 @dist:=if(".$dist."<".$distz.",".$distz."-".$dist.",null),
 @A1:=".$A1.",
 @A2:=".$A2.",
-@aTemp2:=".$pa."*pow(@EcTempRaw,2) + ".$pb."*@EcTempRaw + ".$pc.",
+@aTemp2:=".$f_atemp.",
 @R2p:=(((-@A2*".$R1."-@A2*".$Rx1."+".$R1."*".$Dr."+".$Rx1."*".$Dr.")/@A2)),			#10
 @R2n:=(-(-(@A1)*".$R1."-(@A1)*".$Rx2."+".$Rx2."*".$Dr.")/(-(@A1)+".$Dr.")),
 @R2:=(@R2p+@R2n)/2,
-@EC:=if(@R2>0,  ".$ea."*pow(@R2,".$eb.") , 0),
+@EC:=".$f_ec.",
 @ECt:=@EC/(1+".$k."*(@aTemp2-25)),
 @lev:= ".$f_lev.",
 @Lux:=if(@LightRaw=0,null, round(".$apht."*pow(@LightRaw,".$bpht."),0)),
@@ -40,6 +40,7 @@ where dt  >  '".$wsdt."'
  and isnull(".$A1.") = false
  and isnull(".$A2.") = false
  and isnull(".$dist.") = false
+ and ".$RootTemp." != 85
 order by dt limit $limit";
 
 
