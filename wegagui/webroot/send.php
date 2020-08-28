@@ -11,6 +11,12 @@ if (empty($_GET['wsdt'])){$_GET['wsdt']=date("Y-m-d",strtotime($_GET['days']))."
 if (empty($_GET['wpdt'])){$_GET['wpdt']=date("Y-m-d")." 23:59:59";}
 if (empty($_GET['limit'])){$_GET['limit']="100000";}
 
+$timeout=3600;
+$AirTempMin=10;
+$AirTempMax=35;
+$LevelAddEvent=10;
+
+
 include "../config/".$ns.".conf.php";
 
 echo "<h1>".$namesys;
@@ -68,29 +74,40 @@ echo ("<br>Это: <b>".round($Soiln,2)." грамм</b> солей или по 
 // Отправка в телеграм
 
 
-	if ( $lasttime > 3600 )
+	if ( $lasttime > $timeout )
   	   { tme( $namesys."\n нет свежих данных уже: ".$lasttime." сек. С ".$row[0]); }
 
-	if ( $AirTemp < 10 or $AirTemp > 29 ) 	
-           { tme($namesys." (".$row[0].")"
+	if ( $AirTemp < $AirTempMin or $AirTemp > $AirTempMax ) 	
+           { tme($chat_id,$namesys." (".$row[0].")"
+                 ."\nТемпература воздуха за пределами нормы\n"
                  ."\nТемпература воздуха: ".$AirTemp."°C"
                  ."\nТемпература в баке: ".$WaterTempEC."°C"
                  ."\nОстаток в баке: ".round($Level,1)." Литров"
                  ."\nEC= ".round($EC,3)." мСм/см"
-                   ); 
+                  ); 
             }
 
-	if ( $L2 > 10)	{ tme($namesys."\nДля получения ЕС=".$ECPlan." мСм/см нужно долить: ". round($L2,1)."л. до уровня ".($LevelFull-$La).", \nЭто: ".round($Soiln,2)." грамм солей"); }
+	if ( $L2 > $LevelAddEvent)	
+          { tme($chat_id, 
+            $namesys
+            ."\nУровень раствора ниже нормы\n"
+            ."\nОстаток в баке: ".round($Level,1)." Литров"
+            ."\nEC= ".round($EC,3)." мСм/см"
+            ."\nДля получения ЕС=".$ECPlan." мСм/см нужно долить: "
+            . round($L2,1)."л. до уровня "
+            .($LevelFull-$La).", \nЭто: "
+            .round($Soiln,2)." грамм солей или по "
+            .round( $Soiln/2/$konc*1000,0)." мл концентратов ".$konc.":1 с каждого" ); }
 
 
 
 
 
-function tme($msg) 
+function tme($chd, $msg) 
 {
-
 include "../../telegram.php";
-system("torsocks curl -s -X POST https://api.telegram.org/".$namebot.":".$token."/sendMessage -d text='".$msg."' -d chat_id=".$chat_id);
+
+system("torsocks curl -s -X POST https://api.telegram.org/".$namebot.":".$token."/sendMessage -d text='".$msg."' -d chat_id=".$chd);
 
 }
 

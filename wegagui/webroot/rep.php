@@ -1,5 +1,5 @@
 <?php
-include "top.php";
+include "menu.php";
 
 
 $ns=$_GET['ns'];
@@ -13,10 +13,6 @@ if (empty($_GET['limit'])){$_GET['limit']="100000";}
 
 include "../config/".$ns.".conf.php";
 
-echo "<h1>".$namesys;
-echo "</h1>";
-echo $comment;
-echo "<br>";
 
 
 $wsdt=$_GET['wsdt'];
@@ -30,10 +26,10 @@ echo '  <a href=rep.php?ns='.$ns.'&days=-14%20days>2 недели</a><br>';
 
 echo '
 <form action="" method="get">
- <p><input type="text" name="ns" value="'.$_GET['ns'].'"/> </p>
+ <p><input type="hidden" name="ns" value="'.$_GET['ns'].'"/> </p>
  <p>Дата с: <input type="text" name="wsdt" value="'.$_GET['wsdt'].'"/> </p>
- <p>Дата по: <input type="text" name="wpdt" value="'.$_GET['wpdt'].'"/> можно указать любую часть</p>
- <p>Выводить не более: <input type="text" name="limit" value="'.$_GET['limit'].'"/> строк</p>
+ <p>Дата по: <input type="text" name="wpdt" value="'.$_GET['wpdt'].'"/> </p>
+ <p>Число измерений не более: <input type="text" name="limit" value="'.$_GET['limit'].'"/></p>
 
  <p><input type="submit" value="Найти"/></p>
 </form>';

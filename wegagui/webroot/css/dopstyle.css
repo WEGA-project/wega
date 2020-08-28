@@ -1,0 +1,83 @@
+.top-menu li{
+	list-style:none;/*Убираем маркер*/	
+	display:inline-block;/*Выстраиваем пункты в ряд*/
+	background:white;/*Цвет фона для пункта*/
+	position:relative;
+}
+.top-menu li:hover{
+	background:gray;/*Цвет фона при наведение на пункт*/
+}
+.top-menu li a{
+	color:#222;/*Цвет шрифта в пункте*/
+	padding:5px 7px;/*Отступы для пункта*/	
+	text-decoration:none;/*Убираем подчеркивание*/	
+	display:block;
+}
+.top-menu li ul{
+	display:none;/*Прячем выпадающее меню*/
+	position:absolute;
+	padding-left:0;
+	width:120px;/*Ширина выпадающего меню*/
+	padding-top:3px;/*Отступ сверху у выпадающего меню*/
+}
+.top-menu li:hover ul{
+	display:block;/*Показываем выпадающее меню при наведение*/
+	left:0px;
+}
+
+form {
+  display: grid;
+  background: #f9f9f9;
+  border: 1px solid #c1c1c1;
+  max-width: 600px;
+padding: 10px;
+}
+
+input {
+width: 200px; /* Ширина поля в пикселах */
+float:right; 
+   border: 1px solid black; //цвет рамки
+   background: #ffffff !important; // желательно прописывать, так как в Chrome при сохранных данных оно может быть желтым
+   outline: none; // удаляет обводку в браузерах хром(желтая) и сафари(синяя)
+   height: 24px; // высота на свое усмотрение
+   width: 120px; // ширина на свое усмотрение
+   color: #cccccc; //цвет шрифта в обычном состоянии
+
+}
+input[type="text"]:focus {
+  color: #000000;
+  border: 1px solid blue
+}
+input[name="comment"] {
+width:595px;
+}
+
+
+table {
+  font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+  border-collapse: collapse;
+  color: #686461;
+}
+caption {
+  padding: 10px;
+  color: white;
+  background: #8FD4C1;
+  font-size: 18px;
+  text-align: left;
+  font-weight: bold;
+}
+th {
+  border-bottom: 3px solid #B9B29F;
+  padding: 10px;
+  text-align: left;
+}
+td {
+  padding: 10px;
+}
+tr:nth-child(odd) {
+  background: white;
+}
+tr:nth-child(even) {
+  background: #f9f9f9;
+}
+

@@ -40,7 +40,8 @@ where dt  >  '".$wsdt."'
  and isnull(".$A1.") = false
  and isnull(".$A2.") = false
  and isnull(".$dist.") = false
- and ".$RootTemp." != 85
+ and ".$RootTemp." != 85  and ".$RootTemp." != -28.375 and ".$RootTemp." != -0.063
+
 order by dt limit $limit";
 
 

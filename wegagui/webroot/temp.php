@@ -1,15 +1,7 @@
 <?php
-include "top.php";
+include "menu.php";
 
 
-$ns=$_GET['ns'];
-
-
-
-if (empty($_GET['days'])){$_GET['days']="-0 days";}
-if (empty($_GET['wsdt'])){$_GET['wsdt']=date("Y-m-d",strtotime($_GET['days']))." 00:00:00";}
-if (empty($_GET['wpdt'])){$_GET['wpdt']=date("Y-m-d")." 23:59:59";}
-if (empty($_GET['limit'])){$_GET['limit']="100000";}
 
 include "../config/".$ns.".conf.php";
 
@@ -18,10 +10,6 @@ echo "</h1>";
 echo $comment;
 echo "<br>";
 
-
-$wsdt=$_GET['wsdt'];
-$wpdt=$_GET['wpdt'];
-$limit=$_GET['limit'];
 
 echo '<a href=rep.php?ns='.$ns.'&days=-1%20days>1 день</a>';
 echo '  <a href=rep.php?ns='.$ns.'&days=-2%20days>2 дня</a>';

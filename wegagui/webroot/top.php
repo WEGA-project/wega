@@ -1,5 +1,6 @@
 <?php
 
+
 foreach (glob("../config/*.conf.php") as $filename) {
     //echo "$filename размер " . filesize($filename) . "<br>";
     include $filename;
