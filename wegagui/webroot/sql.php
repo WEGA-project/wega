@@ -42,7 +42,7 @@ where dt  >  '".$wsdt."'
  and isnull(".$dist.") = false
  and ".$RootTemp." != 85  and ".$RootTemp." != -28.375 and ".$RootTemp." != -0.063
 
-order by dt limit $limit";
+order by dt";
 
 
 //@lev:=intpl(".$dist."),

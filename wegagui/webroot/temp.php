@@ -105,7 +105,7 @@ set xdata time
 //set format x "%d.%m %H:%M"
 set timefmt "%Y-%m-%d %H:%M:%S"
 set grid
-set multiplot layout 4, 2
+set multiplot layout 4,2
 set lmargin 10
 set rmargin 10
 set y2label
@@ -125,17 +125,7 @@ plot    \
 plot    \
 	"'.$csv.'" using 1:5 w l title "'.$EcTempRaw.'", \
 
-plot    \
-	"'.$csv.'" using 1:6 w l title "'.$LightRaw.'", \
 
-plot    \
-	"'.$csv.'" using 1:7 w l title "'.$dist.'", \
-
-plot    \
-	"'.$csv.'" using 1:8 w l title "'.$A1.'", \
-
-plot    \
-	"'.$csv.'" using 1:9 w l title "'.$A2.'", \
 
 
 ';

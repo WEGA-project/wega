@@ -15,10 +15,7 @@ $wsdt=$_GET['wsdt'];
 $wpdt=$_GET['wpdt'];
 $limit=$_GET['limit'];
 
-echo "<h1>".$namesys;
-echo "</h1>";
-echo $comment;
-echo "<br>";
+//      <link href="css/dopstyle.css" rel="stylesheet" media="screen">          
 
 
 echo '
@@ -27,36 +24,27 @@ echo '
   <head>
     <title>WEGA '.$namesys.'</title>    
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-	<link href="css/dopstyle.css" rel="stylesheet" media="screen">		
+	<link href="css/menu.css" rel="stylesheet" media="screen">		
   </head>
   <body>
-	<div class="top-menu">
+
+<nav role="navigation">
 		<ul>
-			<li>
-				Выбор системы</a>
-                                <ul>';
+			<li><a href="#">Выбор системы</a><ul>';
+				foreach (glob("../config/*.conf.php") as $filename) {
+    				include $filename;
+    				$fl=explode("/", $filename);
+    				$nm=explode(".", $fl[2]);
+    				$cname=$nm[0];
+    				echo "<li><a href=rep.php?ns=".$cname.">". $namesys ."</a></li>";
 
-//echo "<li><a href="finderr.php">Недоступныхeee</a></li>";
-foreach (glob("../config/*.conf.php") as $filename) {
-    //echo "$filename размер " . filesize($filename) . "<br>";
-    include $filename;
-    $fl=explode("/", $filename);
-    $nm=explode(".", $fl[2]);
-    $cname=$nm[0];
-    //echo "<br>".$cname."<br>";
-    echo "<li><a href=rep.php?ns=".$cname.">". $namesys ."</a></li>";
-
-}
+			}
 
 echo '
-
-
-
-                                </ul>
+                </ul>
                         </li>
 
-			<li>Анализ</a>
-				<ul>
+			<li><a href="#">Анализ</a><ul>
 					<li><a href="temp.php?ns='.$ns.'">Температура</a></li>
 					<li><a href="subnet-timeout.php">Влажность</a></li>
 					<li><a href="subnet-timeout.php">Влажность</a></li>
@@ -65,19 +53,16 @@ echo '
 					<li><a href="subnet-timeout.php">pH</a></li>
 				</ul>
 
-			<li>
-				Параметры</a>
-				<ul>
+			<li><a href="#">Параметры</a><ul>
 					<li><a href="subnet.edit.php">Калибровка сенсоров</a></li>
 					<li><a href="subnet-timeout.php">Уведомления</a></li>
 				</ul>
 			</li>
 		</ul>
-	</div>
-    
-  </body>
-</html>
+</nav> 
 
+
+<br><br>
 ';
 
 

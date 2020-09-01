@@ -13,67 +13,21 @@ if (empty($_GET['limit'])){$_GET['limit']="100000";}
 
 include "../config/".$ns.".conf.php";
 
-
-
-$wsdt=$_GET['wsdt'];
-$wpdt=$_GET['wpdt'];
-$limit=$_GET['limit'];
-
-echo '<a href=rep.php?ns='.$ns.'&days=-1%20days>1 день</a>';
-echo '  <a href=rep.php?ns='.$ns.'&days=-2%20days>2 дня</a>';
-echo '  <a href=rep.php?ns='.$ns.'&days=-7%20days>Неделя</a>';
-echo '  <a href=rep.php?ns='.$ns.'&days=-14%20days>2 недели</a><br>';
-
-echo '
-<form action="" method="get">
- <p><input type="hidden" name="ns" value="'.$_GET['ns'].'"/> </p>
- <p>Дата с: <input type="text" name="wsdt" value="'.$_GET['wsdt'].'"/> </p>
- <p>Дата по: <input type="text" name="wpdt" value="'.$_GET['wpdt'].'"/> </p>
- <p>Число измерений не более: <input type="text" name="limit" value="'.$_GET['limit'].'"/></p>
-
- <p><input type="submit" value="Найти"/></p>
-</form>';
-
-
-
-// Подключаемся к базе
-
-include "sql.php";
-
-
-
-
-$AirTemp=$row[1];
-$Humidity=$row[2];
-$WaterTemp=$row[3];
-$WaterTempEC=round($row[9],3);
-$WaterTempECraw=$row[4];
-$EC=$row[14];
-$Level=$row[15];
-$LightRaw=round($row[5],0);
-$Lux=round($row[16],0);
-$L1=$Level+$LevelAdd;
-$L2=$LevelFull-$Level-$La;
-$ECn=(-($EC*$L1 - $ECPlan*$L1 - $ECPlan*$L2 )/$L2);
-$Soiln=$ECn*$Slk*($L2);
-$levsm=$row[6];
-$lasttime=date("U") - date("U",strtotime($row[0]) );
-
-
-echo ("Дата: ".$row[0]." обновлено: ".$lasttime." сек. назад");
+echo "<h1>".$namesys;
+echo "</h1>";
+echo $comment;
 echo "<br>";
-echo ("<br>Температура воздуха: ".$AirTemp."°C");
-echo ("<br>Температура раствора (корни): ".$WaterTemp."°C");
-echo ("<br>Температура раствора (бак): ".$WaterTempEC."°C (raw=".$WaterTempECraw.")");
-echo ("<br>Влажность воздуха: ".$Humidity."%");
-echo ("<br>Освещенность: ".$Lux." lux (raw: ".$LightRaw.")<br>");
-echo ("<br>Текущий ЕС: ".round($EC,3)." мСм/см");
-echo ("<br>Остаток в баке: <b>".round($Level,1)." л.</b> (".round($levsm,2)." см) ".round(100-($LevelFull-$Level)/$LevelFull*100,0)."%");
-echo ("<br>Дополнительно в системе: ".round($LevelAdd,1)." л. Общий остаток раствора: ".round($L1,1)." л");
-echo ("<br>Предельный объем бака: ".round($LevelFull,1)." л. Защита от аварийного перелива: ".round($La,1));
-echo ("<br>Для получения ЕС=".$ECPlan." мСм/см нужно долить: <b>". round($L2,1)."л.</b> до уровня ".($LevelFull-$La).", c ЕС=".round( $ECn   ,2)." мСм/см" );
-echo ("<br>Это: <b>".round($Soiln,2)." грамм</b> солей или по ".round( $Soiln/2/$konc*1000,0)." мл концентратов ".$konc.":1 с каждого");
+echo "<br>";
 
+
+
+
+
+include "helper.php";
+echo "<br>";
+echo "<br>";
+
+include "datetime.php";
 
 
 mysqli_data_seek($rs,0);
@@ -106,14 +60,16 @@ $handler = fopen($filename, "w");
 
 
 $text='
-set terminal png size 1900,6080
+set terminal png size 1200,2400
 set output "'.$gimg.'"
 set datafile separator ";"
 set xdata time
-set format x "%d.%m %H:%M"
+//set format x "%d.%m %H:%M"
 set timefmt "%Y-%m-%d %H:%M:%S"
 set grid
-set multiplot layout 10, 1
+//set multiplot layout 7, 1
+set multiplot layout 7,1
+
 set lmargin 10
 set rmargin 10
 set y2label
@@ -139,8 +95,8 @@ set ylabel "%"
 set yrange[0:100]
 
 plot    \
-	"/var/log/sensors/owm.log" using 1:($5) w l  title "Облачность", \
-	"'.$csv.'" using 1:3 w l title "Влажность", \
+	"/var/log/sensors/owm.log" using 1:($5) w boxes fs solid 0.01 title "Облачность" lc rgb "grey", \
+	"'.$csv.'" using 1:3 w l title "Влажность" lc rgb "blue", \
 
 unset yrange
 unset ylabel
@@ -150,13 +106,14 @@ set title "Освещенность"
 set ylabel "Люксы"
 
 plot    \
-	"'.$csv.'" using 1:17 w l title "Lux", \
+	"'.$csv.'" using 1:6 w l title "Lux", \
 
 unset ylabel
 unset title
 
 
 
+set title "Электропроводность"
 set ylabel "mS/cm"
 
 plot    \
@@ -164,36 +121,38 @@ plot    \
 	"'.$csv.'" using 1:15 w l title "ECt", \
 
 unset ylabel
+unset title
+
+
+set title "Уровень в питательном баке"
+set ylabel "литры"
+
 
 plot    \
 	"'.$csv.'" using 1:16 w l title "Объем в баке", \
 
+unset ylabel
+unset title
+
+
+
+set title "Колличество растворенных солей"
+set ylabel "граммы"
+
 plot    \
 	"'.$csv.'" using 1:18 w l title "Остаток солей", \
-	"'.$csv.'" using 1:19 w l title "k", \
+
+unset ylabel
+unset title
 
 
+set title "Кислотно-щелочной баланс"
 
-
-plot    \
-	"'.$csv.'" using 1:5 w l title "aTemp", \
-
-plot    \
-	"'.$csv.'" using 1:11 w l title "R2p", \
-	"'.$csv.'" using 1:12 w l title "R2n", \
-	"'.$csv.'" using 1:13 w l title "R2 среднее", \
-
-
-
-
-plot    \
-	"'.$csv.'" using 1:8 w l title "An", \
-
-plot    \
-	"'.$csv.'" using 1:9 w l title "Ap", \
 
 plot    \
 	"'.$csv.'" using 1:19 w l title "pH", \
+
+unset ylabel
 
 
 
