@@ -20,8 +20,8 @@ dt,												# 1
 @EcTempRaw:=".$EcTempRaw.",
 @LightRaw:=".$LightRaw.",
 @dist:=if(".$dist."<".$distz.",".$distz."-".$dist.",null),
-@A1:=".$A1.",
-@A2:=".$A2.",
+@A1:=if ( ".$A1." < ".$Dr." and ".$A1." > 0 , ".$A1.", null),
+@A2:=if ( ".$A2." < ".$Dr." and ".$A2." > 0 , ".$A2.", null),
 @aTemp2:=".$f_atemp.",
 @R2p:=(((-@A2*".$R1."-@A2*".$Rx1."+".$R1."*".$Dr."+".$Rx1."*".$Dr.")/@A2)),			#10
 @R2n:=(-(-(@A1)*".$R1."-(@A1)*".$Rx2."+".$Rx2."*".$Dr.")/(-(@A1)+".$Dr.")),
@@ -29,13 +29,13 @@ dt,												# 1
 @EC:=".$f_ec.",
 @ECt:=@EC/(1+".$k."*(@aTemp2-25)),
 @lev:= ".$f_lev.",
-@Lux:=if(@LightRaw=0,null, round(".$apht."*pow(@LightRaw,".$bpht."),0)),
+@Lux:=if(@LightRaw=0,null, round(".$apht."*pow(@LightRaw,".$bpht."),0))/1000,
 @SoilAll:=".$f_soil.",
 @pH:=".$f_ph."
 
 
 from $tb 
-where dt  >  '".$wsdt."'
+where dt  >  '".$wsdt."'- INTERVAL 1 DAY
  and  dt  <  '".$wpdt."'
  and isnull(".$A1.") = false
  and isnull(".$A2.") = false

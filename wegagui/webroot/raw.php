@@ -32,8 +32,10 @@ dt,												# 1
 @dAirTemp:=".$dAirTemp.",
 @RootTemp:=".$RootTemp.",
 @EcTempRaw:=".$EcTempRaw.",
-@aTemp2:=".$f_atemp."
-
+@LightRaw:=".$LightRaw.",
+@dist:=".$dist.",
+@A1:=".$A1.",
+@A2:=".$A2."
 
 
 from $tb 
@@ -81,14 +83,14 @@ $handler = fopen($filename, "w");
 
 
 $text='
-set terminal png size 900,1000
+set terminal png size 900,2000
 set output "'.$gimg.'"
 set datafile separator ";"
 set xdata time
-//set format x "%d.%m %H:%M"
+set format x "%d.%m\n%H:%M"
 set timefmt "%Y-%m-%d %H:%M:%S"
 set grid
-set multiplot layout 2,1
+set multiplot layout 8,1
 set lmargin 10
 set rmargin 10
 set y2label
@@ -97,12 +99,23 @@ set xrange ["'.$wsdt.'" : "'.$wpdt.'"]
 
 
 plot    \
-	"'.$csv.'" using 1:2 w l title "'.$dAirTemp.'", \
-	"'.$csv.'" using 1:3 w l title "'.$RootTemp.'", \
-	"'.$csv.'" using 1:5 w l title "EC Temp", \
+	"'.$csv.'" using 1:2 w l title "dAirTemp", \
+	"'.$csv.'" using 1:3 w l title "RootTemp", \
 
 plot    \
-	"'.$csv.'" using 1:4 w l title "'.$EcTempRaw.'", \
+	"'.$csv.'" using 1:4 w l title "EcTempRaw", \
+
+plot    \
+	"'.$csv.'" using 1:5 w l title "LightRaw", \
+
+plot    \
+	"'.$csv.'" using 1:6 w l title "dist", \
+
+plot    \
+	"'.$csv.'" using 1:7 w l title "A1", \
+
+plot    \
+	"'.$csv.'" using 1:8 w l title "A2", \
 
 
 

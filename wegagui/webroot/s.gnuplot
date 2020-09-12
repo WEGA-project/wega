@@ -3,7 +3,7 @@ set terminal png size 1200,2400
 set output "s.png"
 set datafile separator ";"
 set xdata time
-//set format x "%d.%m %H:%M"
+set format x "%d.%m\n%H:%M"
 set timefmt "%Y-%m-%d %H:%M:%S"
 set grid
 //set multiplot layout 7, 1
@@ -12,10 +12,34 @@ set multiplot layout 7,1
 set lmargin 10
 set rmargin 10
 set y2label
-set xrange ["2020-09-01 00:00:00" : "2020-09-01 23:59:59"]
+set xrange ["2020-09-10 00:00:00" : "2020-09-12 23:59:59"]
 
 
 ############## plot2 temp ######################
+set title "Погодные условия"
+set ylabel "%"
+set yrange[0:100]
+
+plot    \
+	"/var/log/sensors/owm.log" using 1:($5) w boxes fs solid 0.01 title "Облачность" lc rgb "grey", \
+	"s.csv" using 1:3 w l title "Влажность" lc rgb "blue", \
+
+unset yrange
+unset ylabel
+unset title
+
+
+
+set title "Освещенность"
+set ylabel "Киллолюксы"
+
+plot    \
+	"s.csv" using 1:17 w l title "Датчик освещенности", \
+
+unset ylabel
+unset title
+
+
 
 
 set ylabel "градусы"
@@ -29,27 +53,6 @@ plot    \
 
 unset ylabel
 unset title
-
-set ylabel "%"
-set yrange[0:100]
-
-plot    \
-	"/var/log/sensors/owm.log" using 1:($5) w boxes fs solid 0.01 title "Облачность" lc rgb "grey", \
-	"s.csv" using 1:3 w l title "Влажность" lc rgb "blue", \
-
-unset yrange
-unset ylabel
-
-
-set title "Освещенность"
-set ylabel "Люксы"
-
-plot    \
-	"s.csv" using 1:6 w l title "Lux", \
-
-unset ylabel
-unset title
-
 
 
 set title "Электропроводность"

@@ -1,4 +1,4 @@
-<?php
+�<?php
 include "menu.php";
 
 
@@ -24,25 +24,38 @@ if (!$link) {
     exit;
 }
 
-
+//my_arg FLOAT, varVolt FLOAT, up1 FLOAT, max1 FLOAT,min1 FLOAT
+echo "<h3>Аргументы функций:</h3>";
+echo "\$DistC0=".$DistC0."<br>";
+echo "\$DistC1=".$DistC1."<br>";
+echo "\$DistC2=".$DistC2."<br>";
+echo "\$DistC3=".$DistC3."<br>";
+echo "\$DistC4=".$DistC4."<br>";
+echo "<br>";
 
 $strSQL ="select 
 
-dt,												# 1
-@dAirTemp:=".$dAirTemp.",
-@RootTemp:=".$RootTemp.",
-@EcTempRaw:=".$EcTempRaw.",
-@aTemp2:=".$f_atemp."
-
+dt,
+".$DistC0.",
+".$DistC1.",
+".$DistC2.",
+".$DistC3.",
+".$DistC4."
 
 
 from $tb 
-where dt  >  '".$wsdt."'
+where dt  >  '".$wsdt." '- INTERVAL 1 DAY
  and  dt  <  '".$wpdt."'
 order by dt limit $limit";
 
+//@dist:='".$dist." '
 
-//@lev:=intpl(".$dist."),
+//@lev:='".$f_lev." '
+
+//@Dist:=( 20.046796*sqrt(273.15+WaterTemp) )/10000*(us/2),
+//@DistF:=kalman(@dist,19,0.8,3,1)
+
+// @DistF:=kalman(@dist,10,30,140,35)
 
 // Выполняем запрос
 $rs=mysqli_query($link, $strSQL);
@@ -81,14 +94,14 @@ $handler = fopen($filename, "w");
 
 
 $text='
-set terminal png size 900,1000
+set terminal png size 1800,2000
 set output "'.$gimg.'"
 set datafile separator ";"
 set xdata time
-//set format x "%d.%m %H:%M"
+set format x "%d.%m\n%H:%M"
 set timefmt "%Y-%m-%d %H:%M:%S"
 set grid
-set multiplot layout 2,1
+set multiplot layout 5,1
 set lmargin 10
 set rmargin 10
 set y2label
@@ -97,13 +110,17 @@ set xrange ["'.$wsdt.'" : "'.$wpdt.'"]
 
 
 plot    \
-	"'.$csv.'" using 1:2 w l title "'.$dAirTemp.'", \
-	"'.$csv.'" using 1:3 w l title "'.$RootTemp.'", \
-	"'.$csv.'" using 1:5 w l title "EC Temp", \
+	"'.$csv.'" using 1:2 w l title "DistC0", \
 
 plot    \
-	"'.$csv.'" using 1:4 w l title "'.$EcTempRaw.'", \
+	"'.$csv.'" using 1:3 w l title "DistC1", \
 
+plot    \
+	"'.$csv.'" using 1:4 w l title "DistC2", \
+	"'.$csv.'" using 1:5 w l title "DistC3", \
+
+plot    \
+	"'.$csv.'" using 1:6 w l title "DistC2", \
 
 
 

@@ -120,7 +120,7 @@ $la=pow($dst1,(-$lb))*$lev1;
 $x1=431;   // raw АЦП
 $y1=10000; //Lux
 
-$x2=642;   // raw АЦП
+$x2=800;   // raw АЦП
 $y2=65000; // Lux
 
 $bpht=(-log($y1/$y2))/(log($x2/$x1));
@@ -155,10 +155,47 @@ $f_ec=$ea."*pow(@R2,".$eb.")";
 // Функция калибровки аналогово сенсора для компенсации ЕС
 $f_atemp=$pa."*pow(@EcTempRaw,2) + ".$pb."*@EcTempRaw + ".$pc;
 
+
+
+// Блок дорасчета уровня по ультрозвуковому датчику
+// Первичные данне
+$DistC0=$dist;
+// Расчет расстояния от датчика до поверхности раствора в см
+//$DistC1=$DistC0;
+//$DistC2=$DistC1;
+//$DistC3="kalman(".$DistC2.",1,0.2,3,1)";
+//$DistC4="intpl(".$DistC3."-3)";
+
+
+
+$DistC0=$dist;
+$DistC1="intpl(".$DistC0.")-3";
+$DistC2="levmin(".$DistC1.")";
+$DistC3="kalman(".$DistC2.",0.2,-0.1,1,10)";
+$DistC4=$DistC3;
+
+//$DistC2="levmin(".$DistC1.")";
+//$DistC3="kalman(".$DistC2.",0.2,-0.1,1,10)";
+//$DistC4=$DistC3;
+
+//$DistC1="intpl(".$dist.")";
+// Расчет высоты водного столба от дна бака до поверхности раствора в см
+//$DistC2="if (".$DistC1."<".$distz.",".$distz."-".$DistC1.",null)";
+// Филтрация выбросов (сглаживание)
+//$DistC3="kalman(".$DistC2.",6,-0.8,1,3)";
+// Расчет уровня по раствора в литрах в зависимости от высоты водного столба и формы бака в л.
+//$DistC4=$la."*pow(".$DistC3.",".$lb.")";
+//$DistC4=$DistC3;
+
+
 // Функция апроксимации объема раствора
 //$f_lev=$la."*pow(@dist,".$lb.")";
 
-$f_lev="levmin(intpl(".$dist."-3.0))";
+//$f_lev="levmin(intpl(".$dist."-3.0))";
+$f_lev=$DistC4;
+//$f_lev=$DistC4;
+
+
 
 // Формула расчета остатка солей
 $f_soil="(@lev+".$LevelAdd.")*@ECt*".$Slk;

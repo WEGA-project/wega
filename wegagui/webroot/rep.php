@@ -64,7 +64,7 @@ set terminal png size 1200,2400
 set output "'.$gimg.'"
 set datafile separator ";"
 set xdata time
-//set format x "%d.%m %H:%M"
+set format x "%d.%m\n%H:%M"
 set timefmt "%Y-%m-%d %H:%M:%S"
 set grid
 //set multiplot layout 7, 1
@@ -77,6 +77,30 @@ set xrange ["'.$wsdt.'" : "'.$wpdt.'"]
 
 
 ############## plot2 temp ######################
+set title "Погодные условия"
+set ylabel "%"
+set yrange[0:100]
+
+plot    \
+	"/var/log/sensors/owm.log" using 1:($5) w boxes fs solid 0.01 title "Облачность" lc rgb "grey", \
+	"'.$csv.'" using 1:3 w l title "Влажность" lc rgb "blue", \
+
+unset yrange
+unset ylabel
+unset title
+
+
+
+set title "Освещенность"
+set ylabel "Киллолюксы"
+
+plot    \
+	"'.$csv.'" using 1:17 w l title "Датчик освещенности", \
+
+unset ylabel
+unset title
+
+
 
 
 set ylabel "градусы"
@@ -90,27 +114,6 @@ plot    \
 
 unset ylabel
 unset title
-
-set ylabel "%"
-set yrange[0:100]
-
-plot    \
-	"/var/log/sensors/owm.log" using 1:($5) w boxes fs solid 0.01 title "Облачность" lc rgb "grey", \
-	"'.$csv.'" using 1:3 w l title "Влажность" lc rgb "blue", \
-
-unset yrange
-unset ylabel
-
-
-set title "Освещенность"
-set ylabel "Люксы"
-
-plot    \
-	"'.$csv.'" using 1:6 w l title "Lux", \
-
-unset ylabel
-unset title
-
 
 
 set title "Электропроводность"

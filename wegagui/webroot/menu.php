@@ -15,6 +15,8 @@ $wsdt=$_GET['wsdt'];
 $wpdt=$_GET['wpdt'];
 $limit=$_GET['limit'];
 
+$stfind="?ns=".$ns."&wsdt=".$wsdt."&wpdt=".$wpdt;
+
 //      <link href="css/dopstyle.css" rel="stylesheet" media="screen">          
 
 
@@ -45,8 +47,9 @@ echo '
                         </li>
 
 			<li><a href="#">Анализ</a><ul>
-					<li><a href="temp.php?ns='.$ns.'">Температура</a></li>
-					<li><a href="subnet-timeout.php">Влажность</a></li>
+					<li><a href="raw.php'.$stfind.'">Сырые данные</a></li>
+					<li><a href="temp.php'.$stfind.'">Температура</a></li>
+					<li><a href="level.php'.$stfind.'">Уровень</a></li>
 					<li><a href="subnet-timeout.php">Влажность</a></li>
 					<li><a href="subnet-timeout.php">Освещенность</a></li>
 					<li><a href="subnet-timeout.php">EC</a></li>
