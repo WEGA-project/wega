@@ -12,7 +12,7 @@ set multiplot layout 7,1
 set lmargin 10
 set rmargin 10
 set y2label
-set xrange ["2020-09-10 00:00:00" : "2020-09-12 23:59:59"]
+set xrange ["2020-11-12 00:00:00" : "2020-11-19 23:59:59"]
 
 
 ############## plot2 temp ######################

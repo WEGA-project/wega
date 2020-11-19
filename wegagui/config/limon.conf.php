@@ -9,7 +9,7 @@ $comment="Подпор активный - с периодической прол
 $LevelFull=12;
 
 // Запас раствора вне бака в литрах в трубказ коробах в субстрате
-$LevelAdd=5; 
+$LevelAdd=5.5; 
 
 // Аварийная защита от перелива в литрах (это сколько литров сольется назад в бак при внезапной остановке циркуляции)
 $La=5;
@@ -155,8 +155,28 @@ $A1="Ap"; // значение EC в RAW при отрицательной фаз
 $A2="An"; // значение EC в RAW при положительной фазе цикла
 $phraw="pHraw"; // значение pH в RAW
 
+
+
+$DistC0=$dist;
+$DistC1="undist(".$dist.",0.1,0.4,5,19)";
+$DistC2="if(".$distz."-".$DistC1.">0,".$distz."-".$DistC1.",null)";
+$DistC3=$la."*pow(".$DistC2.",".$lb.")";
+$DistC4="kalman(".$DistC3.",0.1,0,0.4,2)";
+$DistC5=$DistC4;
+
+//$DistC1="undist(".$dist.",0.07,0.5,5,19)";
+//$DistC2="intpl(".$DistC1.")";
+//$DistC3=$DistC2;
+//$DistC3="if (".$DistC0." < 5, ".$DistC2." ,levmin(".$DistC2."))";
+//$DistC3="if (".$DistC0." > 5, kalman(".$DistC2.",0.2,-0.1,2,11), kalman(".$DistC2.",0.0001,0,0,0))";
+//$DistC4="kalman(".$DistC2.",0.005,0,0.3,0.3)";
+
+
+
+
 // Функция апроксимации объема раствора
-$f_lev="levmin(".$la."*pow(@dist,".$lb."))";
+//$f_lev="levmin(".$la."*pow(@dist,".$lb."))";
+$f_lev=$DistC5;
 
 //$f_lev="levmin(intpl(".$dist."-3.0))";
 

@@ -38,10 +38,7 @@ $strSQL ="select
 dt,
 ".$DistC0.",
 ".$DistC1.",
-".$DistC2.",
-".$DistC3.",
-".$DistC4."
-
+levmin(".$DistC1.")
 
 from $tb 
 where dt  >  '".$wsdt." '- INTERVAL 1 DAY
@@ -101,7 +98,7 @@ set xdata time
 set format x "%d.%m\n%H:%M"
 set timefmt "%Y-%m-%d %H:%M:%S"
 set grid
-set multiplot layout 5,1
+set multiplot layout 2,1
 set lmargin 10
 set rmargin 10
 set y2label
@@ -110,20 +107,17 @@ set xrange ["'.$wsdt.'" : "'.$wpdt.'"]
 
 
 plot    \
-	"'.$csv.'" using 1:2 w l title "DistC0", \
-	"'.$csv.'" using 1:3 w l title "DistC1", \
+	"'.$csv.'" using 1:2 w l title "Dist", \
+	"'.$csv.'" using 1:3 w l title "g1", \
+	"'.$csv.'" using 1:(19) w l , \
+
+
+#	"'.$csv.'" using 1:4 w l title "g2", \
+#	"'.$csv.'" using 1:5 w l title "g3", \
+#	"'.$csv.'" using 1:6 w l title "g4", \
 
 plot    \
-	"'.$csv.'" using 1:4 w l title "DistC2", \
-
-plot    \
-	"'.$csv.'" using 1:5 w l title "DistC3", \
-	"'.$csv.'" using 1:6 w l title "DistC4", \
-
-plot    \
-	"'.$csv.'" using 1:6 w l title "DistC4", \
-
-
+	"'.$csv.'" using 1:3 w l title "g1", \
 
 
 ';

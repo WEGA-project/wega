@@ -35,18 +35,21 @@ echo "<br>";
 
 $strSQL ="select 
 
-dt,
-".$DistC0.",
-".$DistC1.",
-".$DistC2.",
-".$DistC3.",
-".$DistC4."
+min(dt),
+min(".$DistC0."),
+max(".$DistC0."),
+(min(".$DistC0.")+max(".$DistC0."))/2,
+kalman( (min(".$DistC0.")+max(".$DistC0."))/2, 1, 0, 0, 2   )
 
 
 from $tb 
+
 where dt  >  '".$wsdt." '- INTERVAL 1 DAY
  and  dt  <  '".$wpdt."'
-order by dt limit $limit";
+group by year(dt),month(dt),day(dt),hour(dt) div 1
+
+
+order by min(dt) limit $limit";
 
 //@dist:='".$dist." '
 
@@ -111,19 +114,12 @@ set xrange ["'.$wsdt.'" : "'.$wpdt.'"]
 
 plot    \
 	"'.$csv.'" using 1:2 w l title "DistC0", \
-	"'.$csv.'" using 1:3 w l title "DistC1", \
+	"'.$csv.'" using 1:3 w l title "DistC0", \
+	"'.$csv.'" using 1:4 w l title "DistC0", \
+	"'.$csv.'" using 1:5 w l title "DistC0", \
 
 plot    \
-	"'.$csv.'" using 1:4 w l title "DistC2", \
-
-plot    \
-	"'.$csv.'" using 1:5 w l title "DistC3", \
-	"'.$csv.'" using 1:6 w l title "DistC4", \
-
-plot    \
-	"'.$csv.'" using 1:6 w l title "DistC4", \
-
-
+	"'.$csv.'" using 1:5 w l title "DistC0", \
 
 
 ';
