@@ -17,7 +17,6 @@ $limit=$_GET['limit'];
 
 $stfind="?ns=".$ns."&wsdt=".$wsdt."&wpdt=".$wpdt;
 
-//      <link href="css/dopstyle.css" rel="stylesheet" media="screen">          
 
 
 echo '
