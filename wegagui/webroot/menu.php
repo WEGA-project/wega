@@ -47,6 +47,7 @@ echo '
 
 			<li><a href="#">Анализ</a><ul>
 					<li><a href="raw.php'.$stfind.'">Сырые данные</a></li>
+					<li><a href="listdata.php'.$stfind.'">Таблица значений</a></li>
 					<li><a href="temp.php'.$stfind.'">Температура</a></li>
 					<li><a href="level.php'.$stfind.'">Уровень</a></li>
 					<li><a href="subnet-timeout.php">Влажность</a></li>
