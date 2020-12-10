@@ -57,7 +57,7 @@ echo '
 				</ul>
 
 			<li><a href="#">Параметры</a><ul>
-					<li><a href="subnet.edit.php">Калибровка сенсоров</a></li>
+					<li><a href="createlev.php'.$stfind.'">Калибровка уровня</a></li>
 					<li><a href="subnet-timeout.php">Уведомления</a></li>
 				</ul>
 			</li>
