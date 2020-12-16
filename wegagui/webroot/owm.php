@@ -19,11 +19,11 @@ echo $comment;
 echo "<br>";
 echo "<br>";
 
+$owm="/var/log/sensors/owm.log";
 
 
 
-
-include "helper.php";
+//include "helper.php";
 echo "<br>";
 echo "<br>";
 
@@ -60,7 +60,7 @@ $handler = fopen($filename, "w");
 
 
 $text='
-set terminal png size 1200,2400
+set terminal png size 1000,2000
 set output "'.$gimg.'"
 set datafile separator ";"
 set xdata time
@@ -68,7 +68,7 @@ set format x "%d.%m\n%H:%M"
 set timefmt "%Y-%m-%d %H:%M:%S"
 set grid
 //set multiplot layout 7, 1
-set multiplot layout 6,1
+set multiplot layout 4,1
 
 set lmargin 10
 set rmargin 10
@@ -77,72 +77,48 @@ set xrange ["'.$wsdt.'" : "'.$wpdt.'"]
 
 
 ############## plot2 temp ######################
-
-
-set title "Освещенность"
-set ylabel "Киллолюксы"
+set title "Погодные условия - облачность"
+set ylabel "%"
+set yrange[0:100]
 
 plot    \
-	"'.$csv.'" using 1:17 w l title "Датчик освещенности", \
+	"'.$owm.'" using 1:($5) w boxes fs solid 0.01 title "Облачность" lc rgb "grey", \
 
+unset yrange
 unset ylabel
 unset title
 
 
 
+set title "Погодные условия - влажность"
+set ylabel "%"
 
+plot    \
+	"/var/log/sensors/owm.log" using 1:3 w l title "Относительная влажность", \
+
+unset ylabel
+unset title
+
+
+set title "Погодные условия - Температура"
 set ylabel "градусы"
-set title "Температура"
 plot    \
-	"'.$csv.'" using 1:4 w l title "Корни", \
-	"'.$csv.'" using 1:10 w l title "Бак", \
-	"'.$csv.'" using 1:2 w l title "Воздух", \
+	"/var/log/sensors/owm.log" using 1:2 w l title "Улица", \
 
 
 unset ylabel
 unset title
 
 
-set title "Электропроводность"
-set ylabel "mS/cm"
+set title "Погодные условия - Атмосферное давление"
+set ylabel "мм. ртутного столба"
 
 plot    \
-	"'.$csv.'" using 1:14 w l title "EC", \
-	"'.$csv.'" using 1:15 w l title "ECt", \
+	"/var/log/sensors/owm.log" using 1:($4/1.333333) w l title "Давление", \
 
 unset ylabel
 unset title
 
-
-set title "Уровень в питательном баке"
-set ylabel "литры"
-
-
-plot    \
-	"'.$csv.'" using 1:16 w l title "Объем в баке", \
-
-unset ylabel
-unset title
-
-
-
-set title "Колличество растворенных солей"
-set ylabel "граммы"
-
-plot    \
-	"'.$csv.'" using 1:18 w l title "Остаток солей", \
-
-unset ylabel
-unset title
-
-
-set title "Кислотно-щелочной баланс"
-
-
-plot    \
-	"'.$csv.'" using 1:19 w l title "pH", \
-
-unset ylabel
 
 
 

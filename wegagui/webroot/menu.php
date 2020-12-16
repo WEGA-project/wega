@@ -30,6 +30,7 @@ echo '
   <body>
 
 <nav role="navigation">
+		<ul><a href="../wega"><img src="wega-mini.png" width="32" height="32"></img></a><span style="vertical-align: 0.6em"> '.$namesys.'</span></ul>
 		<ul>
 			<li><a href="#">Выбор системы</a><ul>';
 				foreach (glob("../config/*.conf.php") as $filename) {
@@ -37,7 +38,8 @@ echo '
     				$fl=explode("/", $filename);
     				$nm=explode(".", $fl[2]);
     				$cname=$nm[0];
-    				echo "<li><a href=rep.php?ns=".$cname.">". $namesys ."</a></li>";
+//    				echo "<li><a href=rep.php?ns=".$cname.">". $namesys ."</a></li>";
+    				echo "<li><a href=".$_SERVER['PHP_SELF']."?ns=".$cname.">". $namesys ."</a></li>";
 
 			}
 
@@ -46,10 +48,13 @@ echo '
                         </li>
 
 			<li><a href="#">Анализ</a><ul>
+					<li><a href="rep.php'.$stfind.'">Сводный анализ</a></li>
+					<li><a href="helperprev.php'.$stfind.'">Помощник</a></li>
 					<li><a href="raw.php'.$stfind.'">Сырые данные</a></li>
 					<li><a href="listdata.php'.$stfind.'">Таблица значений</a></li>
 					<li><a href="temp.php'.$stfind.'">Температура</a></li>
 					<li><a href="level.php'.$stfind.'">Уровень</a></li>
+					<li><a href="owm.php'.$stfind.'">Погода</a></li>
 					<li><a href="subnet-timeout.php">Влажность</a></li>
 					<li><a href="subnet-timeout.php">Освещенность</a></li>
 					<li><a href="subnet-timeout.php">EC</a></li>

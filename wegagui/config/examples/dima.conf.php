@@ -183,7 +183,8 @@ $f_soil="(@lev+".$LevelAdd.")*@ECt*".$Slk;
 
 // Формула расчета pH
 //$f_ph=".$aph."+".$bph."*".$phraw.";
-$f_ph=$aph."+".$bph."*".$phraw;
+//$f_ph=$aph."+".$bph."*".$phraw;
+$f_ph='null';
 
 // Функция калибровки ЕС
 $f_ec=$ea."*pow(@R2,".$eb.")";

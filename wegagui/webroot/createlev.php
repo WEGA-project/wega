@@ -177,6 +177,7 @@ fclose($handler);
 $filename=$gnups;
 $handler = fopen($filename, "w");
 
+
 // рисование gnuplot
 
 $text='
@@ -188,9 +189,11 @@ set xlabel "RAW"
 set ylabel "Объем в литрах"
 set multiplot layout 2,2
 
+set label "Текущий уровень" at '.$raw.','.$intpl_raw.' point pointtype 7
+
 plot    \
 	"'.$csv.'" using 1:2 w l title "", \
-	"'.$csv.'" using 1:2 w p title "", \
+	"'.$csv.'" using 1:2 w p pt 6 title "", \
 
 set xdata time
 set format x "%d.%m\n%H:%M"
@@ -201,6 +204,8 @@ set ylabel "RAW"
 plot    \
 	"'.$csv2.'" using 1:2 w l title "", \
 
+set grid ytics mytics
+set mytics 2
 
 set ylabel "Объем в литрах"
 plot    \
