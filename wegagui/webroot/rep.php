@@ -88,6 +88,15 @@ plot    \
 unset ylabel
 unset title
 
+set title "Влажность"
+set ylabel "%"
+
+plot    \
+	"'.$csv.'" using 1:3 w l title "Датчик влажности", \
+
+unset ylabel
+unset title
+
 
 
 
