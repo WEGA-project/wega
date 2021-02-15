@@ -37,13 +37,13 @@ $chat_id="-473002458";
 // px - показания АЦП, py - реальное значение температуры
 
 // Точка 1 - минимальная температура
-$px1=1620; 	$py1=18;
+$px1=1765; 	$py1=22.5;
 
 // Точка 2 - средняя (потимальная)
-$px2=1840; 	$py2=24;
+$px2=1830; 	$py2=24;
 
 // Точка 3 - максимум
-$px3=2250; 	$py3=28;
+$px3=1910; 	$py3=25.8;
 
 
 // Функция нелинейной экстраполяции значние по 3м точкам
@@ -127,10 +127,10 @@ $bpht=(-log($y1/$y2))/(log($x2/$x1));
 $apht=pow($x1,(-$bpht))*$y1;
 
 // Калибровка pH метра
-$phr1=14576;
+$phr1=13300;
 $ph1=4.01;
 
-$phr2=12200;
+$phr2=11000;
 $ph2=6.86;
 
 $aph=(-$phr2*$ph1+$ph2*$phr1)/(-$phr2+$phr1);
@@ -158,11 +158,15 @@ $phraw="pHraw"; // значение pH в RAW
 
 
 $DistC0=$dist;
-$DistC1="undist(".$dist.",0.1,0.4,5,19)";
-$DistC2="if(".$distz."-".$DistC1.">0,".$distz."-".$DistC1.",null)";
-$DistC3=$la."*pow(".$DistC2.",".$lb.")";
-$DistC4="kalman(".$DistC3.",0.1,0,0.4,2)";
-$DistC5=$DistC4;
+$DistC1="@lvm:=levmin($DistC0)";
+$DistC2="intpl($DistC0)";
+$DistC3="intpl(@lvm)";
+$DistC4=$DistC0;
+$DistC5=$DistC0;
+//$DistC2="intpl($DistC0)";
+//$DistC3="intpl($DistC1)";
+//$DistC4="kalman(".$DistC3.",0.1,0,0.4,2)";
+//$DistC5=$DistC4;
 
 //$DistC1="undist(".$dist.",0.07,0.5,5,19)";
 //$DistC2="intpl(".$DistC1.")";
@@ -176,11 +180,13 @@ $DistC5=$DistC4;
 
 // Функция апроксимации объема раствора
 //$f_lev="levmin(".$la."*pow(@dist,".$lb."))";
-//$f_lev=$DistC5;
-$f_lev="intpl($dist)";
+$f_lev=$DistC3;
+//$f_lev="intpl($dist)";
+//$f_lev="intpl(levmin($dist))";
 
 //$f_lev="levmin(intpl(".$dist."-3.0))";
-
+$f_lev="intpl(levmin(Dst))";
+$f_lev="intpl(Dst)";
 // Формула расчета остатка солей
 $f_soil="(@lev+".$LevelAdd.")*@ECt*".$Slk;
 

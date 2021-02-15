@@ -115,9 +115,9 @@ plot    \
 
 plot    \
 	"'.$csv.'" using 1:4 w l title "DistC2", \
+	"'.$csv.'" using 1:5 w l title "DistC3", \
 
 plot    \
-	"'.$csv.'" using 1:5 w l title "DistC3", \
 	"'.$csv.'" using 1:6 w l title "DistC4", \
 
 plot    \

@@ -2,7 +2,6 @@
 include "menu.php";
 
 
-echo "<b>привет вика</b>";
 
 
 include "../config/".$ns.".conf.php";

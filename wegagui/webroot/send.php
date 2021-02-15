@@ -12,8 +12,8 @@ if (empty($_GET['wpdt'])){$_GET['wpdt']=date("Y-m-d")." 23:59:59";}
 if (empty($_GET['limit'])){$_GET['limit']="100000";}
 
 $timeout=3600;
-$AirTempMin=10;
-$AirTempMax=35;
+$AirTempMin=15;
+$AirTempMax=30;
 $LevelAddEvent=10;
 
 
@@ -107,7 +107,7 @@ function tme($chd, $msg)
 {
 include "../../telegram.php";
 
-system("torsocks curl -s -X POST https://api.telegram.org/".$namebot.":".$token."/sendMessage -d text='".$msg."' -d chat_id=".$chd);
+system("curl -s -X POST https://api.telegram.org/".$namebot.":".$token."/sendMessage -d text='".$msg."' -d chat_id=".$chd);
 
 }
 

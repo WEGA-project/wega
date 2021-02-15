@@ -29,7 +29,7 @@ if (!$link) {
 $strSQL ="select 
 
 dt,												# 1
-@dAirTemp:=".$dAirTemp.",
+@dAirTemp:=".$dAirTemp."+0.4,
 @RootTemp:=".$RootTemp.",
 @EcTempRaw:=".$EcTempRaw.",
 @aTemp2:=".$f_atemp."
@@ -85,10 +85,10 @@ set terminal png size 900,1000
 set output "'.$gimg.'"
 set datafile separator ";"
 set xdata time
-//set format x "%d.%m %H:%M"
+set format x "%d.%m\n%H:%M"
 set timefmt "%Y-%m-%d %H:%M:%S"
 set grid
-set multiplot layout 2,1
+set multiplot layout 3,1
 set lmargin 10
 set rmargin 10
 set y2label
@@ -103,6 +103,9 @@ plot    \
 
 plot    \
 	"'.$csv.'" using 1:4 w l title "'.$EcTempRaw.'", \
+
+plot    \
+	"'.$csv.'" using 1:5 w l title "'.$EcTemp.'", \
 
 
 

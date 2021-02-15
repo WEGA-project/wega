@@ -13,18 +13,12 @@ if (empty($_GET['limit'])){$_GET['limit']="100000";}
 
 include "../config/".$ns.".conf.php";
 
-echo "<h1>".$namesys;
+echo "<h1>".Погода;
 echo "</h1>";
-echo $comment;
-echo "<br>";
-echo "<br>";
 
 $owm="/var/log/sensors/owm.log";
 
 
-
-//include "helper.php";
-echo "<br>";
 echo "<br>";
 
 include "datetime.php";

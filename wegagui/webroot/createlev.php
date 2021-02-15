@@ -157,7 +157,7 @@ $handler = fopen($filename, "w");
 
 
 // составление csv уровня
-$rs=mysqli_query($link, "select dt,dst,intpl(dst) from sens order by dt desc limit 100");
+$rs=mysqli_query($link, "select dt,$dist,@a:=intpl($dist),levmin(@a) from sens order by dt desc limit 100");
 
 $csv2="tmp/lev.csv";
 $filename=$csv2;
@@ -210,6 +210,17 @@ set mytics 2
 set ylabel "Объем в литрах"
 plot    \
 	"'.$csv2.'" using 1:3 w l title "", \
+	"'.$csv2.'" using 1:4 w l title "", \
+
+set grid ytics mytics
+set mytics 2
+
+set ylabel "Объем в литрах"
+plot    \
+	"'.$csv2.'" using 1:4 w l title "", \
+
+
+
 
 ';
 
