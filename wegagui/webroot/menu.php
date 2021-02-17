@@ -55,7 +55,6 @@ echo '
 					<li><a href="rep.php'.$stfind.'">Сводный анализ</a></li>
 					<li><a href="helperprev.php'.$stfind.'">Помощник</a></li>
 					<li><a href="temp.php'.$stfind.'">Температура</a></li>
-					<li><a href="ph.php'.$stfind.'">pH</a></li>
 					<li><a href="level.php'.$stfind.'">Уровень</a></li>
 					<li><a href="owm.php'.$stfind.'">Погода</a></li>
 				</ul>
@@ -65,6 +64,8 @@ echo '
 					<li><a href="conformity.php'.$stfind.'">Сопоставление полей</a></li>
 					<li><a href="createlev.php'.$stfind.'">Калибровка уровня</a></li>
 					<li><a href="CalibrateEC.php'.$stfind.'">Калибровка EC</a></li>
+					<li><a href="ph.php'.$stfind.'">Калибровка pH</a></li>
+					<li><a href="termoresistor.php'.$stfind.'">Калибровка терморезистора</a></li>
 					<li><a href="subnet-timeout.php">Уведомления</a></li>
 				</ul>
 			</li>

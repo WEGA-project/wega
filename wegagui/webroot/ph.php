@@ -1,12 +1,62 @@
-��<?php
+<?php
 include "menu.php";
 
 include "../config/".$ns.".conf.php";
 
-echo "<h1>".$namesys;
-echo "</h1>";
+echo "<h1>".$namesys."</h1>";
 echo $comment;
 echo "<br>";
+
+echo "<h2>Водородный потенциал pH</h2>";
+
+
+include "func.php";
+
+if (dbval("pHraw",$ns) != "null") {
+
+$pHraw=dbval("pHraw",$ns);
+$RootTemp=dbval("RootTemp",$ns);
+
+
+
+//if (dbval("A2",$ns)=='') {setdbval($ns,"A2","An","Имя поля в базе содержащее raw значение ЕС при отрицательной фазе ");}
+echo "Калибровка по двум точкам<br>";
+pedit("pH_val_p1",$ns,4.01,"Фактическое значение pH точки 1");
+$pH_val_p2=floatval(dbval("pH_val_p2",$ns));
+
+
+pedit("pH_raw_p1",$ns,21897,"Значение АЦП RAW для pH точки 1");
+$pH_raw_p2=floatval(dbval("pH_raw_p2",$ns));
+
+
+pedit("pH_val_p2",$ns,6.86,"Фактическое значение pH точки 2");
+$pH_val_p1=floatval(dbval("pH_val_p1",$ns));
+
+pedit("pH_raw_p2",$ns,19360,"Значение АЦП RAW для pH точки 2");
+$pH_raw_p1=floatval(dbval("pH_raw_p1",$ns));
+
+
+
+
+// Процедурв интерполяции
+$link=mysqli_connect("$dbhost", "$login", "$password", "$my_db");
+$strSQL ="
+CREATE DEFINER=`root`@`localhost` FUNCTION `line2point`(
+x1 FLOAT,
+y1 FLOAT,
+x2 FLOAT,
+y2 FLOAT,
+x  FLOAT) RETURNS float
+BEGIN
+
+set @a:=(-x1*y2+x2*y1)/(x2-x1);
+set @k:=(y2-y1)/(x2-x1);
+set @y:=@a + @k *  x;
+RETURN @y;
+END
+";
+$rs=mysqli_query($link, $strSQL);
+
 
 
 include "datetime.php";
@@ -24,38 +74,22 @@ if (!$link) {
 
 
 
-$y1=6.86;    $x1=12282;
-$y2=4.01;    $x2=15070;
-
-$a=(-$x1*$y2+$x2*$y1)/($x2-$x1);
-$k=($y2-$y1)/($x2-$x1);
-
-
-include "func.php";
-//$phraw=dbval("pHraw",$ns);
-
-
 $strSQL ="select 
 
 dt,												# 1
-@pHraw:=".dbval("pHraw",$ns).",
-@pH:=line2point(19360,6.86,21897,4.01,@pHraw),
-@RootTemp:=".$RootTemp.",
-@EcTempRaw:=".$EcTempRaw."
-
+@pHraw:=".$pHraw.",
+@pH:=line2point($pH_raw_p1,$pH_val_p1,$pH_raw_p2,$pH_val_p2,@pHraw),
+@atemp:=".dbval("airtemp",$ns).",
+@pHt:=@pH/(1+0.002*(@atemp-25))
 
 
 
 from $tb 
 where dt  >  '".$wsdt."'
  and  dt  <  '".$wpdt."'
+ and  ".dbval("roottemp",$ns)." <80
 order by dt limit $limit";
 
-//@pHraw:=".$phraw.",
-
-//@pH:=".$a." + ".$k." * @pHraw
-
-//@lev:=intpl(".$dist."),
 
 // Выполняем запрос
 $rs=mysqli_query($link, $strSQL);
@@ -116,10 +150,12 @@ plot    \
 	"'.$csv.'" using 1:3 w l title "pH", \
 
 plot    \
-	"'.$csv.'" using 1:5 w l title "RAW-Temperature", \
+	"'.$csv.'" using 1:4 w l title "temp", \
 
 plot    \
-	"'.$csv.'" using 1:4 w l title "Temperature", \
+	"'.$csv.'" using 1:5 w l title "pHt", \
+	"'.$csv.'" using 1:3 w l title "pH", \
+
 
 
 
@@ -133,7 +169,11 @@ echo $err;
 
 echo '<img src="'.$img.'" alt="альтернативный текст">';
 
-
+}
+else
+{
+echo "Датчик pH не задан. Если он есть сопоставьте соответсвующее поле в базе";
+}
 
 
 ?>

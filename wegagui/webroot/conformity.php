@@ -17,15 +17,6 @@ echo "<br>";
 echo "<br>";
 echo "<h2>Сопоставление полей в базе данных</h2>";
 
-//if (dbval("A1",$ns)=='') {setdbval($ns,"A1","Ap","Имя поля в базе содержащее raw значение ЕС при положительной фазе ");}
-//if (dbval("A2",$ns)=='') {setdbval($ns,"A2","An","Имя поля в базе содержащее raw значение ЕС при отрицательной фазе ");}
-//if (dbval("pHraw",$ns)=='') {setdbval($ns,"pHraw","pHraw","Имя поля в базе содержащее raw значение pH");}
-
-
-//$A1=dbval("A1",$ns); echo "<a href=setpapam.php?ns=".$ns."&parameter=".A1."> A1 </a> = ".$A1." ".dbcomment("A1",$ns)."<br>";
-//$A2=dbval("A2",$ns); echo "<a href=setpapam.php?ns=".$ns."&parameter=".A2."> A2 </a> = ".$A2." ".dbcomment("A2",$ns)."<br>";
-//$pHraw=dbval("pHraw",$ns); echo "<a href=setpapam.php?ns=".$ns."&parameter=".pHraw."> pHraw </a> = ".$pHraw." ".dbcomment("pHraw",$ns)."<br>";
-
 
 
 form($ns,"A1","Датчик ЕС при положительной фазе (RAW)");
@@ -85,7 +76,7 @@ echo "   </select>";
 
 echo "  <input type='submit' value='Задать'>";
 //echo " (". $parm.") ".$comment;
-echo " ".$comment;
+echo " ".$comment. ", имя парамтера: <b>".$parm."</b> ";
 echo "</p></form>";
 
 if ( $_GET[$parm] ){ 

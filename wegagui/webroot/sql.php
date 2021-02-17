@@ -9,15 +9,21 @@ if (!$link) {
     exit;
 }
 
+include "func.php";
+//include "dbvar.php";
+
+//$LightRaw=dbval("LightRAW",$ns);
+
+
 
 
 $strSQL ="select 
 
 dt,												# 1
-@dAirTemp:=".$dAirTemp.",
-@dAirHum:=".$dAirHum.",
-@RootTemp:=".$RootTemp.",
-@EcTempRaw:=".$EcTempRaw.",
+@dAirTemp:=".dbval("AirTemp",$ns).",
+@dAirHum:=".dbval("AirHum",$ns).",
+@RootTemp:=".dbval("RootTemp",$ns).",
+@EcTempRaw:=".dbval("ECtempRAW",$ns).",
 @LightRaw:=".$LightRaw.",
 @dist:=if(".$dist."<".$distz.",".$distz."-".$dist.",null),
 @A1:=if ( ".$A1." < ".$Dr." and ".$A1." > 0 , ".$A1.", null),

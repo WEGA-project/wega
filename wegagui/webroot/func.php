@@ -49,4 +49,17 @@ function sensval($p_name,$ns)
    return $value;
 }
 
+
+function pedit($str,$ns,$defv,$defc)
+{
+   include "../config/".$ns.".conf.php";
+   $tb="config";
+   $strv=dbval($str,$ns); echo "<a href=setpapam.php?ns=".$ns."&parameter=".$str."> ".$str." </a> = ".$strv." ".dbcomment($str,$ns)."<br>";
+   if (dbval($str,$ns)=='') {setdbval($ns,$str,$defv,$defc);}
+
+}
+
+
+
+
 ?>
