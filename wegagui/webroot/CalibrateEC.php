@@ -1,49 +1,191 @@
 <?php
 include "menu.php";
-include "func.php";
-
-$ns=$_GET['ns'];
-
-
-
-if ( $_GET['ns'] ){
-
 
 include "../config/".$ns.".conf.php";
-echo "<h1>".$namesys;
-echo "</h1>";
+
+echo "<h1>".$namesys."</h1>";
 echo $comment;
 echo "<br>";
-echo "<br>";
+
+
+
+include "func.php";
+
+if (dbval("A1",$ns) != "null" and dbval("A2",$ns) != "null") {
+
+
+
 echo "<h2>Калибровка EC</h2>";
-echo "<h3>Расчет сопротивления</h3>";
+echo "<h3>Калибровка по двум точкам</h3>";
+pedit("EC_val_p1",$ns,1.08,"Фактическое значение EC точки 1");
+pedit("EC_R2_p1",$ns,538,"Значение R2 для точки 1");
+echo "<br>";
+
+pedit("EC_val_p2",$ns,4.89,"Фактическое значение EC точки 2");
+pedit("EC_R2_p2",$ns,155,"Значение R2 для точки 2");
+
+$ec1=floatval(dbval("EC_val_p1",$ns));
+$ec2=floatval(dbval("EC_val_p2",$ns));
+
+$ex1=floatval(dbval("EC_R2_p1",$ns));
+$ex2=floatval(dbval("EC_R2_p2",$ns));
 
 
-$R1=dbval("R1",$ns); echo "<a href=setpapam.php?ns=".$ns."&parameter=".R1."> R1 </a> = ".$R1." ".dbcomment("R1",$ns)."<br>";
-$Rx1=dbval("Rx1",$ns); echo "<a href=setpapam.php?ns=".$ns."&parameter=".Rx1."> Rx1 </a> = ".$Rx1." ".dbcomment("Rx1",$ns)."<br>";
-$Rx2=dbval("Rx2",$ns); echo "<a href=setpapam.php?ns=".$ns."&parameter=".Rx2."> Rx1 </a> = ".$Rx2." ".dbcomment("Rx2",$ns)."<br>";
-$Dr=dbval("Dr",$ns); echo "<a href=setpapam.php?ns=".$ns."&parameter=".Dr."> Dr </a> = ".$Dr." ".dbcomment("Dr",$ns)."<br>";
-
-$A1=dbval("A1",$ns); echo "<a href=setpapam.php?ns=".$ns."&parameter=".A1."> A1 </a> = ".$A1." ".dbcomment("A1",$ns)."<br>";
-$A2=dbval("A2",$ns); echo "<a href=setpapam.php?ns=".$ns."&parameter=".A2."> A2 </a> = ".$A2." ".dbcomment("A2",$ns)."<br>";
-
-echo "aa";
-$A1v=sensval($A1,$ns);
-echo sensval(An,$ns);
-
-echo $A1v;
+// Функция нелинейной апроксимации по трем точкам одна из которых нулевая
+$eb=(-log($ec1/$ec2))/(log($ex2/$ex1));
+$ea=pow($ex1,(-$eb))*$ec1;
 
 
+echo "<h3>Параметры термокомпенсации</h3>";
 
-if (dbval("Rx1",$ns)=='') {setdbval($ns,"Rx1","-120","Внутреннее сопротивление подбираются таким образом, что-бы во всех калибровочных растворах значения Rp и  Rn сошлись");}
-if (dbval("Rx2",$ns)=='') {setdbval($ns,"Rx2","0","Внутреннее сопротивление подбираются таким образом, что-бы во всех калибровочных растворах значения Rp и  Rn сошлись");}
-if (dbval("R1",$ns)=='') {setdbval($ns,"R1","509.3","Резистор делителя R1 в омах");}
+pedit("EC_R1",$ns,500,"EC Резистор делителя R1 в омах");
+pedit("EC_Rx1",$ns,-120,"EC Внутреннее сопротивление порта 1");
+pedit("EC_Rx2",$ns,0,"EC Внутреннее сопротивление порта 2");
+pedit("Dr",$ns,4095,"Разрядность АЦП");
 
-if (dbval("Dr",$ns)=='') {setdbval($ns,"Dr","4095","Предел АЦП");}
-if (dbval("A1",$ns)=='') {setdbval($ns,"A1","Ap","Имя поля в базе содержащее raw значение ЕС при положительной фазе ");}
-if (dbval("A2",$ns)=='') {setdbval($ns,"A2","An","Имя поля в базе содержащее raw значение ЕС при отрицательной фазе ");}
+	$R1=floatval(dbval("EC_R1",$ns));
+	$Rx1=floatval(dbval("EC_Rx1",$ns));
+	$Rx2=floatval(dbval("EC_Rx2",$ns));
+
+echo "<h3>Параметры электрода</h3>";
+pedit("EC_kT",$ns,0.02,"Значение коэфициента термокомпенсации ЕС");
+	$k=floatval(dbval("EC_kT",$ns));
+echo "<br>";
+echo "<br>";
+echo "<h3>Текущие показания</h3>";
+echo sensval("dt",$ns);
+echo "<br>";
+echo "<br>";
+$P_A1=dbval("A1",$ns);
+$A1=sensval($P_A1,$ns);
+
+$P_A2=dbval("A2",$ns);
+$A2=sensval($P_A2,$ns);
+
+echo "A1.RAW(-)=".$A1;
+echo "<br>";
+echo "A2.RAW(+)=".$A2;
+
+echo "<br>";
+echo "<br>";
+
+$R2p=round( sensval("(-(-($P_A1)*$R1-$P_A1*$Rx2+$Rx2*$Dr)/(-$P_A1+$Dr))",$ns), 1);
+echo "R2(+)=".$R2p."Ω";
+echo "<br>";
+
+$R2n=round( sensval("(((-$P_A2*$R1-$P_A2*$Rx1+$R1*$Dr+$Rx1*$Dr)/$P_A2))",$ns), 1);
+echo "R2(-)=".$R2n."Ω";
+
+echo "<br>";
+$R2=($R2p+$R2n)/2;
+echo "R2=".$R2."Ω";
 
 
+        $tR_val_p1=floatval(dbval("tR_val_p1",$ns));
+        $tR_val_p2=floatval(dbval("tR_val_p2",$ns));
+        $tR_val_p3=floatval(dbval("tR_val_p3",$ns));
+        $tR_raw_p1=floatval(dbval("tR_raw_p1",$ns));
+        $tR_raw_p2=floatval(dbval("tR_raw_p2",$ns));
+        $tR_raw_p3=floatval(dbval("tR_raw_p3",$ns));
+
+
+
+include "datetime.php";
+
+
+
+
+$strSQL ="select 
+
+dt,
+@A1:=".dbval('A1',$ns).",
+@A2:=".dbval('A2',$ns).",
+@ECtempRAW:=".dbval('ECtempRAW',$ns).",
+@R2p:=(((-@A2*".$R1."-@A2*".$Rx1."+".$R1."*".$Dr."+".$Rx1."*".$Dr.")/@A2)),
+@R2n:=(-(-(@A1)*".$R1."-(@A1)*".$Rx2."+".$Rx2."*".$Dr.")/(-(@A1)+".$Dr.")),
+@R2:=(@R2p+@R2n)/2,
+@EC:=if (@R2>0,".$ea."*pow(@R2,".$eb."),null),
+@tR:=int3point(".$tR_raw_p1.",".$tR_val_p1.",".$tR_raw_p2.",".$tR_val_p2.",".$tR_raw_p3.",".$tR_val_p3.",@ECtempRAW),
+@ECt:=@EC/(1+".$k."*(@tR-25))
+
+
+
+from $tb 
+where dt  >  '".$wsdt."'
+ and  dt  <  '".$wpdt."'
+order by dt limit $limit";
+
+
+
+include "sqltocsv.php";
+
+
+
+$text='
+set terminal png size 1900,1500
+set output "'.$gimg.'"
+set datafile separator ";"
+set xdata time
+set format x "%d.%m\n%H:%M"
+set timefmt "%Y-%m-%d %H:%M:%S"
+set grid
+set multiplot layout 5,2
+set lmargin 10
+set rmargin 10
+set y2label
+set xrange ["'.$wsdt.'" : "'.$wpdt.'"]
+
+
+
+plot    \
+	"'.$csv.'" using 1:2 w l title "RAW(-)", \
+
+
+plot    \
+	"'.$csv.'" using 1:3 w l title "RAW(+)", \
+
+plot    \
+	"'.$csv.'" using 1:5 w l title "R2(-)", \
+
+
+plot    \
+	"'.$csv.'" using 1:6 w l title "R2(+)", \
+
+plot    \
+	"'.$csv.'" using 1:5 w l title "R2(+)", \
+	"'.$csv.'" using 1:6 w l title "R2(-)", \
+	"'.$csv.'" using 1:7 w l title "R2", \
+
+plot    \
+	"'.$csv.'" using 1:7 w l title "R2", \
+
+plot    \
+	"'.$csv.'" using 1:8 w l title "EC", \
+
+plot    \
+	"'.$csv.'" using 1:9 w l title "tR", \
+
+plot    \
+	"'.$csv.'" using 1:8 w l title "EC", \
+	"'.$csv.'" using 1:10 w l title "ECt", \
+
+
+';
+
+fwrite($handler, $text);
+fclose($handler);
+
+$err=shell_exec('cat '.$gnups.'|gnuplot');
+echo $err;
+
+echo '<img src="'.$img.'" alt="альтернативный текст">';
 
 }
+else
+{
+echo "Датчик EC не задан. Если он есть сопоставьте соответсвующее поле в базе";
+}
+
+
 ?>
+

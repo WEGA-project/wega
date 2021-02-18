@@ -42,11 +42,10 @@ function sensval($p_name,$ns)
    include "../config/".$ns.".conf.php";
    $tb="sens";
    $link=mysqli_connect("$dbhost", "$login", "$password", "$my_db");
-   $sqlstr="select An from sens limit 1";
+   $sqlstr="select ".$p_name." from sens order by dt desc  limit 1";
    $result=mysqli_query($link, $sqlstr);
-   $value = mysqli_fetch_object($result)->value;
+   return mysqli_fetch_object($result)->$p_name;
    mysqli_close($link);
-   return $value;
 }
 
 

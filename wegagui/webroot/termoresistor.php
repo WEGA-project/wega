@@ -12,6 +12,8 @@ echo "<h2>Калибровка терморезистора</h2>";
 
 include "func.php";
 
+
+
 if (dbval("tRraw",$ns) != "null") {
 
 $pHraw=dbval("tRraw",$ns);
@@ -65,20 +67,19 @@ END
 $rs=mysqli_query($link, $strSQL);
 
 
-
 include "datetime.php";
 
+$P_ECtempRAW=dbval("ECtempRAW",$ns);
+$ECtempRAW=sensval($P_ECtempRAW,$ns);
 
-// Подключаемся к базе
-$link = mysqli_connect("$dbhost", "$login", "$password", "$my_db");
+$P_RootTemp=dbval("RootTemp",$ns);
+$RootTemp=sensval($P_RootTemp,$ns);
 
-if (!$link) {
-    echo "Ошибка: Невозможно установить соединение с MySQL." . PHP_EOL;
-    echo "Код ошибки errno: " . mysqli_connect_errno() . PHP_EOL;
-    echo "Текст ошибки error: " . mysqli_connect_error() . PHP_EOL;
-    exit;
-}
+echo "<br><br>RAW (".$P_ECtempRAW.")=".$ECtempRAW;
+echo "<br>Температура сравнения (".$P_RootTemp.")=".$RootTemp;
+echo "<br>Температура ЕС=".sensval("int3point($tR_raw_p1,$tR_val_p1,$tR_raw_p2,$tR_val_p2,$tR_raw_p3,$tR_val_p3,$ECtempRAW)",$ns)."<br>";
 
+//int3point(".$tR_raw_p1.",".$tR_val_p1.",".$tR_raw_p2.",".$tR_val_p2.",".$tR_raw_p3.",".$tR_val_p3.",@ECtempRAW)
 
 
 $strSQL ="select 
@@ -96,40 +97,10 @@ where dt  >  '".$wsdt."'
  and ".dbval("RootTemp",$ns)." < 80
 order by dt limit $limit";
 
-
-// Выполняем запрос
-$rs=mysqli_query($link, $strSQL);
-$numb=mysqli_num_rows($rs);
-mysqli_data_seek($rs,$numb-1);
-$row=mysqli_fetch_row($rs);
-mysqli_data_seek($rs,0);
+include "sqltocsv.php";
 
 
 
-
-echo "<br><table border='1'>";
-
-
-$filename=$csv;
-$handler = fopen($filename, "w");
-
-while($id=mysqli_fetch_row($rs))
-        { 
-        for ($x=0; $x<=count($id)-1; $x++) 
-                {
-		$text= $id[$x].";";
-		fwrite($handler, $text);
-                }
-	fwrite($handler, "\n");
-
-
-        }
-
-
-
-fclose($handler);
-$filename=$gnups;
-$handler = fopen($filename, "w");
 
 
 

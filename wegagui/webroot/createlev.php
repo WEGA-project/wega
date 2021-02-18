@@ -133,6 +133,24 @@ END
 
 $rs=mysqli_query($link, $strSQL);
 
+// Процедурв фильтрации мини
+$link=mysqli_connect("$dbhost", "$login", "$password", "$my_db");
+$strSQL ="
+CREATE DEFINER=`root`@`localhost` FUNCTION `levmin`(my_arg FLOAT) RETURNS float
+BEGIN
+set @levmin:=if (isnull(@levmin),1000,@levmin);
+
+
+set @levmin:= if (@levmin-my_arg > 1.6,  my_arg, @levmin);
+
+set @levmin:= if (@levmin-my_arg < 0,  my_arg, @levmin);
+
+RETURN (@levmin-0);
+END
+";
+
+$rs=mysqli_query($link, $strSQL);
+
 
 // Рисуем калибровочный график
 // составление csv калибровки
