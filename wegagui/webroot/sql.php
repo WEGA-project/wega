@@ -15,15 +15,19 @@ include "func.php";
 //$LightRaw=dbval("LightRAW",$ns);
 
 
-
+$p_AirTemp=dbval("AirTemp",$ns);
+$p_AirHum=dbval("AirHum",$ns);
+$p_RootTemp=dbval("RootTemp",$ns);
+$p_ECtempRAW=dbval("ECtempRAW",$ns);
+$p_LightRaw=dbval("LightRaw",$ns);
 
 $strSQL ="select 
 
 dt,												# 1
-@dAirTemp:=".dbval("AirTemp",$ns).",
-@dAirHum:=".dbval("AirHum",$ns).",
-@RootTemp:=".dbval("RootTemp",$ns).",
-@EcTempRaw:=".dbval("ECtempRAW",$ns).",
+@dAirTemp:=".$p_AirTemp.",
+@dAirHum:=".$p_AirHum.",
+@RootTemp:=".$p_RootTemp.",
+@EcTempRaw:=".$p_ECtempRAW.",
 @LightRaw:=".$LightRaw.",
 @dist:=if(".$dist."<".$distz.",".$distz."-".$dist.",null),
 @A1:=if ( ".$A1." < ".$Dr." and ".$A1." > 0 , ".$A1.", null),

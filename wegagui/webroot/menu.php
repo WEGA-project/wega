@@ -62,11 +62,11 @@ echo '
 			<li><a href="#">Параметры</a><ul>
 					<li><a href="srctbl.php'.$stfind.'">База</a></li>
 					<li><a href="conformity.php'.$stfind.'">Сопоставление полей</a></li>
-					<li><a href="createlev.php'.$stfind.'">Калибровка уровня</a></li>
-					<li><a href="CalibrateEC.php'.$stfind.'">Калибровка EC</a></li>
-					<li><a href="ph.php'.$stfind.'">Калибровка pH</a></li>
 					<li><a href="termoresistor.php'.$stfind.'">Калибровка терморезистора</a></li>
-					<li><a href="subnet-timeout.php">Уведомления</a></li>
+					<li><a href="CalibrateEC.php'.$stfind.'">Калибровка EC</a></li>
+					<li><a href="photoresistor.php'.$stfind.'">Калибровка фоторезистора</a></li>
+					<li><a href="createlev.php'.$stfind.'">Калибровка уровня</a></li>
+					<li><a href="ph.php'.$stfind.'">Калибровка pH</a></li>
 				</ul>
 			</li>
 
