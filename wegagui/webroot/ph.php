@@ -78,10 +78,7 @@ $strSQL ="select
 
 dt,												# 1
 @pHraw:=".$pHraw.",
-@pH:=line2point($pH_raw_p1,$pH_val_p1,$pH_raw_p2,$pH_val_p2,@pHraw),
-@atemp:=".dbval("airtemp",$ns).",
-@pHt:=@pH/(1+0.002*(@atemp-25))
-
+@pH:=line2point($pH_raw_p1,$pH_val_p1,$pH_raw_p2,$pH_val_p2,@pHraw)
 
 
 from $tb 
@@ -135,7 +132,7 @@ set xdata time
 set format x "%d.%m\n%H:%M"
 set timefmt "%Y-%m-%d %H:%M:%S"
 set grid
-set multiplot layout 4,1
+set multiplot layout 2,1
 set lmargin 10
 set rmargin 10
 set y2label
@@ -149,12 +146,6 @@ plot    \
 plot    \
 	"'.$csv.'" using 1:3 w l title "pH", \
 
-plot    \
-	"'.$csv.'" using 1:4 w l title "temp", \
-
-plot    \
-	"'.$csv.'" using 1:5 w l title "pHt", \
-	"'.$csv.'" using 1:3 w l title "pH", \
 
 
 
