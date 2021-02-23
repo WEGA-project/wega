@@ -1,5 +1,5 @@
 
-set terminal png size 900,1000
+set terminal png size 1500,1000
 set output "s.png"
 set datafile separator ";"
 set xdata time
@@ -15,12 +15,12 @@ set xrange ["2021-02-23 00:00:00" : "2021-02-23 23:59:59"]
 
 
 plot    \
-	"s.csv" using 1:2 w l title "pHraw", \
+	"s.csv" using 1:2 w l title "RAW", \
+	"s.csv" using 1:3 w l title "levmin(RAW)", \
 
 plot    \
-	"s.csv" using 1:3 w l title "pH", \
-
-
+	"s.csv" using 1:4 w l title "Уровень", \
+	"s.csv" using 1:5 w l title "Levmin(Уровень)", \
 
 
 

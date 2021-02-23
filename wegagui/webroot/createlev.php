@@ -1,6 +1,7 @@
 <?php
 include "menu.php";
 $ns=$_GET['ns'];
+//include "func.php";
 
 
 
@@ -84,6 +85,9 @@ echo "Текущее значение RAW: ".$dist." = ".$raw;
 echo "<br>";
 echo "Интерполированное текущее значение объема: ".round($intpl_raw,3)." Литр.";
 echo "<br>";
+//pedit("Dist_min_k1",$ns,1.7,"Значение k1 для фильтрации выброса Dst");
+
+
 
 
 // Форма добавления
@@ -101,59 +105,13 @@ echo "<br>Добавить точку интерполяции<br>
 
 mysqli_close($link);
 
-
-// Процедурв интерполяции
-$link=mysqli_connect("$dbhost", "$login", "$password", "$my_db");
-$strSQL ="
-CREATE FUNCTION `intpl`(x FLOAT) RETURNS float
-BEGIN
-
-set @x1:=(SELECT cm FROM $tb 
-         where cm <= x
-         order by cm desc 
-         limit 1 );
-set @y1:=(SELECT lev FROM $tb 
-         where cm <= x
-         order by cm desc
-         limit 1 );
-set @x2:=(SELECT cm FROM $tb 
-         where cm > x
-         order by cm
-         limit 1 );
-set @y2:=(SELECT lev FROM $tb 
-         where cm > x
-         order by cm
-         limit 1 ); 
-
-set @y:=(@y2*@x1-@x2*@y1+x*@y1-x*@y2)/(-@x2+@x1);
-
-RETURN @y;
-END
-";
-
-$rs=mysqli_query($link, $strSQL);
-
-// Процедурв фильтрации мини
-$link=mysqli_connect("$dbhost", "$login", "$password", "$my_db");
-$strSQL ="
-CREATE DEFINER=`root`@`localhost` FUNCTION `levmin`(my_arg FLOAT) RETURNS float
-BEGIN
-set @levmin:=if (isnull(@levmin),1000,@levmin);
-
-
-set @levmin:= if (@levmin-my_arg > 1.6,  my_arg, @levmin);
-
-set @levmin:= if (@levmin-my_arg < 0,  my_arg, @levmin);
-
-RETURN (@levmin-0);
-END
-";
-
-$rs=mysqli_query($link, $strSQL);
+include "sqfunc.php";
 
 
 // Рисуем калибровочный график
 // составление csv калибровки
+// Процедурв фильтрации мини
+$link=mysqli_connect("$dbhost", "$login", "$password", "$my_db");
 $rs=mysqli_query($link, "select cm, lev from $tb order by cm");
 
 $filename=$csv;
@@ -173,9 +131,11 @@ fclose($handler);
 $filename=$gnups;
 $handler = fopen($filename, "w");
 
+include "sqvar.php";
+
 
 // составление csv уровня
-$rs=mysqli_query($link, "select dt,$dist,@a:=intpl($dist),levmin(@a) from sens order by dt desc limit 100");
+$rs=mysqli_query($link, "select dt,$p_Dst,@a:=intpl($p_Dst),levmin(@a) from sens order by dt desc limit 100");
 
 $csv2="tmp/lev.csv";
 $filename=$csv2;
@@ -254,6 +214,8 @@ echo '<img src="'.$img.'" alt="график">';
 
 mysqli_close($link);
 
+
+
 }
 else
 {
@@ -262,4 +224,5 @@ echo "Не выбрана система";
 
 
 ?>
+
 

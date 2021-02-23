@@ -130,6 +130,52 @@ END
 
 ");
 
+
+mysqli_query($link, "
+CREATE FUNCTION `intpl`(x FLOAT) RETURNS float
+BEGIN
+
+set @x1:=(SELECT cm FROM $tb 
+         where cm <= x
+         order by cm desc 
+         limit 1 );
+set @y1:=(SELECT lev FROM $tb 
+         where cm <= x
+         order by cm desc
+         limit 1 );
+set @x2:=(SELECT cm FROM $tb 
+         where cm > x
+         order by cm
+         limit 1 );
+set @y2:=(SELECT lev FROM $tb 
+         where cm > x
+         order by cm
+         limit 1 ); 
+
+set @y:=(@y2*@x1-@x2*@y1+x*@y1-x*@y2)/(-@x2+@x1);
+
+RETURN @y;
+END
+");
+
+
+// Процедурв фильтрации мини
+mysqli_query($link, "
+
+CREATE FUNCTION `levmin`(my_arg FLOAT) RETURNS float
+BEGIN
+set @levmin:=if (isnull(@levmin),1000,@levmin);
+
+
+set @levmin:= if (@levmin-my_arg > 1.6,  my_arg, @levmin);
+
+set @levmin:= if (@levmin-my_arg < 0,  my_arg, @levmin);
+
+RETURN (@levmin-0);
+END
+");
+
+////////////////////////
 mysqli_close($link);
 
 

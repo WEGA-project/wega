@@ -9,29 +9,7 @@ if (!$link) {
     exit;
 }
 
-include "func.php";
-//include "dbvar.php";
-
-//$LightRaw=dbval("LightRAW",$ns);
-//if(".$dist."<".$distz.",".$distz."-".$dist.",null)
-//@A1:=if ( ".$A1." < ".$Dr." and ".$A1." > 0 , ".$A1.", null),
-//@A2:=if ( ".$A2." < ".$Dr." and ".$A2." > 0 , ".$A2.", null),
-//@EC:=".$f_ec.",
-//$tempEC=sensval("ftR(".dbval("ECtempRAW",$ns).")",$ns);
-//@aTemp2:=".$f_atemp.",
-
-
-$p_AirTemp=dbval("AirTemp",$ns);
-$p_AirHum=dbval("AirHum",$ns);
-$p_RootTemp=dbval("RootTemp",$ns);
-$p_ECtempRAW=dbval("ECtempRAW",$ns);
-$p_LightRaw=dbval("LightRaw",$ns);
-$p_Dst=dbval("Dst",$ns);
-$P_A1=dbval("A1",$ns);
-$P_A2=dbval("A2",$ns);
-
-$P_A2=dbval("A2",$ns);
-
+include "sqvar.php";
 
 
 $strSQL ="select 

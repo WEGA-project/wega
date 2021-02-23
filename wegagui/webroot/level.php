@@ -10,10 +10,10 @@ echo "</h1>";
 echo $comment;
 echo "<br>";
 
-
 include "datetime.php";
 
-
+//include "func.php";
+//pedit("Dist_min_k1",$ns,1,"Значение k1 для фильтрации выброса Dst");
 // Подключаемся к базе
 $link = mysqli_connect("$dbhost", "$login", "$password", "$my_db");
 
@@ -24,23 +24,17 @@ if (!$link) {
     exit;
 }
 
-//my_arg FLOAT, varVolt FLOAT, up1 FLOAT, max1 FLOAT,min1 FLOAT
-echo "<h3>Аргументы функций:</h3>";
-echo "\$DistC0=".$DistC0."<br>";
-echo "\$DistC1=".$DistC1."<br>";
-echo "\$DistC2=".$DistC2."<br>";
-echo "\$DistC3=".$DistC3."<br>";
-echo "\$DistC4=".$DistC4."<br>";
-echo "<br>";
+include "sqvar.php";
+
+
 
 $strSQL ="select 
 
 dt,
-".$DistC0.",
-".$DistC1.",
-".$DistC2.",
-".$DistC3.",
-".$DistC4."
+@dst:=".$p_Dst.",
+@ldst:=levmin(@dst),
+intpl(@dst),
+intpl(@ldst)
 
 
 from $tb 
@@ -94,14 +88,14 @@ $handler = fopen($filename, "w");
 
 
 $text='
-set terminal png size 1800,2000
+set terminal png size 1500,1000
 set output "'.$gimg.'"
 set datafile separator ";"
 set xdata time
 set format x "%d.%m\n%H:%M"
 set timefmt "%Y-%m-%d %H:%M:%S"
 set grid
-set multiplot layout 5,1
+set multiplot layout 2,1
 set lmargin 10
 set rmargin 10
 set y2label
@@ -110,19 +104,12 @@ set xrange ["'.$wsdt.'" : "'.$wpdt.'"]
 
 
 plot    \
-	"'.$csv.'" using 1:2 w l title "DistC0", \
-	"'.$csv.'" using 1:3 w l title "DistC1", \
+	"'.$csv.'" using 1:2 w l title "RAW", \
+	"'.$csv.'" using 1:3 w l title "levmin(RAW)", \
 
 plot    \
-	"'.$csv.'" using 1:4 w l title "DistC2", \
-	"'.$csv.'" using 1:5 w l title "DistC3", \
-
-plot    \
-	"'.$csv.'" using 1:6 w l title "DistC4", \
-
-plot    \
-	"'.$csv.'" using 1:6 w l title "DistC4", \
-
+	"'.$csv.'" using 1:4 w l title "Уровень", \
+	"'.$csv.'" using 1:5 w l title "Levmin(Уровень)", \
 
 
 

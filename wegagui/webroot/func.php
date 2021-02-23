@@ -55,10 +55,9 @@ function pedit($str,$ns,$defv,$defc)
    $tb="config";
    $strv=dbval($str,$ns); echo "<a href=setpapam.php?ns=".$ns."&parameter=".$str."> ".$str." </a> = ".$strv." ".dbcomment($str,$ns)."<br>";
    if (dbval($str,$ns)=='') {setdbval($ns,$str,$defv,$defc);}
+   mysqli_close($link);
 
 }
-
-
 
 
 ?>
