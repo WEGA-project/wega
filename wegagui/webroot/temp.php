@@ -4,6 +4,7 @@ include "menu.php";
 
 
 include "../config/".$ns.".conf.php";
+include "sqvar.php";
 
 echo "<h1>".$namesys;
 echo "</h1>";
@@ -29,10 +30,8 @@ if (!$link) {
 $strSQL ="select 
 
 dt,												# 1
-@dAirTemp:=".$dAirTemp."+0.4,
-@RootTemp:=".$RootTemp.",
-@EcTempRaw:=".$EcTempRaw.",
-@aTemp2:=".$f_atemp."
+@dAirTemp:=".$p_AirTemp.",
+@RootTemp:=".$p_RootTemp."
 
 
 
