@@ -2,10 +2,34 @@
 
 $link=mysqli_connect("$dbhost", "$login", "$password", "$my_db");
 
-$strSQL ="
+
+// Процедурв линейной интерполяции по двум точкам
+//CREATE DEFINER=`root`@`localhost` FUNCTION `line2point`(
+
+mysqli_query($link, "
+
+CREATE FUNCTION `line2point`(
+x1 FLOAT,
+y1 FLOAT,
+x2 FLOAT,
+y2 FLOAT,
+x  FLOAT) RETURNS float
+BEGIN
+
+set @a:=(-x1*y2+x2*y1)/(x2-x1);
+set @k:=(y2-y1)/(x2-x1);
+set @y:=@a + @k *  x;
+RETURN @y;
+END
+
+");
 
 
-CREATE DEFINER=`root`@`localhost` FUNCTION `fpR`(rawP FLOAT) RETURNS float
+
+// Функция sql процедура перевода фоторезистора в люксы 
+mysqli_query($link, "
+
+CREATE FUNCTION `fpR`(rawP FLOAT) RETURNS float
 BEGIN
 
 set @px1:=(select value from config where parameter='pR_raw_p1' limit 1);
@@ -23,18 +47,15 @@ set @pc:=( @py3*pow(@px1,2)*@px2 - @py2*pow(@px1,2)*@px3 - pow(@px2,2)*@px1*@py3
 RETURN @pa*pow(rawP,2) + @pb*rawP + @pc;
 
 END
-";
-
-$rs=mysqli_query($link, $strSQL);
+");
 
 
 
 
 // Процедура интерполяции по трем точкам
-$link=mysqli_connect("$dbhost", "$login", "$password", "$my_db");
+mysqli_query($link, "
 
-$strSQL ="
-CREATE DEFINER=`root`@`localhost` FUNCTION `int3point`(
+CREATE FUNCTION `int3point`(
 px1 FLOAT,
 py1 FLOAT,
 px2 FLOAT,
@@ -51,16 +72,13 @@ set @pc:=( py3*pow(px1,2)*px2 - py2*pow(px1,2)*px3 - pow(px2,2)*px1*py3 + pow(px
 
 RETURN @pa*pow(x,2) + @pb*x + @pc;
 END
-";
-
-$rs=mysqli_query($link, $strSQL);
+");
 
 
+// Калибровка EC 
+mysqli_query($link, "
 
-
-$link=mysqli_connect("$dbhost", "$login", "$password", "$my_db");
-$strSQL ="
-CREATE DEFINER=`root`@`localhost` FUNCTION `EC`(A1 FLOAT,A2 FLOAT, Temp FLOAT) RETURNS float
+CREATE FUNCTION `EC`(A1 FLOAT,A2 FLOAT, Temp FLOAT) RETURNS float
 BEGIN
 set @R1 := (select value from config where parameter='EC_R1' limit 1);
 set @Rx1 := (select value from config where parameter='EC_Rx1' limit 1);
@@ -86,21 +104,12 @@ set @ec:=if(@R2>0,@ea*pow(@R2,@eb),null);
 set @ECt:=@ec/(1+@kt*(Temp-25));
 RETURN @ECt;
 END
-";
-$rs=mysqli_query($link, $strSQL);
+");
 
+// Калибровка терморезистора 
+mysqli_query($link, "
 
-
-
-
-//$link=mysqli_connect("$dbhost", "$login", "$password", "$my_db");
-
-
-$strSQL ="
-
-
-
-CREATE DEFINER=`root`@`localhost` FUNCTION `ftR`(rawT FLOAT) RETURNS float
+CREATE FUNCTION `ftR`(rawT FLOAT) RETURNS float
 BEGIN
 
 set @px1:=(select value from config where parameter='tR_raw_p1' limit 1);
@@ -119,10 +128,9 @@ RETURN @pa*pow(rawT,2) + @pb*rawT + @pc;
 
 END
 
-";
-$rs=mysqli_query($link, $strSQL);
+");
 
-
+mysqli_close($link);
 
 
 ?>

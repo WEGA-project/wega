@@ -37,28 +37,7 @@ $pH_raw_p1=floatval(dbval("pH_raw_p1",$ns));
 
 
 
-
-// Процедурв интерполяции
-$link=mysqli_connect("$dbhost", "$login", "$password", "$my_db");
-$strSQL ="
-CREATE DEFINER=`root`@`localhost` FUNCTION `line2point`(
-x1 FLOAT,
-y1 FLOAT,
-x2 FLOAT,
-y2 FLOAT,
-x  FLOAT) RETURNS float
-BEGIN
-
-set @a:=(-x1*y2+x2*y1)/(x2-x1);
-set @k:=(y2-y1)/(x2-x1);
-set @y:=@a + @k *  x;
-RETURN @y;
-END
-";
-$rs=mysqli_query($link, $strSQL);
-
-
-
+include "sqfunc.php";
 include "datetime.php";
 
 
