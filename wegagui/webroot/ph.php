@@ -10,7 +10,7 @@ echo "<br>";
 echo "<h2>Водородный потенциал pH</h2>";
 
 
-include "func.php";
+include_once "func.php";
 
 if (dbval("pHraw",$ns) != "null") {
 
@@ -35,7 +35,12 @@ $pH_val_p1=floatval(dbval("pH_val_p1",$ns));
 pedit("pH_raw_p2",$ns,19360,"Значение АЦП RAW для pH точки 2");
 $pH_raw_p1=floatval(dbval("pH_raw_p1",$ns));
 
+echo "<br><b>Текущие значения</b>";
+$phraw=sensval(dbval("pHraw",$ns),$ns);
+echo "<br>pH(RAW)=".round($phraw,3)." <br>";
 
+$ph=sensval("ph(".dbval("pHraw",$ns).")",$ns);
+echo "pH=".round($ph,3)." <br><br>";
 
 include "sqfunc.php";
 include "datetime.php";

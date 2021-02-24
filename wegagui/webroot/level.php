@@ -4,16 +4,20 @@ include "menu.php";
 
 
 include "../config/".$ns.".conf.php";
+include "sqvar.php";
 
 echo "<h1>".$namesys;
 echo "</h1>";
 echo $comment;
 echo "<br>";
+echo "<br>";
+echo "<h3>Параметры фильтрации выбросов уровня</h3>";
+pedit("Dist_min_k1",$ns,0.81,"Значение k1 для фильтрации выброса levmin(Dst)");
+echo "<br>";
 
 include "datetime.php";
 
-//include "func.php";
-//pedit("Dist_min_k1",$ns,1,"Значение k1 для фильтрации выброса Dst");
+
 // Подключаемся к базе
 $link = mysqli_connect("$dbhost", "$login", "$password", "$my_db");
 
@@ -24,7 +28,6 @@ if (!$link) {
     exit;
 }
 
-include "sqvar.php";
 
 
 
@@ -95,7 +98,7 @@ set xdata time
 set format x "%d.%m\n%H:%M"
 set timefmt "%Y-%m-%d %H:%M:%S"
 set grid
-set multiplot layout 2,1
+set multiplot layout 3,1
 set lmargin 10
 set rmargin 10
 set y2label
@@ -109,6 +112,9 @@ plot    \
 
 plot    \
 	"'.$csv.'" using 1:4 w l title "Уровень", \
+	"'.$csv.'" using 1:5 w l title "Levmin(Уровень)", \
+
+plot    \
 	"'.$csv.'" using 1:5 w l title "Levmin(Уровень)", \
 
 
@@ -125,6 +131,7 @@ echo '<img src="'.$img.'" alt="альтернативный текст">';
 
 
 
+include "func.php";
 
 
 ?>

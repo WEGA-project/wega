@@ -1,5 +1,5 @@
 <?php
-include "menu.php";
+include_once "menu.php";
 
 include "../config/".$ns.".conf.php";
 
@@ -10,7 +10,7 @@ echo "<br>";
 echo "<h2>Калибровка датчика освещенности</h2>";
 
 
-include "func.php";
+include_once "func.php";
 
 
 if (dbval("LightRAW",$ns) != "null") {

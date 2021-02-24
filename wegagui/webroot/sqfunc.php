@@ -164,14 +164,33 @@ mysqli_query($link, "
 
 CREATE FUNCTION `levmin`(my_arg FLOAT) RETURNS float
 BEGIN
+
 set @levmin:=if (isnull(@levmin),1000,@levmin);
-
-
-set @levmin:= if (@levmin-my_arg > 1.6,  my_arg, @levmin);
-
+set @Dist_min_k1:=(select value from config where parameter='Dist_min_k1' limit 1);
+set @levmin:= if (@levmin-my_arg > @Dist_min_k1,  my_arg, @levmin);
 set @levmin:= if (@levmin-my_arg < 0,  my_arg, @levmin);
 
-RETURN (@levmin-0);
+RETURN (@levmin);
+END
+
+");
+
+// Функция расчета pH
+mysqli_query($link, "
+
+CREATE FUNCTION `ph`(x float) RETURNS float
+BEGIN
+
+set @x1:=(select value from config where parameter='pH_raw_p1' limit 1);
+set @y1:=(select value from config where parameter='pH_val_p1' limit 1);
+set @x2:=(select value from config where parameter='pH_raw_p2' limit 1);
+set @y2:=(select value from config where parameter='pH_val_p2' limit 1);
+
+set @a:=(-@x1*@y2+@x2*@y1)/(@x2-@x1);
+set @k:=(@y2-@y1)/(@x2-@x1);
+set @y:=@a + @k *  x;
+RETURN @y;
+
 END
 ");
 

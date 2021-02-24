@@ -9,7 +9,7 @@ echo "<br>";
 
 
 
-include "func.php";
+include_once "func.php";
 if (dbval("A1",$ns) != "null" and dbval("A2",$ns) != "null") {
 echo "<h2>Калибровка EC</h2>";
 
@@ -198,7 +198,6 @@ else
 {
 echo "Датчик EC не задан. Если он есть сопоставьте соответсвующее поле в базе";
 }
-
 
 ?>
 

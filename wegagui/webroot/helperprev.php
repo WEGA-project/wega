@@ -2,7 +2,6 @@
 
 include "menu.php";
 
-
 $ns=$_GET['ns'];
 
 
@@ -14,6 +13,8 @@ if (empty($_GET['wpdt'])){$_GET['wpdt']=date("Y-m-d")." 23:59:59";}
 if (empty($_GET['limit'])){$_GET['limit']="100000";}
 
 include "../config/".$ns.".conf.php";
+
+
 
 
 $wsdt=$_GET['wsdt'];

@@ -7,7 +7,9 @@ if (empty($_GET['wsdt'])){$_GET['wsdt']=date("Y-m-d",strtotime($_GET['days']))."
 if (empty($_GET['wpdt'])){$_GET['wpdt']=date("Y-m-d")." 23:59:59";}
 if (empty($_GET['limit'])){$_GET['limit']="100000";}
 
-include "../config/".$ns.".conf.php";
+include_once "../config/".$ns.".conf.php";
+include_once "sqvar.php";
+
 include version.php;
 $version="123";
 $version=date("d M Y H:i:s", filemtime('../../.git/index'));
@@ -33,8 +35,8 @@ echo '
 
 		<ul>
 			<li>
-                        <img src="wega-mini.png" width="34" height="34"></img>
-                        <span style="vertical-align: 0.7em">
+                        <img src="wega-mini.png" width="30" height="32.5"></img>
+                        <span style="vertical-align: 0.60em">
                          '.strtoupper($namesys).'
                         </span>
                 <ul>';
@@ -43,7 +45,7 @@ echo '
     				$fl=explode("/", $filename);
     				$nm=explode(".", $fl[2]);
     				$cname=$nm[0];
-    				echo "<li><a href=".$_SERVER['PHP_SELF']."?ns=".$cname.">". $namesys ."</a></li>";
+    				echo "<li><a href=".$_SERVER['PHP_SELF']."?ns=".$cname.">". $cname ."</a></li>";
 
 			 }
 
@@ -52,20 +54,22 @@ echo '
                         </li>
 
 			<li><a href="#">Анализ</a><ul>
+					<li><a href="status.php'.$stfind.'">Текущие измерения</a></li>
 					<li><a href="rep.php'.$stfind.'">Сводный анализ</a></li>
 					<li><a href="helperprev.php'.$stfind.'">Помощник</a></li>
 					<li><a href="temp.php'.$stfind.'">Температура</a></li>
-					<li><a href="level.php'.$stfind.'">Уровень</a></li>
 					<li><a href="owm.php'.$stfind.'">Погода</a></li>
 				</ul>
 
 			<li><a href="#">Параметры</a><ul>
+					<li><a href="main.php'.$stfind.'">Основные параметры</a></li>
 					<li><a href="srctbl.php'.$stfind.'">База</a></li>
 					<li><a href="conformity.php'.$stfind.'">Сопоставление полей</a></li>
 					<li><a href="termoresistor.php'.$stfind.'">Калибровка терморезистора</a></li>
 					<li><a href="CalibrateEC.php'.$stfind.'">Калибровка EC</a></li>
 					<li><a href="photoresistor.php'.$stfind.'">Калибровка фоторезистора</a></li>
 					<li><a href="createlev.php'.$stfind.'">Калибровка уровня</a></li>
+					<li><a href="level.php'.$stfind.'">Фильтрация уровня</a></li>
 					<li><a href="ph.php'.$stfind.'">Калибровка pH</a></li>
 				</ul>
 			</li>
@@ -93,7 +97,6 @@ echo '
 
 <br><br>
 ';
-
 
 ?>
 

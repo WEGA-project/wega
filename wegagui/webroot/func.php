@@ -30,7 +30,7 @@ function setdbval($ns,$p_name,$p_value,$p_comment)
 
    $tb="config";
    mysqli_query($link, "create table IF NOT EXISTS $tb (parameter varchar(50) PRIMARY KEY) DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci");
-   mysqli_query($link, "alter table $tb add column value varchar(50) ");
+   mysqli_query($link, "alter table $tb add column value varchar(255) ");
    mysqli_query($link, "alter table $tb add column comment varchar(255) ");
    mysqli_query($link, "insert into $tb (parameter, value, comment) values ( '$p_name', '$p_value', '$p_comment' )" );
    mysqli_query($link, "update $tb set value = '$p_value', comment = '$p_comment'  where parameter ='$p_name' ");

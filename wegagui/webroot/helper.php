@@ -7,12 +7,16 @@ $ns=$_GET['ns'];
 
 echo '<h2>Текущее состояние</h2>';
 
+
+
+
 if (empty($_GET['days'])){$_GET['days']="-0 days";}
 if (empty($_GET['wsdt'])){$_GET['wsdt']=date("Y-m-d",strtotime($_GET['days']))." 00:00:00";}
 if (empty($_GET['wpdt'])){$_GET['wpdt']=date("Y-m-d")." 23:59:59";}
 if (empty($_GET['limit'])){$_GET['limit']="100000";}
 
 include "../config/".$ns.".conf.php";
+include_once "sqvar.php";
 
 
 $wsdt=$_GET['wsdt'];
@@ -44,6 +48,12 @@ $ECn=(-($EC*$L1 - $ECPlan*$L1 - $ECPlan*$L2 )/$L2);
 $Soiln=$ECn*$Slk*($L2);
 $levsm=$row[6];
 $lasttime=date("U") - date("U",strtotime($row[0]) );
+
+
+
+
+
+
 
 
 echo ("Дата: ".$row[0]." обновлено: ".$lasttime." сек. назад");

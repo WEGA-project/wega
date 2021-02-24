@@ -1,17 +1,34 @@
 <?php
-include "menu.php";
-
+include_once "menu.php";
 
 $ns=$_GET['ns'];
+include_once "func.php";
+//$namesys=dbval("namesys",$ns);
 
 
+if ($ns){
 
 if (empty($_GET['days'])){$_GET['days']="-0 days";}
 if (empty($_GET['wsdt'])){$_GET['wsdt']=date("Y-m-d",strtotime($_GET['days']))." 00:00:00";}
 if (empty($_GET['wpdt'])){$_GET['wpdt']=date("Y-m-d")." 23:59:59";}
 if (empty($_GET['limit'])){$_GET['limit']="100000";}
 
-include "../config/".$ns.".conf.php";
+include_once "../config/".$ns.".conf.php";
+include_once "sqvar.php";
+//$comment=dbcomment("namesys",$ns);
+//$LevelFull=dbval("LevelFull",$ns);
+// $LevelAdd=dbval("LevelAdd",$ns);
+// $La=dbval("La",$ns);
+// $ECPlan=dbval("ECPlan",$ns);
+// $sEC=dbval("sEC",$ns);
+// $rEC=dbval("rEC",$ns);
+//$Slk=sEC/rEC;
+// $konc=dbval("konc",$ns);
+
+
+
+//include "func.php";
+//dbval("namesys",$ns);
 
 echo "<h1>".$namesys;
 echo "</h1>";
@@ -23,11 +40,11 @@ echo "<br>";
 
 
 
-include "helper.php";
+include_once "helper.php";
 echo "<br>";
 echo "<br>";
 
-include "datetime.php";
+include_once "datetime.php";
 
 
 mysqli_data_seek($rs,0);
@@ -166,6 +183,11 @@ echo $err;
 echo '<img src="'.$img.'" alt="альтернативный текст">';
 
 
+}
+else
+{
+echo "<h1>Система не выбрана</h1>";
+}
 
 
 
