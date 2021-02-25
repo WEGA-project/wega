@@ -24,6 +24,7 @@ pedit("Dr",$ns,4095,"Разрядность АЦП");
 	$R1=floatval(dbval("EC_R1",$ns));
 	$Rx1=floatval(dbval("EC_Rx1",$ns));
 	$Rx2=floatval(dbval("EC_Rx2",$ns));
+	$Dr=floatval(dbval("Dr",$ns));
 
 echo "<h3>Калибровка ЕС по сопротивлению и температуре</h3>";
 pedit("EC_val_p1",$ns,1.08,"Фактическое значение EC точки 1");
@@ -124,8 +125,6 @@ from $tb
 where dt  >  '".$wsdt."'
  and  dt  <  '".$wpdt."'
 order by dt limit $limit";
-
-
 
 include "sqltocsv.php";
 

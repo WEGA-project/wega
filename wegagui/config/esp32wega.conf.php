@@ -159,9 +159,9 @@ $tb="sens"; // Имя таблицы с данными
 
 
 
-//$csv="s.csv";
-//$gnups="s.gnuplot";
-//$img="s.png";
-//$gimg=$img;
+$csv="s.csv";
+$gnups="s.gnuplot";
+$img="s.png";
+$gimg=$img;
 
 ?>
