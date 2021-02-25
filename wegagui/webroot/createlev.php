@@ -11,6 +11,8 @@ $cm=$_GET['cm'];
 $lev=$_GET['lev'];
 
 include "../config/".$ns.".conf.php";
+include "sqvar.php";
+
 echo "<h1>".$namesys;
 echo "</h1>";
 echo $comment;
@@ -77,11 +79,10 @@ while($id=mysqli_fetch_row($rs))
 
 // Параметры RAW
 echo "<br>";
-
-$id=mysqli_fetch_row(mysqli_query($link, "select $dist,intpl($dist) from sens order by dt desc limit 1"));
+$id=mysqli_fetch_row(mysqli_query($link, "select $p_Dst, intpl($p_Dst) from sens order by dt desc limit 1"));
 $raw=$id[0];
 $intpl_raw=$id[1];
-echo "Текущее значение RAW: ".$dist." = ".$raw;
+echo "Текущее значение RAW: ".$p_dist." = ".$raw;
 echo "<br>";
 echo "Интерполированное текущее значение объема: ".round($intpl_raw,3)." Литр.";
 echo "<br>";

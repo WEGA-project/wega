@@ -1,52 +1,42 @@
 
-set terminal png size 1000,3500
+set terminal png size 1400,800
 set output "s.png"
 set datafile separator ";"
+set grid
+set xlabel "RAW"
+set ylabel "Объем в литрах"
+set multiplot layout 2,2
+
+set label "Текущий уровень" at 16.249,16.479103088378906 point pointtype 7
+
+plot    \
+	"s.csv" using 1:2 w l title "", \
+	"s.csv" using 1:2 w p pt 6 title "", \
+
 set xdata time
 set format x "%d.%m\n%H:%M"
 set timefmt "%Y-%m-%d %H:%M:%S"
-set grid
-set multiplot layout 10,1
-set lmargin 10
-set rmargin 10
-set y2label
-set xrange ["2021-02-25 00:00:00" : "2021-02-25 23:59:59"]
-
-
+set xlabel "Дата/Время"
+set ylabel "RAW"
 
 plot    \
-	"s.csv" using 1:2 w l title "RAW(-)", \
+	"tmp/lev.csv" using 1:2 w l title "", \
 
+set grid ytics mytics
+set mytics 2
 
+set ylabel "Объем в литрах"
 plot    \
-	"s.csv" using 1:3 w l title "RAW(+)", \
+	"tmp/lev.csv" using 1:3 w l title "", \
+	"tmp/lev.csv" using 1:4 w l title "", \
 
+set grid ytics mytics
+set mytics 2
+
+set ylabel "Объем в литрах"
 plot    \
-	"s.csv" using 1:5 w l title "R2(-)", \
+	"tmp/lev.csv" using 1:4 w l title "", \
 
 
-plot    \
-	"s.csv" using 1:6 w l title "R2(+)", \
-
-plot    \
-	"s.csv" using 1:5 w l title "R2(+)", \
-	"s.csv" using 1:6 w l title "R2(-)", \
-	"s.csv" using 1:7 w l title "R2", \
-
-plot    \
-	"s.csv" using 1:7 w l title "R2", \
-
-plot    \
-	"s.csv" using 1:8 w l title "EC", \
-
-plot    \
-	"s.csv" using 1:9 w l title "tR", \
-
-plot    \
-	"s.csv" using 1:8 w l title "EC", \
-	"s.csv" using 1:10 w l title "ECt", \
-
-plot    \
-	"s.csv" using 1:10 w l title "ECt", \
 
 
