@@ -7,7 +7,7 @@ if (empty($_GET['wsdt'])){$_GET['wsdt']=date("Y-m-d",strtotime($_GET['days']))."
 if (empty($_GET['wpdt'])){$_GET['wpdt']=date("Y-m-d")." 23:59:59";}
 if (empty($_GET['limit'])){$_GET['limit']="100000";}
 
-include_once "../config/".$ns.".conf.php";
+//include_once "../config/".$ns.".conf.php";
 include_once "sqvar.php";
 
 include version.php;

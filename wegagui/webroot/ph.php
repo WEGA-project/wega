@@ -57,12 +57,13 @@ if (!$link) {
 }
 
 
+//@pH:=line2point($pH_raw_p1,$pH_val_p1,$pH_raw_p2,$pH_val_p2,@pHraw)
 
 $strSQL ="select 
 
 dt,												# 1
 @pHraw:=".$pHraw.",
-@pH:=line2point($pH_raw_p1,$pH_val_p1,$pH_raw_p2,$pH_val_p2,@pHraw)
+@pH:=ph(@pHraw)
 
 
 from $tb 

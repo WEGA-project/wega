@@ -1,6 +1,6 @@
 <?php
 include "menu.php";
-include "func.php";
+include_once "func.php";
 
 $ns=$_GET['ns'];
 
