@@ -1,16 +1,17 @@
 <?php
 include_once "menu.php";
+//include "func.php";
 
-include "../config/".$ns.".conf.php";
+if ($ns){
+include "sqvar.php";
+
+//include "../config/".$ns.".conf.php";
 
 echo "<h1>".$namesys."</h1>";
 echo $comment;
 echo "<br>";
 
 echo "<h2>Калибровка датчика освещенности</h2>";
-
-
-include_once "func.php";
 
 
 if (dbval("LightRAW",$ns) != "null") {
@@ -55,28 +56,20 @@ $Light=sensval("fpR(".dbval("LightRAW",$ns).")",$ns);
 
 echo "<br>Яркость ".round($Light,2)." kLux";
 
-//int3point(".$tR_raw_p1.",".$tR_val_p1.",".$tR_raw_p2.",".$tR_val_p2.",".$tR_raw_p3.",".$tR_val_p3.",@ECtempRAW)
-
-
 $strSQL ="select 
 
-dt,												# 1
-@LightRAW:=".dbval('LightRAW',$ns).",
-int3point(".$pR_raw_p1.",".$pR_val_p1.",".$pR_raw_p2.",".$pR_val_p2.",".$pR_raw_p3.",".$pR_val_p3.",@LightRAW)
-
+dt,
+".$p_LightRaw.",
+".$p_Lux."
 
 
 from $tb 
 where dt  >  '".$wsdt."'
  and  dt  <  '".$wpdt."'
- and ".dbval("RootTemp",$ns)." < 80
-order by dt limit $limit";
+order by dt";
+
 
 include "sqltocsv.php";
-
-
-
-
 
 
 $text='
@@ -116,6 +109,12 @@ echo '<img src="'.$img.'" alt="альтернативный текст">';
 else
 {
 echo "Датчик освещенности не найден. Если он есть сопоставьте соответсвующее поле в базе";
+}
+
+}
+else
+{
+echo "Не выбрана система";
 }
 
 

@@ -1,7 +1,11 @@
 <?php
 include "menu.php";
+//include "../config/".$ns.".conf.php";
 
-include "../config/".$ns.".conf.php";
+
+if ($ns){
+include "sqvar.php";
+
 
 echo "<h1>".$namesys."</h1>";
 echo $comment;
@@ -197,6 +201,14 @@ else
 {
 echo "Датчик EC не задан. Если он есть сопоставьте соответсвующее поле в базе";
 }
+
+
+}
+else
+{
+echo "Не выбрана система";
+}
+
 
 ?>
 

@@ -13,6 +13,7 @@ echo "
 <th>EC
 <th>pH
 <th>V
+<th>Обновлено
 </th>";
 
 foreach (glob("../config/*.conf.php") as $filename) {
@@ -44,7 +45,8 @@ echo "<td>";
   if ($p_pHraw != 'null'){echo round($ph,1);}
 echo "<td>";
   echo round($lev,1);
-
+echo "<td>";
+  echo $dt;
 
 echo "</tr>";
 

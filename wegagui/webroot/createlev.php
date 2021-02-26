@@ -1,18 +1,17 @@
 <?php
 include "menu.php";
-$ns=$_GET['ns'];
+//$ns=$_GET['ns'];
 //include "func.php";
 
 
 
-if ( $_GET['ns'] ){
+if ($ns ){
 
 $cm=$_GET['cm'];
-$lev=$_GET['lev'];
+$levc=$_GET['lev'];
 
-include "../config/".$ns.".conf.php";
+//include "../config/".$ns.".conf.php";
 include "sqvar.php";
-
 echo "<h1>".$namesys;
 echo "</h1>";
 echo $comment;
@@ -33,7 +32,7 @@ if ( $_GET['add'] == 'add' ) {
 mysqli_query($link, "CREATE DATABASE $my_db");
 mysqli_query($link, "create table $tb (cm double PRIMARY KEY)");
 mysqli_query($link, "alter table $tb add column lev double");
-mysqli_query($link, "insert into $tb (cm, lev) values ( $cm, $lev )");
+mysqli_query($link, "insert into $tb (cm, lev) values ( $cm, $levc )");
 }
 
 // Удаляем
@@ -43,7 +42,7 @@ mysqli_query($link, "delete from $tb where cm=$cm");
 
 // Редактируем
 if ( $_GET['edit'] == 'edit' ) {
-mysqli_query($link, "update $tb set lev=$lev where cm=$cm");
+mysqli_query($link, "update $tb set lev=$levc where cm=$cm");
 }
 
 
@@ -79,12 +78,11 @@ while($id=mysqli_fetch_row($rs))
 
 // Параметры RAW
 echo "<br>";
-$id=mysqli_fetch_row(mysqli_query($link, "select $p_Dst, intpl($p_Dst) from sens order by dt desc limit 1"));
-$raw=$id[0];
-$intpl_raw=$id[1];
-echo "Текущее значение RAW: ".$p_Dst." = ".$raw;
+$raw=$DstRAW;
+$intpl_raw=$lev;
+echo "Текущее значение RAW: ".$p_Dst." = ".$DstRAW;
 echo "<br>";
-echo "Интерполированное текущее значение объема: ".round($intpl_raw,3)." Литр.";
+echo "Интерполированное текущее значение объема: ".round($lev,3)." Литр.";
 echo "<br>";
 //pedit("Dist_min_k1",$ns,1.7,"Значение k1 для фильтрации выброса Dst");
 
@@ -106,7 +104,6 @@ echo "<br>Добавить точку интерполяции<br>
 
 mysqli_close($link);
 
-include "sqfunc.php";
 
 
 // Рисуем калибровочный график
@@ -132,11 +129,16 @@ fclose($handler);
 $filename=$gnups;
 $handler = fopen($filename, "w");
 
-include "sqvar.php";
 
 
 // составление csv уровня
-$rs=mysqli_query($link, "select dt,$p_Dst,@a:=intpl($p_Dst),levmin(@a) from sens order by dt desc limit 100");
+$rs=mysqli_query($link, "
+select 
+dt,
+$p_Dst,
+@a:=intpl($p_Dst),
+levmin(@a) 
+from sens order by dt desc limit 100");
 
 $csv2="tmp/lev.".$ns.".csv";
 $filename=$csv2;
@@ -223,6 +225,8 @@ else
 echo "Не выбрана система";
 }
 
+include "sqfunc.php";
+//include "sqvar.php";
 
 ?>
 

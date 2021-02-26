@@ -1,13 +1,17 @@
 <?php
 include_once "func.php";
+include "../config/".$ns.".conf.php";
 
 $p_AirTemp=dbval("AirTemp",$ns);
 $p_AirHum=dbval("AirHum",$ns);
 $p_RootTemp=dbval("RootTemp",$ns);
 $p_ECtempRAW=dbval("ECtempRAW",$ns);
+   $p_ECtemp="ftR(".$p_ECtempRAW.")";
+
 $p_pHraw=dbval("pHraw",$ns);
 $p_LightRaw=dbval("LightRaw",$ns);
 $p_Dst=dbval("Dst",$ns);
+
 $P_A1=dbval("A1",$ns);
 $P_A2=dbval("A2",$ns);
 
@@ -28,13 +32,15 @@ $p_lev="intpl(levmin(".$p_Dst."))";
  $Slk=($sEC/$rEC);
  $konc=dbval("konc",$ns);
 
-
+$dt=sensval("dt",$ns);
 $A1=sensval($P_A1,$ns);
 $A2=sensval($P_A2,$ns);
 $AirHum=sensval($p_AirHum,$ns);
 $AirTemp=sensval($p_AirTemp,$ns);
 $RootTemp=sensval($p_RootTemp,$ns);
-$tempEC=sensval("ftR(".dbval("ECtempRAW",$ns).")",$ns);
+$ECtempRAW=sensval($p_ECtempRAW,$ns);
+$DstRAW=sensval($p_Dst,$ns);
+$tempEC=sensval("ftR(".$ECtempRAW.")",$ns);
 $Lux=sensval("fpR(".dbval("LightRAW",$ns).")",$ns);
 $ec=sensval("EC($P_A1,$P_A2,".$tempEC.")",$ns);
 $ph=sensval("ph(".dbval("pHraw",$ns).")",$ns);

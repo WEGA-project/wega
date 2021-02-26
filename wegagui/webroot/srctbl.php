@@ -3,7 +3,8 @@ include "menu.php";
 
 if ( $_GET['ns'] ){
 
-include "../config/".$ns.".conf.php";
+//include "../config/".$ns.".conf.php";
+include "sqvar.php";
 
 echo "<h1>".$namesys;
 echo "</h1>";

@@ -1,7 +1,10 @@
 <?php
 include "menu.php";
 
-include "../config/".$ns.".conf.php";
+if ($ns){
+
+//include "../config/".$ns.".conf.php";
+include "sqvar.php";
 
 echo "<h1>".$namesys."</h1>";
 echo $comment;
@@ -14,11 +17,7 @@ include_once "func.php";
 
 
 
-if (dbval("tRraw",$ns) != "null") {
-
-$pHraw=dbval("tRraw",$ns);
-$RootTemp=dbval("RootTemp",$ns);
-
+if ($p_ECtempRAW != "null") {
 
 echo "<h4>Калибровка по трём точкам<br></h4>";
 echo "<br>Точка 1<br>";
@@ -43,18 +42,17 @@ pedit("tR_raw_p3",$ns,920,"tR Значение АЦП RAW точки 3");
 
 
 
-include "sqfunc.php";
 include "datetime.php";
 
-$P_ECtempRAW=dbval("ECtempRAW",$ns);
-$ECtempRAW=sensval($P_ECtempRAW,$ns);
+//$P_ECtempRAW=dbval("ECtempRAW",$ns);
+//$ECtempRAW=sensval($P_ECtempRAW,$ns);
 
-$P_RootTemp=dbval("RootTemp",$ns);
-$RootTemp=sensval($P_RootTemp,$ns);
+//$P_RootTemp=dbval("RootTemp",$ns);
+//$RootTemp=sensval($P_RootTemp,$ns);
 
-echo "<br><br>RAW (".$P_ECtempRAW.")=".$ECtempRAW;
-echo "<br>Температура сравнения (".$P_RootTemp.")=".$RootTemp;
-echo "<br>Температура ЕС=".round(sensval("int3point($tR_raw_p1,$tR_val_p1,$tR_raw_p2,$tR_val_p2,$tR_raw_p3,$tR_val_p3,$ECtempRAW)",$ns),3)."<br>";
+echo "<br><br>RAW (".$p_ECtempRAW.")=".$ECtempRAW;
+echo "<br>Температура сравнения (".$p_RootTemp.")=".$RootTemp;
+//echo "<br>Температура ЕС=".round(sensval("int3point($tR_raw_p1,$tR_val_p1,$tR_raw_p2,$tR_val_p2,$tR_raw_p3,$tR_val_p3,$ECtempRAW)",$ns),3)."<br>";
 
 //int3point(".$tR_raw_p1.",".$tR_val_p1.",".$tR_raw_p2.",".$tR_val_p2.",".$tR_raw_p3.",".$tR_val_p3.",@ECtempRAW)
 
@@ -62,16 +60,14 @@ echo "<br>Температура ЕС=".round(sensval("int3point($tR_raw_p1,$tR_
 $strSQL ="select 
 
 dt,												# 1
-@ECtempRAW:=".dbval('ECtempRAW',$ns).",
-int3point(".$tR_raw_p1.",".$tR_val_p1.",".$tR_raw_p2.",".$tR_val_p2.",".$tR_raw_p3.",".$tR_val_p3.",@ECtempRAW),
-".dbval('RootTemp',$ns)."
-
+".$p_ECtempRAW.",
+".$p_ECtemp.",
+".$p_RootTemp."
 
 
 from $tb 
 where dt  >  '".$wsdt."'
  and  dt  <  '".$wpdt."'
- and ".dbval("RootTemp",$ns)." < 80
 order by dt limit $limit";
 
 include "sqltocsv.php";
@@ -126,6 +122,13 @@ else
 echo "Датчик pH не задан. Если он есть сопоставьте соответсвующее поле в базе";
 }
 
+}
+else
+{
+echo "Не выбрана система";
+}
+
+include "sqfunc.php";
 
 ?>
 

@@ -1,7 +1,7 @@
 <?php
 include "menu.php";
 
-
+if($ns){
 
 include "../config/".$ns.".conf.php";
 include "sqvar.php";
@@ -131,8 +131,15 @@ echo '<img src="'.$img.'" alt="альтернативный текст">';
 
 
 
-include "func.php";
-include "myfunc.php";
+//include "func.php";
+//include "myfunc.php";
+
+}
+else
+{
+echo "Не выбрана система";
+}
+
 
 
 ?>

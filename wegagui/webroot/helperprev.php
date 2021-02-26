@@ -9,5 +9,11 @@ include "helper.php";
 
 
 }
+else
+{
+echo "Не выбрана система";
+}
+
+
 ?>
 
