@@ -1,10 +1,16 @@
 <?php
 
+
 $link=mysqli_connect("$dbhost", "$login", "$password", "$my_db");
+
+
+
 
 
 // Процедурв линейной интерполяции по двум точкам
 //CREATE DEFINER=`root`@`localhost` FUNCTION `line2point`(
+
+mysqli_query($link, "DROP FUNCTION IF EXISTS line2point;");
 
 mysqli_query($link, "
 
@@ -15,7 +21,7 @@ x2 FLOAT,
 y2 FLOAT,
 x  FLOAT) RETURNS float
 BEGIN
-
+# test
 set @a:=(-x1*y2+x2*y1)/(x2-x1);
 set @k:=(y2-y1)/(x2-x1);
 set @y:=@a + @k *  x;
@@ -27,6 +33,9 @@ END
 
 
 // Функция sql процедура перевода фоторезистора в люксы 
+mysqli_query($link, "DROP FUNCTION IF EXISTS rawP;");
+
+
 mysqli_query($link, "
 
 CREATE FUNCTION `fpR`(rawP FLOAT) RETURNS float
@@ -53,6 +62,9 @@ END
 
 
 // Процедура интерполяции по трем точкам
+mysqli_query($link, "DROP FUNCTION IF EXISTS int3point;");
+
+
 mysqli_query($link, "
 
 CREATE FUNCTION `int3point`(
@@ -76,6 +88,8 @@ END
 
 
 // Калибровка EC 
+mysqli_query($link, "DROP FUNCTION IF EXISTS EC;");
+
 mysqli_query($link, "
 
 CREATE FUNCTION `EC`(A1 FLOAT,A2 FLOAT, Temp FLOAT) RETURNS float
@@ -107,6 +121,8 @@ END
 ");
 
 // Калибровка терморезистора 
+mysqli_query($link, "DROP FUNCTION IF EXISTS ftR;");
+
 mysqli_query($link, "
 
 CREATE FUNCTION `ftR`(rawT FLOAT) RETURNS float
@@ -130,6 +146,8 @@ END
 
 ");
 
+// Калибровка уровня
+mysqli_query($link, "DROP FUNCTION IF EXISTS intpl;");
 
 mysqli_query($link, "
 CREATE FUNCTION `intpl`(x FLOAT) RETURNS float
@@ -160,6 +178,8 @@ END
 
 
 // Процедурв фильтрации мини
+mysqli_query($link, "DROP FUNCTION IF EXISTS levmin;");
+
 mysqli_query($link, "
 
 CREATE FUNCTION `levmin`(my_arg FLOAT) RETURNS float
@@ -176,6 +196,8 @@ END
 ");
 
 // Функция расчета pH
+mysqli_query($link, "DROP FUNCTION IF EXISTS ph;");
+
 mysqli_query($link, "
 
 CREATE FUNCTION `ph`(x float) RETURNS float

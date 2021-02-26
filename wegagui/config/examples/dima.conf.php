@@ -195,10 +195,10 @@ $f_atemp=$RootTemp;
 
 
 
-$csv="s.csv";
-$gnups="s.gnuplot";
-$img="s.png";
-$gimg=$img;
+//$csv="s.csv";
+//$gnups="s.gnuplot";
+//$img="s.png";
+//$gimg=$img;
 
 
 $chat_id="70042565";

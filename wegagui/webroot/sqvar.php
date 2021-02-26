@@ -42,9 +42,15 @@ $lev=sensval("intpl(levmin(".$p_Dst."))",$ns);
 
 $L1=$lev+$LevelAdd;
 $L2=$LevelFull-$lev-$La;
-$ECn=(-($EC*$L1 - $ECPlan*$L1 - $ECPlan*$L2 )/$L2);
+$ECn=(-($ec*$L1 - $ECPlan*$L1 - $ECPlan*$L2 )/$L2);
 $Soiln=$ECn*$Slk*($L2);
-
 $p_soil="($p_lev+".$L1.")*$p_EC*$Slk";
+
+$csv="tmp/s.".$ns.".csv";
+$gnups="tmp/s.".$ns.".gnuplot";
+$img="tmp/s.".$ns.".png";
+$gimg=$img;
+
+
 
 ?>

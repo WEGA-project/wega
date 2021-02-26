@@ -40,6 +40,9 @@ echo '
                          '.strtoupper($namesys).'
                         </span>
                 <ul>';
+
+echo "<li><a href=../wega>Общий</a>";
+
                          foreach (glob("../config/*.conf.php") as $filename) {
     				include $filename;
     				$fl=explode("/", $filename);

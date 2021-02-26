@@ -132,6 +132,7 @@ echo '<img src="'.$img.'" alt="альтернативный текст">';
 
 
 include "func.php";
+include "myfunc.php";
 
 
 ?>

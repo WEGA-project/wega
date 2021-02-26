@@ -210,9 +210,9 @@ $f_soil="(@lev+".$LevelAdd.")*@ECt*".$Slk;
 $f_ph="null";
 
 
-$csv="s.csv";
-$gnups="s.gnuplot";
-$img="s.png";
-$gimg=$img;
+//$csv="s.csv";
+//$gnups="s.gnuplot";
+//$img="s.png";
+//$gimg=$img;
 
 ?>

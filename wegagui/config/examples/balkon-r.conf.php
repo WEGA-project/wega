@@ -130,9 +130,9 @@ $f_ph="null";
 // Функция калибровки аналогово сенсора для компенсации ЕС
 $f_atemp=$pa."*pow(@EcTempRaw,2) + ".$pb."*@EcTempRaw + ".$pc."+2.2";
 
-$csv="s.csv";
-$gnups="s.gnuplot";
-$img="s.png";
-$gimg=$img;
+//$csv="s.csv";
+//$gnups="s.gnuplot";
+//$img="s.png";
+//$gimg=$img;
 
 ?>

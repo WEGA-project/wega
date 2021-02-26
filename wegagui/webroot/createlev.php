@@ -82,7 +82,7 @@ echo "<br>";
 $id=mysqli_fetch_row(mysqli_query($link, "select $p_Dst, intpl($p_Dst) from sens order by dt desc limit 1"));
 $raw=$id[0];
 $intpl_raw=$id[1];
-echo "Текущее значение RAW: ".$p_dist." = ".$raw;
+echo "Текущее значение RAW: ".$p_Dst." = ".$raw;
 echo "<br>";
 echo "Интерполированное текущее значение объема: ".round($intpl_raw,3)." Литр.";
 echo "<br>";
@@ -138,7 +138,7 @@ include "sqvar.php";
 // составление csv уровня
 $rs=mysqli_query($link, "select dt,$p_Dst,@a:=intpl($p_Dst),levmin(@a) from sens order by dt desc limit 100");
 
-$csv2="tmp/lev.csv";
+$csv2="tmp/lev.".$ns.".csv";
 $filename=$csv2;
 $handler = fopen($filename, "w");
 
