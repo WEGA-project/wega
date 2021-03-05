@@ -38,8 +38,13 @@ echo "<br>";
 pedit("EC_val_p2",$ns,4.89,"Фактическое значение EC точки 2");
 pedit("EC_R2_p2",$ns,155,"Значение R2 для точки 2");
 
+pedit("EC_val_korr",$ns,0,"Линейная коррекция");
+
+
 $ec1=floatval(dbval("EC_val_p1",$ns));
 $ec2=floatval(dbval("EC_val_p2",$ns));
+$eckorr=floatval(dbval("EC_val_korr",$ns));
+
 
 $ex1=floatval(dbval("EC_R2_p1",$ns));
 $ex2=floatval(dbval("EC_R2_p2",$ns));
@@ -119,9 +124,9 @@ dt,
 @R2p:=(((-@A2*".$R1."-@A2*".$Rx1."+".$R1."*".$Dr."+".$Rx1."*".$Dr.")/@A2)),
 @R2n:=(-(-(@A1)*".$R1."-(@A1)*".$Rx2."+".$Rx2."*".$Dr.")/(-(@A1)+".$Dr.")),
 @R2:=(@R2p+@R2n)/2,
-@EC:=if (@R2>0,".$ea."*pow(@R2,".$eb."),null),
-@tR:=int3point(".$tR_raw_p1.",".$tR_val_p1.",".$tR_raw_p2.",".$tR_val_p2.",".$tR_raw_p3.",".$tR_val_p3.",@ECtempRAW),
-@ECt:=@EC/(1+".$k."*(@tR-25))
+@EC:=ec(@A1,@A2,25),
+@tR:=ftr(@ECtempRAW),
+@ECt:=ec(@A1,@A2,@tR)
 
 
 

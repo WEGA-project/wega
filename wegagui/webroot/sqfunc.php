@@ -1,17 +1,6 @@
 <?php
 $link=mysqli_connect("$dbhost", "$login", "$password", "$my_db");
 
-/*
-mysqli_query($link, "DROP FUNCTION IF EXISTS line2point;");
-mysqli_query($link, "DROP FUNCTION IF EXISTS fpR;");
-mysqli_query($link, "DROP FUNCTION IF EXISTS int3point;");
-mysqli_query($link, "DROP FUNCTION IF EXISTS EC;");
-mysqli_query($link, "DROP FUNCTION IF EXISTS ftR;");
-mysqli_query($link, "DROP FUNCTION IF EXISTS intpl;");
-mysqli_query($link, "DROP FUNCTION IF EXISTS levmin;");
-mysqli_query($link, "DROP FUNCTION IF EXISTS ph;");
-*/
-
 // Процедурв линейной интерполяции по двум точкам
 mysqli_query($link, "
 
@@ -93,6 +82,7 @@ set @ex1 := (select value from config where parameter='EC_R2_p1' limit 1);
 set @ex2 := (select value from config where parameter='EC_R2_p2' limit 1);
 
 set @kt := (select value from config where parameter='EC_kT' limit 1);
+set @eckorr := (select value from config where parameter='EC_val_korr' limit 1);
 
 set @R2p:=(((-A2*@R1-A2*@Rx1+@R1*@Dr+@Rx1*@Dr)/A2));
 set @R2n:=(-(-A1*@R1-A1*@Rx2+@Rx2*@Dr)/(-A1+@Dr));
@@ -104,7 +94,7 @@ set @ea:=pow(@ex1,(-@eb))*@ec1;
 set @ec:=if(@R2>0,@ea*pow(@R2,@eb),null);
 
 set @ECt:=@ec/(1+@kt*(Temp-25));
-RETURN @ECt;
+RETURN @ECt+@eckorr;
 END
 ");
 
@@ -138,19 +128,19 @@ mysqli_query($link, "
 CREATE FUNCTION `intpl`(x FLOAT) RETURNS float
 BEGIN
 
-set @x1:=(SELECT cm FROM $tb 
+set @x1:=(SELECT cm FROM level 
          where cm <= x
          order by cm desc 
          limit 1 );
-set @y1:=(SELECT lev FROM $tb 
+set @y1:=(SELECT lev FROM level 
          where cm <= x
          order by cm desc
          limit 1 );
-set @x2:=(SELECT cm FROM $tb 
+set @x2:=(SELECT cm FROM level 
          where cm > x
          order by cm
          limit 1 );
-set @y2:=(SELECT lev FROM $tb 
+set @y2:=(SELECT lev FROM level 
          where cm > x
          order by cm
          limit 1 ); 
