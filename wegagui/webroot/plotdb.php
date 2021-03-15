@@ -69,8 +69,6 @@ $row=mysqli_fetch_row($rs);
 mysqli_data_seek($rs,0);
 
 
-
-
 echo "<br><table border='1'>";
 
 

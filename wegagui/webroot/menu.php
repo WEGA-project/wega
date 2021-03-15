@@ -74,6 +74,7 @@ echo '
 					<li><a href="createlev.php'.$stfind.'">Калибровка уровня</a></li>
 					<li><a href="level.php'.$stfind.'">Фильтрация уровня</a></li>
 					<li><a href="ph.php'.$stfind.'">Калибровка pH</a></li>
+					<li><a href="events.php'.$stfind.'">Настройка уведомлений</a></li>
 					<li><a href="rmfunc.php'.$stfind.'">Пересоздание функций</a></li>
 				</ul>
 			</li>

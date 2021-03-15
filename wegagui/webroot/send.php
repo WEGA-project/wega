@@ -1,116 +1,118 @@
 <?php
-include "top.php";
-
 
 $ns=$_GET['ns'];
 
+if ( $_GET['ns'] ){
+      include_once "func.php";
+      include_once "sqvar.php";
+
+    
+$OutDate = strtotime("now")-strtotime($dt);
+
+if ($OutDate < floatval(dbval("Ev_Max_Dt",$ns))){
 
 
-if (empty($_GET['days'])){$_GET['days']="-0 days";}
-if (empty($_GET['wsdt'])){$_GET['wsdt']=date("Y-m-d",strtotime($_GET['days']))." 00:00:00";}
-if (empty($_GET['wpdt'])){$_GET['wpdt']=date("Y-m-d")." 23:59:59";}
-if (empty($_GET['limit'])){$_GET['limit']="100000";}
+// Проверки выхода за пороговые значения
+// Температура воздуха
+$Max_AirTemp=floatval(dbval("Ev_Max_AirTemp",$ns));
+if ($AirTemp > $Max_AirTemp) { $EventBody=$EventBody."Превышение температуры воздуха ". $AirTemp." > ".$Max_AirTemp."\n";}
 
-$timeout=3600;
-$AirTempMin=15;
-$AirTempMax=30;
-$LevelAddEvent=10;
+$Min_AirTemp=floatval(dbval("Ev_Min_AirTemp",$ns));
+if ($AirTemp < $Min_AirTemp) { $EventBody=$EventBody."Низкая температуры воздуха ". $AirTemp." < ".$Min_AirTemp."\n";}
 
+// Температура корней
+$Max_RootTemp=floatval(dbval("Ev_Max_RootTemp",$ns));
+if ($RootTemp > $Max_RootTemp) { $EventBody=$EventBody."Превышение температуры зоны корней ". $RootTemp." > ".$Max_RootTemp."\n";}
 
-include "../config/".$ns.".conf.php";
+$Min_RootTemp=floatval(dbval("Ev_Min_RootTemp",$ns));
+if ($RootTemp < $Min_RootTemp) { $EventBody=$EventBody."Низкая температуры зоны корней ". $RootTemp." < ".$Root_AirTemp."\n";}
 
-echo "<h1>".$namesys;
-echo "</h1>";
-echo $comment;
-echo "<br>";
+// Температура бака
+$Max_WaterTemp=floatval(dbval("Ev_Max_WaterTemp",$ns));
+if ($tempEC > $Max_WaterTemp) { $EventBody=$EventBody."Превышение температуры расвтора ". $tempEC." > ".$Max_WaterTemp."\n";}
 
+$Min_WaterTemp=floatval(dbval("Ev_Min_WaterTemp",$ns));
+if ($tempEC < $Min_WaterTemp) { $EventBody=$EventBody."Низкая температура раствра ". $tempEC." < ".$Min_WaterTemp."\n";}
 
-$wsdt=$_GET['wsdt'];
-$wpdt=$_GET['wpdt'];
-$limit=$_GET['limit'];
+// Влажность воздуха
+$Max_AirHum=floatval(dbval("Ev_Max_AirHum",$ns));
+if ($AirHum > $Max_AirHum) { $EventBody=$EventBody."Высокая влажность воздуха ". $AirHum."% > ".$Max_AirHum."%\n";}
 
-
-
-
-// Подключаемся к базе
-
-include "sql.php";
-
-
-
-
-$AirTemp=$row[1];
-$Humidity=$row[2];
-$WaterTemp=$row[3];
-$WaterTempEC=round($row[9],3);
-$WaterTempECraw=$row[4];
-$EC=$row[14];
-$Level=$row[15];
-$LightRaw=round($row[5],0);
-$Lux=round($row[16],0);
-$L1=$Level+$LevelAdd;
-$L2=$LevelFull-$Level-$La;
-$ECn=(-($EC*$L1 - $ECPlan*$L1 - $ECPlan*$L2 )/$L2);
-$Soiln=$ECn*$Slk*($L2);
-$levsm=$row[6];
-$lasttime=date("U") - date("U",strtotime($row[0]) );
-
-
-echo ("Дата: ".$row[0]." обновлено: ".$lasttime." сек. назад");
-echo "<br>";
-echo ("<br>Температура воздуха: ".$AirTemp."°C");
-echo ("<br>Температура раствора (корни): ".$WaterTemp."°C");
-echo ("<br>Температура раствора (бак): ".$WaterTempEC."°C (raw=".$WaterTempECraw.")");
-echo ("<br>Влажность воздуха: ".$Humidity."%");
-echo ("<br>Освещенность: ".$Lux." lux (raw: ".$LightRaw.")<br>");
-echo ("<br>Текущий ЕС: ".round($EC,3)." мСм/см");
-echo ("<br>Остаток в баке: <b>".round($Level,1)." л.</b> (".round($levsm,2)." см) ".round(100-($LevelFull-$Level)/$LevelFull*100,0)."%");
-echo ("<br>Дополнительно в системе: ".round($LevelAdd,1)." л. Общий остаток раствора: ".round($L1,1)." л");
-echo ("<br>Предельный объем бака: ".round($LevelFull,1)." л. Защита от аварийного перелива: ".round($La,1));
-echo ("<br>Для получения ЕС=".$ECPlan." мСм/см нужно долить: <b>". round($L2,1)."л.</b> до уровня ".($LevelFull-$La).", c ЕС=".round( $ECn   ,2)." мСм/см" );
-echo ("<br>Это: <b>".round($Soiln,2)." грамм</b> солей или по ".round( $Soiln/2/$konc*1000,0)." мл концентратов ".$konc.":1 с каждого");
-
-
-// Отправка в телеграм
-
-
-	if ( $lasttime > $timeout )
-  	   { tme( $namesys."\n нет свежих данных уже: ".$lasttime." сек. С ".$row[0]); }
-
-	if ( $AirTemp < $AirTempMin or $AirTemp > $AirTempMax ) 	
-           { tme($chat_id,$namesys." (".$row[0].")"
-                 ."\nТемпература воздуха за пределами нормы\n"
-                 ."\nТемпература воздуха: ".$AirTemp."°C"
-                 ."\nТемпература в баке: ".$WaterTempEC."°C"
-                 ."\nОстаток в баке: ".round($Level,1)." Литров"
-                 ."\nEC= ".round($EC,3)." мСм/см"
-                  ); 
-            }
-
-	if ( $L2 > $LevelAddEvent)	
-          { tme($chat_id, 
-            $namesys
-            ."\nУровень раствора ниже нормы\n"
-            ."\nОстаток в баке: ".round($Level,1)." Литров"
-            ."\nEC= ".round($EC,3)." мСм/см"
-            ."\nДля получения ЕС=".$ECPlan." мСм/см нужно долить: "
-            . round($L2,1)."л. до уровня "
-            .($LevelFull-$La).", \nЭто: "
-            .round($Soiln,2)." грамм солей или по "
-            .round( $Soiln/2/$konc*1000,0)." мл концентратов ".$konc.":1 с каждого" ); }
+$Min_AirHum=floatval(dbval("Ev_Min_AirHum",$ns));
+if ($AirHum < $Min_AirHum) { $EventBody=$EventBody."Низкая влажность воздуха ". $AirHum."% < ".$Min_AirHum."%\n";}
 
 
 
 
+// Уровень раствора
+$Min_Level=floatval(dbval("Ev_Min_Level",$ns));
+$Crit_Level=floatval(dbval("Ev_Crit_Level",$ns));
+if ($lev < $Crit_Level) {$EventBody=$EventBody."КРИТИЧЕСКИ НИЗКИЙ УРОВЕНЬ РАСТВОРА! \n";}
+if ($lev < $Min_Level) { 
+      $EventBody=$EventBody."Уровень раствора ниже заданного ". round($lev,1)."л < ".$Min_Level."л\n";
+      $EventBody=$EventBody."ЕС = ". round($ec,3)." мСм/см";
+      $EventBody=$EventBody."Для получения ЕС=".$ECPlan." мСм/см нужно долить: ". round($L2,1)."л. до уровня ".($LevelFull-$La).", c ЕС=".round( $ECn   ,2)." мСм/см\n";
+      $EventBody=$EventBody."Это:".round($Soiln,2)." грамм солей или по ".round( $Soiln/2/$konc*1000,0)." мл концентратов ".$konc.":1 с каждого";
+}
 
-function tme($chd, $msg) 
+// ЕС
+$Max_EC=floatval(dbval("Ev_Max_EC",$ns));
+if ($ec > $Max_EC) { $EventBody=$EventBody."Высокий EC расвтора ". round($ec,3)." > ".$Max_EC."\n";}
+
+$Min_EC=floatval(dbval("Ev_Min_EC",$ns));
+if ($ec < $Min_EC) { $EventBody=$EventBody."Низкий EC расвтора ". round($ec,3)." < ".$Min_EC."\n";}
+
+// pH
+if (dbval("pHraw",$ns) != "null"){
+      $Max_pH=floatval(dbval("Ev_Max_pH",$ns));
+      if ($ph > $Max_pH) { $EventBody=$EventBody."Высокий pH расвтора ". round($ph,3)." > ".$Max_pH."\n";}
+
+      $Min_pH=floatval(dbval("Ev_Min_pH",$ns));
+      if ($ph < $Min_pH) { $EventBody=$EventBody."Низкий pH расвтора ". round($ph,3)." < ".$Min_pH."\n";}
+  }
+}
+
+else // Если данные давно не поступали
 {
-include "../../telegram.php";
 
-system("curl -s -X POST https://api.telegram.org/".$namebot.":".$token."/sendMessage -d text='".$msg."' -d chat_id=".$chd);
+       $EventBody="Данные от устройства отсутсвуют более чем ".$OutDate." сек"."\n";
+       $EventBody=$EventBody."Последние данные получены ". $dt."\n";
 
 }
 
+
+if ($EventBody){
+      $EventBody=$namesys."\n".$EventBody;
+
+echo "<pre>";
+
+echo $EventBody;
+
+echo "</pre>";
+
+
+$namebot=dbval("Ev_namebot",$ns);
+$token=dbval("Ev_token",$ns);
+$chat_id=dbval("Ev_chat_id",$ns);
+
+
+system("curl -s -X POST https://api.telegram.org/".$namebot.":".$token."/sendMessage -d text='".$EventBody."' -d chat_id=".$chat_id);
+//echo $trep;
+
+}else
+{
+      echo "Все контрольные параметры в норме, нечего слать";
+}
+
+
+
+
+}
+
+else
+{
+ echo "Не выбрана система";
+}
 
 
 
