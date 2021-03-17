@@ -28,13 +28,15 @@ if ( $_GET['ns'] ){
     echo "<br>";
     
     echo "<h3>Настройки телеграм</h3>";
-    pedit("Ev_chat_id",$ns,"","Идентификатор чата");
+    echo "<a href=https://t.me/BotFather>Регистрация бота</a><br><br>";
     pedit("Ev_token",$ns,"","Токен");
-    pedit("Ev_namebot",$ns,"","Имя бота");
-    
+    pedit("Ev_chat_id",$ns,"","Идентификатор чата");
+    echo "<br><a href=telegrambot.php?ns=".$ns.">Проверить входящие</a>";
     echo "<br>";
     
-    echo "<br><button><a href=send.php?ns=".$ns.">Проверить</a></button>";
+    echo "<br><a href=send.php?ns=".$ns.">Проверить отправку</a>";
+echo "<br>";
+    
 }
 
 else

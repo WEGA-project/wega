@@ -25,14 +25,14 @@ $Max_RootTemp=floatval(dbval("Ev_Max_RootTemp",$ns));
 if ($RootTemp > $Max_RootTemp) { $EventBody=$EventBody."Превышение температуры зоны корней ". $RootTemp." > ".$Max_RootTemp."\n";}
 
 $Min_RootTemp=floatval(dbval("Ev_Min_RootTemp",$ns));
-if ($RootTemp < $Min_RootTemp) { $EventBody=$EventBody."Низкая температуры зоны корней ". $RootTemp." < ".$Root_AirTemp."\n";}
+if ($RootTemp < $Min_RootTemp) { $EventBody=$EventBody."Низкая температуры зоны корней ". $RootTemp." < ".$Min_RootTemp."\n";}
 
 // Температура бака
 $Max_WaterTemp=floatval(dbval("Ev_Max_WaterTemp",$ns));
-if ($tempEC > $Max_WaterTemp) { $EventBody=$EventBody."Превышение температуры расвтора ". $tempEC." > ".$Max_WaterTemp."\n";}
+if ($tempEC > $Max_WaterTemp) { $EventBody=$EventBody."Превышение температуры расвтора ". round($tempEC,2)." > ".$Max_WaterTemp."\n";}
 
 $Min_WaterTemp=floatval(dbval("Ev_Min_WaterTemp",$ns));
-if ($tempEC < $Min_WaterTemp) { $EventBody=$EventBody."Низкая температура раствра ". $tempEC." < ".$Min_WaterTemp."\n";}
+if ($tempEC < $Min_WaterTemp) { $EventBody=$EventBody."Низкая температура раствра ". round($tempEC,2)." < ".$Min_WaterTemp."\n";}
 
 // Влажность воздуха
 $Max_AirHum=floatval(dbval("Ev_Max_AirHum",$ns));
@@ -50,9 +50,9 @@ $Crit_Level=floatval(dbval("Ev_Crit_Level",$ns));
 if ($lev < $Crit_Level) {$EventBody=$EventBody."КРИТИЧЕСКИ НИЗКИЙ УРОВЕНЬ РАСТВОРА! \n";}
 if ($lev < $Min_Level) { 
       $EventBody=$EventBody."Уровень раствора ниже заданного ". round($lev,1)."л < ".$Min_Level."л\n";
-      $EventBody=$EventBody."ЕС = ". round($ec,3)." мСм/см";
+      $EventBody=$EventBody."Текущий ЕС = ". round($ec,3)." мСм/см\n";
       $EventBody=$EventBody."Для получения ЕС=".$ECPlan." мСм/см нужно долить: ". round($L2,1)."л. до уровня ".($LevelFull-$La).", c ЕС=".round( $ECn   ,2)." мСм/см\n";
-      $EventBody=$EventBody."Это:".round($Soiln,2)." грамм солей или по ".round( $Soiln/2/$konc*1000,0)." мл концентратов ".$konc.":1 с каждого";
+      $EventBody=$EventBody."Это: ".round($Soiln,2)." грамм солей или по ".round( $Soiln/2/$konc*1000,0)." мл концентратов ".$konc.":1 с каждого";
 }
 
 // ЕС
@@ -96,7 +96,7 @@ $token=dbval("Ev_token",$ns);
 $chat_id=dbval("Ev_chat_id",$ns);
 
 
-system("curl -s -X POST https://api.telegram.org/".$namebot.":".$token."/sendMessage -d text='".$EventBody."' -d chat_id=".$chat_id);
+system("curl -s -X POST https://api.telegram.org/bot".$token."/sendMessage -d text='".$EventBody."' -d chat_id=".$chat_id);
 //echo $trep;
 
 }else
