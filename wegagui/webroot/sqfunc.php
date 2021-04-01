@@ -112,11 +112,14 @@ set @py1:=(select value from config where parameter='tR_val_p1' limit 1);
 set @py2:=(select value from config where parameter='tR_val_p2' limit 1);
 set @py3:=(select value from config where parameter='tR_val_p3' limit 1);
 
+set @lkorr:=(select value from config where parameter='tR_val_korr' limit 1);
+
 set @pa:=-(-@px1*@py3 + @px1*@py2 - @px3*@py2 + @py3*@px2 + @py1*@px3 - @py1*@px2) /  (-pow(@px1,2)*@px3 + pow(@px1,2)*@px2 - @px1*pow(@px2,2) + @px1*pow(@px3,2) - pow(@px3,2)*@px2 + @px3*pow(@px2,2) ); 
 set @pb:=( @py3*pow(@px2,2) - pow(@px2,2)*@py1 + pow(@px3,2)*@py1 + @py2*pow(@px1,2) - @py3*pow(@px1,2) - @py2 * pow(@px3,2) ) /  ( (-@px3+@px2) * (@px2*@px3 - @px2*@px1 + pow(@px1,2) - @px3*@px1 ) );
 set @pc:=( @py3*pow(@px1,2)*@px2 - @py2*pow(@px1,2)*@px3 - pow(@px2,2)*@px1*@py3 + pow(@px3,2)*@px1*@py2 + pow(@px2,2)*@py1*@px3 - pow(@px3,2)*@py1*@px2 ) /  ( (-@px3+@px2) * (@px2*@px3 - @px2*@px1 + pow(@px1,2) - @px3*@px1 ) );
 
-RETURN @pa*pow(rawT,2) + @pb*rawT + @pc;
+
+RETURN @pa*pow(rawT,2) + @pb*rawT + @pc+@lkorr;
 
 END
 

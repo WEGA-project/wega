@@ -90,10 +90,12 @@ unset title
 
 set title "Влажность"
 set ylabel "%"
+set yrange [ 0:100 ]
 
 plot    \
 	"'.$csv.'" using 1:5 w l title "Датчик влажности", \
 
+unset yrange
 unset ylabel
 unset title
 
@@ -108,19 +110,22 @@ unset ylabel
 unset title
 
 set title "Кислотно-щелочной баланс"
-
+set yrange [ 3:9 ]
 
 plot    \
 	"'.$csv.'" using 1:7 w l title "pH", \
 
+unset yrange 
 unset ylabel
 
 set title "Электропроводность"
 set ylabel "mS/cm"
+set yrange [ 0:5 ]
 
 plot    \
 	"'.$csv.'" using 1:8 w l title "EC", \
 
+unset yrange
 unset ylabel
 unset title
 

@@ -1,8 +1,12 @@
 <?php
 include "menu.php";
 if ( $_GET['ns'] ){
+
+    include "sqvar.php";
+    include "tstatus.php";  
     echo "<br>";
     
+
     echo "<h3>Общие параметры уведомлений</h3>";
     pedit("Ev_Max_Dt",$ns,3600,"Максимальная продолжительность отсуствия данных в секундах");
     
@@ -29,6 +33,9 @@ if ( $_GET['ns'] ){
     
     echo "<h3>Настройки телеграм</h3>";
     echo "<a href=https://t.me/BotFather>Регистрация бота</a><br><br>";
+
+        
+
     pedit("Ev_token",$ns,"","Токен");
     pedit("Ev_chat_id",$ns,"","Идентификатор чата");
     echo "<br><a href=telegrambot.php?ns=".$ns.">Проверить входящие</a>";
@@ -36,7 +43,7 @@ if ( $_GET['ns'] ){
     
     echo "<br><a href=send.php?ns=".$ns.">Проверить отправку</a>";
 echo "<br>";
-    
+ 
 }
 
 else

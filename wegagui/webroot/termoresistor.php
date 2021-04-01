@@ -20,9 +20,17 @@ include_once "func.php";
 if ($p_ECtempRAW != "null") {
 
 echo "<h4>Калибровка по трём точкам<br></h4>";
+
+
 echo "<br>Точка 1<br>";
 pedit("tR_val_p1",$ns,36,"tR Темература точки 1");
 pedit("tR_raw_p1",$ns,2300,"tR Значение АЦП RAW точки 1");
+
+echo "
+<details>
+ <summary>Подробнее</summary> Точка номер один
+</details>
+";
 
 echo "<br>Точка 2<br>";
 pedit("tR_val_p2",$ns,23,"tR Темература точки 2");
@@ -32,29 +40,25 @@ echo "<br>Точка 3<br>";
 pedit("tR_val_p3",$ns,6,"tR Темература точки 3");
 pedit("tR_raw_p3",$ns,920,"tR Значение АЦП RAW точки 3");
 
+pedit("tR_val_korr",$ns,0,"Линейная коррекция");
+
 	$tR_val_p1=floatval(dbval("tR_val_p1",$ns));
 	$tR_val_p2=floatval(dbval("tR_val_p2",$ns));
 	$tR_val_p3=floatval(dbval("tR_val_p3",$ns));
 	$tR_raw_p1=floatval(dbval("tR_raw_p1",$ns));
 	$tR_raw_p2=floatval(dbval("tR_raw_p2",$ns));
 	$tR_raw_p3=floatval(dbval("tR_raw_p3",$ns));
+	$tR_val_korr=floatval(dbval("tR_val_korr",$ns));
 
 
 
 
 include "datetime.php";
 
-//$P_ECtempRAW=dbval("ECtempRAW",$ns);
-//$ECtempRAW=sensval($P_ECtempRAW,$ns);
-
-//$P_RootTemp=dbval("RootTemp",$ns);
-//$RootTemp=sensval($P_RootTemp,$ns);
 
 echo "<br><br>RAW (".$p_ECtempRAW.")=".$ECtempRAW;
+echo "<br>Расчетная температура (WaterTemp)=".round($WaterTemp,3);
 echo "<br>Температура сравнения (".$p_RootTemp.")=".$RootTemp;
-//echo "<br>Температура ЕС=".round(sensval("int3point($tR_raw_p1,$tR_val_p1,$tR_raw_p2,$tR_val_p2,$tR_raw_p3,$tR_val_p3,$ECtempRAW)",$ns),3)."<br>";
-
-//int3point(".$tR_raw_p1.",".$tR_val_p1.",".$tR_raw_p2.",".$tR_val_p2.",".$tR_raw_p3.",".$tR_val_p3.",@ECtempRAW)
 
 
 $strSQL ="select 
@@ -78,7 +82,7 @@ include "sqltocsv.php";
 
 
 $text='
-set terminal png size 900,1000
+set terminal png size 900,2000
 set output "'.$gimg.'"
 set datafile separator ";"
 set xdata time

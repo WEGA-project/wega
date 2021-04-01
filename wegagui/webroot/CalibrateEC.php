@@ -126,7 +126,8 @@ dt,
 @R2:=(@R2p+@R2n)/2,
 @EC:=ec(@A1,@A2,25),
 @tR:=ftr(@ECtempRAW),
-@ECt:=ec(@A1,@A2,@tR)
+@ECt:=ec(@A1,@A2,@tR),
+@pol:=@R2p-@R2n
 
 
 
@@ -147,7 +148,7 @@ set xdata time
 set format x "%d.%m\n%H:%M"
 set timefmt "%Y-%m-%d %H:%M:%S"
 set grid
-set multiplot layout 10,1
+set multiplot layout 11,1
 set lmargin 10
 set rmargin 10
 set y2label
@@ -176,6 +177,9 @@ plot    \
 
 plot    \
 	"'.$csv.'" using 1:7 w l title "R2", \
+
+plot    \
+	"'.$csv.'" using 1:11 w l title "Polarity", \
 
 plot    \
 	"'.$csv.'" using 1:8 w l title "EC", \
