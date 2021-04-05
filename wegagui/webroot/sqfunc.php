@@ -26,19 +26,26 @@ mysqli_query($link, "
 CREATE FUNCTION `fpR`(rawP FLOAT) RETURNS float
 BEGIN
 
-set @px1:=(select value from config where parameter='pR_raw_p1' limit 1);
-set @px2:=(select value from config where parameter='pR_raw_p2' limit 1);
-set @px3:=(select value from config where parameter='pR_raw_p3' limit 1);
+IF @fpRf is null THEN
 
-set @py1:=(select value from config where parameter='pR_val_p1' limit 1);
-set @py2:=(select value from config where parameter='pR_val_p2' limit 1);
-set @py3:=(select value from config where parameter='pR_val_p3' limit 1);
+set @ppx1:=(select value from config where parameter='pR_raw_p1' limit 1);
+set @ppx2:=(select value from config where parameter='pR_raw_p2' limit 1);
+set @ppx3:=(select value from config where parameter='pR_raw_p3' limit 1);
 
-set @pa:=-(-@px1*@py3 + @px1*@py2 - @px3*@py2 + @py3*@px2 + @py1*@px3 - @py1*@px2) /  (-pow(@px1,2)*@px3 + pow(@px1,2)*@px2 - @px1*pow(@px2,2) + @px1*pow(@px3,2) - pow(@px3,2)*@px2 + @px3*pow(@px2,2) ); 
-set @pb:=( @py3*pow(@px2,2) - pow(@px2,2)*@py1 + pow(@px3,2)*@py1 + @py2*pow(@px1,2) - @py3*pow(@px1,2) - @py2 * pow(@px3,2) ) /  ( (-@px3+@px2) * (@px2*@px3 - @px2*@px1 + pow(@px1,2) - @px3*@px1 ) );
-set @pc:=( @py3*pow(@px1,2)*@px2 - @py2*pow(@px1,2)*@px3 - pow(@px2,2)*@px1*@py3 + pow(@px3,2)*@px1*@py2 + pow(@px2,2)*@py1*@px3 - pow(@px3,2)*@py1*@px2 ) /  ( (-@px3+@px2) * (@px2*@px3 - @px2*@px1 + pow(@px1,2) - @px3*@px1 ) );
+set @ppy1:=(select value from config where parameter='pR_val_p1' limit 1);
+set @ppy2:=(select value from config where parameter='pR_val_p2' limit 1);
+set @ppy3:=(select value from config where parameter='pR_val_p3' limit 1);
 
-RETURN @pa*pow(rawP,2) + @pb*rawP + @pc;
+
+
+set @ppa:=-(-@ppx1*@ppy3 + @ppx1*@ppy2 - @ppx3*@ppy2 + @ppy3*@ppx2 + @ppy1*@ppx3 - @ppy1*@ppx2) /  (-pow(@ppx1,2)*@ppx3 + pow(@ppx1,2)*@ppx2 - @px1*pow(@ppx2,2) + @ppx1*pow(@ppx3,2) - pow(@ppx3,2)*@ppx2 + @ppx3*pow(@ppx2,2) ); 
+set @ppb:=( @ppy3*pow(@ppx2,2) - pow(@ppx2,2)*@ppy1 + pow(@ppx3,2)*@ppy1 + @ppy2*pow(@ppx1,2) - @ppy3*pow(@ppx1,2) - @ppy2 * pow(@ppx3,2) ) /  ( (-@ppx3+@ppx2) * (@ppx2*@ppx3 - @px2*@ppx1 + pow(@ppx1,2) - @ppx3*@ppx1 ) );
+set @ppc:=( @ppy3*pow(@ppx1,2)*@ppx2 - @ppy2*pow(@ppx1,2)*@ppx3 - pow(@ppx2,2)*@ppx1*@ppy3 + pow(@ppx3,2)*@ppx1*@ppy2 + pow(@ppx2,2)*@ppy1*@ppx3 - pow(@ppx3,2)*@ppy1*@ppx2 ) /  ( (-@ppx3+@ppx2) * (@ppx2*@ppx3 - @ppx2*@ppx1 + pow(@ppx1,2) - @ppx3*@ppx1 ) );
+
+set @fpRf:=1;
+END IF;
+
+RETURN @ppa*pow(rawP,2) + @ppb*rawP + @ppc;
 
 END
 ");
@@ -71,6 +78,9 @@ mysqli_query($link, "
 
 CREATE FUNCTION `EC`(A1 FLOAT,A2 FLOAT, Temp FLOAT) RETURNS float
 BEGIN
+
+IF @ECf is null THEN
+
 set @R1 := (select value from config where parameter='EC_R1' limit 1);
 set @Rx1 := (select value from config where parameter='EC_Rx1' limit 1);
 set @Rx2 := (select value from config where parameter='EC_RX2' limit 1);
@@ -84,12 +94,17 @@ set @ex2 := (select value from config where parameter='EC_R2_p2' limit 1);
 set @kt := (select value from config where parameter='EC_kT' limit 1);
 set @eckorr := (select value from config where parameter='EC_val_korr' limit 1);
 
+set @eb:=(-log(@ec1/@ec2))/(log(@ex2/@ex1));
+set @ea:=pow(@ex1,(-@eb))*@ec1;
+
+set @ECf:=1;
+END IF;
+
 set @R2p:=(((-A2*@R1-A2*@Rx1+@R1*@Dr+@Rx1*@Dr)/A2));
 set @R2n:=(-(-A1*@R1-A1*@Rx2+@Rx2*@Dr)/(-A1+@Dr));
 set @R2:=(@R2p+@R2n)/2;
 
-set @eb:=(-log(@ec1/@ec2))/(log(@ex2/@ex1));
-set @ea:=pow(@ex1,(-@eb))*@ec1;
+
 
 set @ec:=if(@R2>0,@ea*pow(@R2,@eb),null);
 
@@ -104,6 +119,8 @@ mysqli_query($link, "
 CREATE FUNCTION `ftR`(rawT FLOAT) RETURNS float
 BEGIN
 
+IF @ftRf is null THEN
+
 set @px1:=(select value from config where parameter='tR_raw_p1' limit 1);
 set @px2:=(select value from config where parameter='tR_raw_p2' limit 1);
 set @px3:=(select value from config where parameter='tR_raw_p3' limit 1);
@@ -114,9 +131,13 @@ set @py3:=(select value from config where parameter='tR_val_p3' limit 1);
 
 set @lkorr:=(select value from config where parameter='tR_val_korr' limit 1);
 
+set @ftRf:=1;
+END IF;
+
 set @pa:=-(-@px1*@py3 + @px1*@py2 - @px3*@py2 + @py3*@px2 + @py1*@px3 - @py1*@px2) /  (-pow(@px1,2)*@px3 + pow(@px1,2)*@px2 - @px1*pow(@px2,2) + @px1*pow(@px3,2) - pow(@px3,2)*@px2 + @px3*pow(@px2,2) ); 
 set @pb:=( @py3*pow(@px2,2) - pow(@px2,2)*@py1 + pow(@px3,2)*@py1 + @py2*pow(@px1,2) - @py3*pow(@px1,2) - @py2 * pow(@px3,2) ) /  ( (-@px3+@px2) * (@px2*@px3 - @px2*@px1 + pow(@px1,2) - @px3*@px1 ) );
 set @pc:=( @py3*pow(@px1,2)*@px2 - @py2*pow(@px1,2)*@px3 - pow(@px2,2)*@px1*@py3 + pow(@px3,2)*@px1*@py2 + pow(@px2,2)*@py1*@px3 - pow(@px3,2)*@py1*@px2 ) /  ( (-@px3+@px2) * (@px2*@px3 - @px2*@px1 + pow(@px1,2) - @px3*@px1 ) );
+
 
 
 RETURN @pa*pow(rawT,2) + @pb*rawT + @pc+@lkorr;
@@ -177,6 +198,8 @@ mysqli_query($link, "
 CREATE FUNCTION `ph`(x float) RETURNS float
 BEGIN
 
+IF @phf is null THEN
+
 set @x1:=(select value from config where parameter='pH_raw_p1' limit 1);
 set @y1:=(select value from config where parameter='pH_val_p1' limit 1);
 set @x2:=(select value from config where parameter='pH_raw_p2' limit 1);
@@ -184,6 +207,10 @@ set @y2:=(select value from config where parameter='pH_val_p2' limit 1);
 
 set @a:=(-@x1*@y2+@x2*@y1)/(@x2-@x1);
 set @k:=(@y2-@y1)/(@x2-@x1);
+
+set @phf:=1;
+END IF;
+
 set @y:=@a + @k *  x;
 RETURN @y;
 

@@ -2,6 +2,7 @@
 include "menu.php";
 //include "../config/".$ns.".conf.php";
 
+$start = microtime(true);
 
 if ($ns){
 include "sqvar.php";
@@ -218,6 +219,7 @@ else
 echo "Не выбрана система";
 }
 
-
+$time = microtime(true) - $start;
+echo "<h0>".$time."</h0>";
 ?>
 

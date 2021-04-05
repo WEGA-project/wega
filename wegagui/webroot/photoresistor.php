@@ -1,4 +1,7 @@
 <?php
+
+$start = microtime(true);
+
 include_once "menu.php";
 //include "func.php";
 
@@ -117,6 +120,7 @@ else
 echo "Не выбрана система";
 }
 
-
+$time = microtime(true) - $start;
+echo "<h0>".$time."</h0>";
 ?>
 

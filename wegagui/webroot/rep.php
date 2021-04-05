@@ -1,4 +1,6 @@
 <?php
+$start = microtime(true);
+
 include_once "menu.php";
 
 $ns=$_GET['ns'];
@@ -172,7 +174,8 @@ else
 echo "<h1>Система не выбрана</h1>";
 }
 
-
+$time = microtime(true) - $start;
+echo "<h0>".$time."</h0>";
 
 ?>
 
