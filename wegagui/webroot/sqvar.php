@@ -9,6 +9,8 @@ $p_ECtempRAW=dbval("ECtempRAW",$ns);
    $p_ECtemp="ftR(".$p_ECtempRAW.")";
 
 $p_pHraw=dbval("pHraw",$ns);
+$p_IntTempRaw=dbval("IntTempRaw",$ns);
+$p_VddRaw=dbval("VddRaw",$ns);
 $p_LightRaw=dbval("LightRaw",$ns);
 $p_Dst=dbval("Dst",$ns);
 
@@ -20,6 +22,7 @@ $p_Lux="fpr(".$p_LightRaw.")";
 $p_pH="pH(".$p_pHraw.")";
 $p_EC="EC(".$P_A1.",".$P_A2.",".$p_ECtemp.")";
 $p_lev="intpl(levmin(".$p_Dst."))";
+$p_Pa="Pa(".$p_AirTemp.",".$p_AirHum.")";
 
  $namesys=dbval("namesys",$ns);
  $comment=dbcomment("namesys",$ns);
@@ -47,6 +50,8 @@ $Lux=sensval("fpR(".dbval("LightRAW",$ns).")",$ns);
 $ec=sensval("EC($P_A1,$P_A2,".$tempEC.")",$ns);
 $ph=sensval("ph(".dbval("pHraw",$ns).")",$ns);
 $lev=sensval("intpl(levmin(".$p_Dst."))",$ns);
+//$Pa=sensval("Pa($p_AirTemp,$p_AirHum)",$ns);
+$Pa=sensval("$p_Pa",$ns);
 
 $L1=$lev+$LevelAdd;
 $L2=$LevelFull-$lev-$La;

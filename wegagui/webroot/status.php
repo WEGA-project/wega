@@ -17,7 +17,7 @@ echo "<br>";
 echo "<h3>Текущие контрольные показания</h3>";
 
 include "tstatus.php";
-
+echo '<br><h3><a href="rep.php'.$stfind.'">Сводный анализ</a></h3>';
 }
 else
 {

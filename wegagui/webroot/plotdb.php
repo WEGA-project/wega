@@ -4,8 +4,8 @@ include "menu.php";
 
 if ( $_GET['ns'] ){
 
-
-include "../config/".$ns.".conf.php";
+        include "sqvar.php";
+//include "../config/".$ns.".conf.php";
 
 echo "<h1>".$namesys;
 echo "</h1>";
@@ -137,54 +137,31 @@ $tb="config";
 
 
 
-$link=mysqli_connect("$dbhost", "$login", "$password", "$my_db");
+// $link=mysqli_connect("$dbhost", "$login", "$password", "$my_db");
 
 
-//mysqli_query($link, "CREATE DATABASE $my_db");
-mysqli_query($link, "create table $tb (parameter VARCHAR(50)  PRIMARY KEY)");
-mysqli_query($link, "alter table $tb add column value VARCHAR(50)");
-mysqli_query($link, "alter table $tb add column comment VARCHAR(255)");
+// //mysqli_query($link, "CREATE DATABASE $my_db");
+// mysqli_query($link, "create table $tb (parameter VARCHAR(50)  PRIMARY KEY)");
+// mysqli_query($link, "alter table $tb add column value VARCHAR(50)");
+// mysqli_query($link, "alter table $tb add column comment VARCHAR(255)");
 
 
-echo '
-<form action="" method="get">
- <input type="hidden" name="ns" value="'.$_GET['ns'].'"/>
- <input type="hidden" name="cl" value="'.$_GET['cl'].'"/>
- Параметр: <input type="text" name="parameter" value="'.$_GET['parameter'].'"/>
- <input type="submit" value="Задать"/>
-</form>';
+// echo '
+// <form action="" method="get">
+//  <input type="hidden" name="ns" value="'.$_GET['ns'].'"/>
+//  <input type="hidden" name="cl" value="'.$_GET['cl'].'"/>
+//  Параметр: <input type="text" name="parameter" value="'.$_GET['parameter'].'"/>
+//  <input type="submit" value="Задать"/>
+// </form>';
 
 
-$parameter=$_GET['parameter'];
+// $parameter=$_GET['parameter'];
 
-// Добавляем
-mysqli_query($link, "insert into $tb (parameter, value ) values ( '$parameter', '$cl' )");
-//}
-
-
+// // Добавляем
+// mysqli_query($link, "insert into $tb (parameter, value ) values ( '$parameter', '$cl' )");
+// //}
 
 
-//mysqli_query($link, "create table $tb");
-//mysqli_query($link, "alter table $tb add column val sting");
-
-
-// Добавляем
-//if ( $_GET['add'] == 'add' ) {
-//mysqli_query($link, "CREATE DATABASE $my_db");
-//mysqli_query($link, "create table $tb (cm double PRIMARY KEY)");
-//mysqli_query($link, "alter table $tb add column lev double");
-//mysqli_query($link, "insert into $tb (cm, lev) values ( $cm, $lev )");
-//}
-
-// Удаляем
-//if ( $_GET['del'] == 'del' ) {
-//mysqli_query($link, "delete from $tb where cm=$cm");
-//}
-
-// Редактируем
-//if ( $_GET['edit'] == 'edit' ) {
-//mysqli_query($link, "update $tb set lev=$lev where cm=$cm");
-//}
 
 
 

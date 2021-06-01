@@ -68,7 +68,7 @@ echo '
 					<li><a href="main.php'.$stfind.'">Основные параметры</a></li>
 					<li><a href="srctbl.php'.$stfind.'">База</a></li>
 					<li><a href="conformity.php'.$stfind.'">Сопоставление полей</a></li>
-					<li><a href="termoresistor.php'.$stfind.'">Калибровка терморезистора</a></li>
+					<li><a href="termoresistor.php'.$stfind.'">Температурная компенсация</a></li>
 					<li><a href="CalibrateEC.php'.$stfind.'">Калибровка EC</a></li>
 					<li><a href="photoresistor.php'.$stfind.'">Калибровка фоторезистора</a></li>
 					<li><a href="createlev.php'.$stfind.'">Калибровка уровня</a></li>

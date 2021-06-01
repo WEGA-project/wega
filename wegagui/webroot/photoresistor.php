@@ -95,7 +95,7 @@ plot    \
 	"'.$csv.'" using 1:2 w l title "'.dbval("LightRAW",$ns).'", \
 
 plot    \
-	"'.$csv.'" using 1:3 w l title "Яркость", \
+	"'.$csv.'" using 1:3 w l title "Освещенность", \
 
 
 ';

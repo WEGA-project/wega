@@ -10,27 +10,47 @@ echo "<h1>".$namesys."</h1>";
 echo $comment;
 echo "<br>";
 
-echo "<h2>Калибровка терморезистора</h2>";
+echo "<h2>Датчик температурной компенсации расвтора</h2>";
 
 
 include_once "func.php";
 
-
+echo "<br><h3>Выбор источника данных</h3>";
+form($ns,"ECtempRAW","Датчик EC температура (RAW)");
 
 if ($p_ECtempRAW != "null") {
 
-echo "<h4>Калибровка по трём точкам<br></h4>";
 
 
+echo "<br><h3>Установка типа датчика</h3>";
+pedit("tR_type",$ns,'direct',"Включение прямое или обратное direct/reverse/digital/other");
+$tR_type=floatval(dbval("tR_type",$ns));
+pedit("tR_val_korr",$ns,0,"Линейная коррекция");
+$tR_val_korr=floatval(dbval("tR_val_korr",$ns));
+echo "
+<details>
+ <summary>Описание типов измерителя</summary>  
+  <b>direct</b> или <b>reverse</b> - соответсвенно прямое или обратное подключение терморезистора типа NTC<br>
+  <b>digital</b> - цифровой датчик выдающий температуру сразу в градусах<br>
+  <b>other</b> - произвольный источник данных, калибруется по 3м точкам
+</details><br>
+";
+
+echo "<details><summary>Калибровка терморезистора NTC</summary>";
+//echo "<br><h3>Калибровка терморезистора NTC</h3>";
+pedit("tR_B",$ns,3950,"Коэффициент температурной чувствительности B25/50");
+$tR_B=floatval(dbval("tR_B",$ns));
+
+pedit("tR_DAC",$ns,4096,"Предел измерения АЦП");
+$tR_U=floatval(dbval("tR_DAC",$ns));
+
+echo "</details><br>";
+
+
+echo "<details><summary>Калибровка по трём точкам</summary>";
 echo "<br>Точка 1<br>";
 pedit("tR_val_p1",$ns,36,"tR Темература точки 1");
 pedit("tR_raw_p1",$ns,2300,"tR Значение АЦП RAW точки 1");
-
-echo "
-<details>
- <summary>Подробнее</summary> Точка номер один
-</details>
-";
 
 echo "<br>Точка 2<br>";
 pedit("tR_val_p2",$ns,23,"tR Темература точки 2");
@@ -40,7 +60,10 @@ echo "<br>Точка 3<br>";
 pedit("tR_val_p3",$ns,6,"tR Темература точки 3");
 pedit("tR_raw_p3",$ns,920,"tR Значение АЦП RAW точки 3");
 
-pedit("tR_val_korr",$ns,0,"Линейная коррекция");
+echo "</details><br>";
+
+
+
 
 	$tR_val_p1=floatval(dbval("tR_val_p1",$ns));
 	$tR_val_p2=floatval(dbval("tR_val_p2",$ns));
@@ -48,7 +71,7 @@ pedit("tR_val_korr",$ns,0,"Линейная коррекция");
 	$tR_raw_p1=floatval(dbval("tR_raw_p1",$ns));
 	$tR_raw_p2=floatval(dbval("tR_raw_p2",$ns));
 	$tR_raw_p3=floatval(dbval("tR_raw_p3",$ns));
-	$tR_val_korr=floatval(dbval("tR_val_korr",$ns));
+
 
 
 
@@ -69,11 +92,13 @@ dt,												# 1
 ".$p_RootTemp."
 
 
+
 from $tb 
 where dt  >  '".$wsdt."'
  and  dt  <  '".$wpdt."'
 order by dt limit $limit";
 
+//R3950(".$p_ECtempRAW.",1024)
 include "sqltocsv.php";
 
 
@@ -109,6 +134,7 @@ plot    \
 plot    \
 	"'.$csv.'" using 1:3 w l title "ECtemp", \
 	"'.$csv.'" using 1:4 w l title "'.dbval("RootTemp",$ns).'", \
+	"'.$csv.'" using 1:5 w l title "E3950", \
 
 ';
 
@@ -123,7 +149,7 @@ echo '<img src="'.$img.'" alt="альтернативный текст">';
 }
 else
 {
-echo "Датчик pH не задан. Если он есть сопоставьте соответсвующее поле в базе";
+echo "Датчик терморезистора не задан. Если он есть сопоставьте соответсвующее поле в базе";
 }
 
 }

@@ -18,15 +18,14 @@ include "datetime.php";
 $strSQL ="select 
 
 dt,												# 1
-".$p_AirTemp.",
-".$p_RootTemp.",
-".$p_ECtemp."
-
+if (".$p_AirTemp." < 80 and ".$p_AirTemp." > -80, ".$p_AirTemp.",null) ,
+if (".$p_RootTemp." < 80 and ".$p_RootTemp." > -80, ".$p_RootTemp.",null) ,
+if (".$p_ECtemp." < 80 and ".$p_ECtemp." > -80, ".$p_ECtemp.",null)
 
 from $tb 
 where dt  >  '".$wsdt."'
  and  dt  <  '".$wpdt."'
-order by dt limit $limit";
+ order by dt";
 
 
 include "sqltocsv.php";

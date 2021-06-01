@@ -1,16 +1,13 @@
 <?php
-$start = microtime(true);
 
 include_once "menu.php";
 
 $ns=$_GET['ns'];
-//$namesys=dbval("namesys",$ns);
 include "../config/".$ns.".conf.php";
 include_once "func.php";
 
 
 if ($ns){
-
 if (empty($_GET['days'])){$_GET['days']="-0 days";}
 if (empty($_GET['wsdt'])){$_GET['wsdt']=date("Y-m-d",strtotime($_GET['days']))." 00:00:00";}
 if (empty($_GET['wpdt'])){$_GET['wpdt']=date("Y-m-d")." 23:59:59";}
@@ -24,149 +21,224 @@ echo $comment;
 echo "<br>";
 echo "<br>";
 
-
 include "tstatus.php";
-include_once "helper.php";
+
+if ($p_DstRAW != 'null' and $P_A1 != 'null' and $P_A2 != 'null') {
+echo "<br>";
+    include_once "helper.php";
+}
 
 echo "<br>";
 echo "<br>";
 include_once "datetime.php";
+$pref="";
 
 
+// Графики температур
+if ($p_AirTemp != 'null' or $p_RootTemp != 'null' or $p_ECtemp !='null') {
+    $pref="temper";
+    $xsize=1000;
+    $ysize=400;
+
+
+$gimg=$gimg.$pref;
+$img=$img.$pref;
 
 $strSQL ="select 
-
 dt,
 ".$p_AirTemp.",
 ".$p_RootTemp.",
-".$p_ECtemp.",
-".$p_AirHum.",
-".$p_Lux.",
-".$p_pH.",
-".$p_EC.",
-".$p_lev.",
-".$p_soil."
-
+".$p_ECtemp."
 
 from sens 
 where dt  >  '".$wsdt."'
  and  dt  <  '".$wpdt."'
-
 order by dt";
-
-echo "<br>";
-
 include "sqltocsv.php";
 
+$name="Температура";
+$dimens="°C";
+$nplot1="Воздух";
+$nplot2="Зона корней";
+$nplot3="Бак";
 
-$text='
-set terminal png size 1200,2400
-set output "'.$gimg.'"
-set datafile separator ";"
-set xdata time
-set format x "%d.%m\n%H:%M"
-set timefmt "%Y-%m-%d %H:%M:%S"
-set grid
-//set multiplot layout 7, 1
-set multiplot layout 7,1
-
-set lmargin 10
-set rmargin 10
-set y2label
-set xrange ["'.$wsdt.'" : "'.$wpdt.'"]
+gplotgen($xsize,$ysize,$gimg,$wsdt,$wpdt,$csv,$handler,$text,$gnups,$img,$name,$nplot1,$nplot2,$nplot3,$nplot4,$nplot5,$dimens);
+}
 
 
-############## plot2 temp ######################
+// Влажность
+if ($p_AirHum != 'null') {
+    $pref="hum";
+    $xsize=1000;
+    $ysize=400;
+    
+ 
+    $gimg=$gimg.$pref;
+    $img=$img.$pref;
+    
+    $strSQL ="select 
+    dt,
+    ".$p_AirHum."
 
-set ylabel "градусы"
-set title "Температура"
-plot    \
-	"'.$csv.'" using 1:2 w l title "Воздух", \
-	"'.$csv.'" using 1:3 w l title "Корни", \
-	"'.$csv.'" using 1:4 w l title "Бак", \
+    
+    from sens 
+    where dt  >  '".$wsdt."'
+     and  dt  <  '".$wpdt."'
+    order by dt";
+    include "sqltocsv.php";
+    
+    $name="Относительная влажность";
+    $dimens="%";
+    $nplot1="Воздух";
 
-
-unset ylabel
-unset title
-
-
-set title "Влажность"
-set ylabel "%"
-set yrange [ 0:100 ]
-
-plot    \
-	"'.$csv.'" using 1:5 w l title "Датчик влажности", \
-
-unset yrange
-unset ylabel
-unset title
-
-
-set title "Освещенность"
-set ylabel "Киллолюксы"
-
-plot    \
-	"'.$csv.'" using 1:6 w l title "Датчик освещенности", \
-
-unset ylabel
-unset title
-
-set title "Кислотно-щелочной баланс"
-set yrange [ 3:9 ]
-
-plot    \
-	"'.$csv.'" using 1:7 w l title "pH", \
-
-unset yrange 
-unset ylabel
-
-set title "Электропроводность"
-set ylabel "mS/cm"
-set yrange [ 0:5 ]
-
-plot    \
-	"'.$csv.'" using 1:8 w l title "EC", \
-
-unset yrange
-unset ylabel
-unset title
+    
+    gplotgen($xsize,$ysize,$gimg,$wsdt,$wpdt,$csv,$handler,$text,$gnups,$img,$name,$nplot1,$nplot2,$nplot3,$nplot4,$nplot5,$dimens);
+    }
 
 
-set title "Уровень в питательном баке"
-set ylabel "литры"
+// График EC
+if ($P_A1 != 'null' and $P_A2 != 'null') {
+    $pref="ec";    
+    $xsize=1000;
+    $ysize=400;
+    
+
+    $gimg=$gimg.$pref;
+    $img=$img.$pref;
+    
+    $strSQL ="select 
+    dt,
+    ".$p_EC."
+    
+    from sens 
+    where dt  >  '".$wsdt."'
+     and  dt  <  '".$wpdt."'
+    order by dt";
+    include "sqltocsv.php";
+    
+    $name="EC (Удельная электропроводность раствора)";
+    $dimens="мСм/см";
+    $nplot1="Бак";
+
+    
+    gplotgen($xsize,$ysize,$gimg,$wsdt,$wpdt,$csv,$handler,$text,$gnups,$img,$name,$nplot1,$nplot2,$nplot3,$nplot4,$nplot5,$dimens);
+    }
+
+// График pH
+
+if ($p_pHraw != 'null') {
+    $pref="ph";
+    $xsize=1000;
+    $ysize=400;
+    
+
+    $gimg=$gimg.$pref;
+    $img=$img.$pref;
+    
+    $strSQL ="select 
+    dt,
+    ".$p_pH."
+    
+    from sens 
+    where dt  >  '".$wsdt."'
+     and  dt  <  '".$wpdt."'
+    order by dt";
+    include "sqltocsv.php";
+    
+    $name="pH (Кислотно-щелочной баланс)";
+    $dimens="";
+    $nplot1="Бак";
+
+    
+    gplotgen($xsize,$ysize,$gimg,$wsdt,$wpdt,$csv,$handler,$text,$gnups,$img,$name,$nplot1,$nplot2,$nplot3,$nplot4,$nplot5,$dimens);
+    }
 
 
-plot    \
-	"'.$csv.'" using 1:9 w l title "Объем в баке", \
+// График света
 
-unset ylabel
-unset title
+if ($p_LightRaw != 'null') {
+    $pref="light";
+    $xsize=1000;
+    $ysize=400;
+    
 
+    $gimg=$gimg.$pref;
+    $img=$img.$pref;
+    
+    $strSQL ="select 
+    dt,
+    ".$p_Lux."
+    
+    from sens 
+    where dt  >  '".$wsdt."'
+     and  dt  <  '".$wpdt."'
+    order by dt";
+    include "sqltocsv.php";
+    
+    $name="Освещение";
+    $dimens="кЛюкс";
+    $nplot1="Зона листвы";
 
+    
+    gplotgen($xsize,$ysize,$gimg,$wsdt,$wpdt,$csv,$handler,$text,$gnups,$img,$name,$nplot1,$nplot2,$nplot3,$nplot4,$nplot5,$dimens);
+    }
 
-set title "Колличество растворенных солей"
-set ylabel "граммы"
+// График уровня раствора
+if ($p_Dst != 'null') {
+    $pref="level";
+    $xsize=1000;
+    $ysize=400;
+    
 
-plot    \
-	"'.$csv.'" using 1:10 w l title "Остаток солей", \
+    $gimg=$gimg.$pref;
+    $img=$img.$pref;
+    
+    $strSQL ="select 
+    dt,
+    ".$p_lev."
+    
+    from sens 
+    where dt  >  '".$wsdt."'
+     and  dt  <  '".$wpdt."'
+    order by dt";
+    include "sqltocsv.php";
+    
+    $name="Объем раствора";
+    $dimens="Литры";
+    $nplot1="Бак";
 
-unset ylabel
-unset title
+    
+    gplotgen($xsize,$ysize,$gimg,$wsdt,$wpdt,$csv,$handler,$text,$gnups,$img,$name,$nplot1,$nplot2,$nplot3,$nplot4,$nplot5,$dimens);
+    }
 
+// График остатка солей
 
+if ($p_DstRAW != 'null' and $P_A1 != 'null' and $P_A2 != 'null') {
+    $pref="soil";
+    $xsize=1000;
+    $ysize=400;
+    
 
+    $gimg=$gimg.$pref;
+    $img=$img.$pref;
+    
+    $strSQL ="select 
+    dt,
+    ".$p_soil."
+    
+    from sens 
+    where dt  >  '".$wsdt."'
+     and  dt  <  '".$wpdt."'
+    order by dt";
+    include "sqltocsv.php";
+    
+    $name="Суммарный вес растворенных солей";
+    $dimens="Граммы";
+    $nplot1="Раствор";
 
-
-';
-
-fwrite($handler, $text);
-fclose($handler);
-
-$err=shell_exec('cat '.$gnups.'|gnuplot');
-echo $err;
-
-echo '<img src="'.$img.'" alt="альтернативный текст">';
-
+    
+    gplotgen($xsize,$ysize,$gimg,$wsdt,$wpdt,$csv,$handler,$text,$gnups,$img,$name,$nplot1,$nplot2,$nplot3,$nplot4,$nplot5,$dimens);
+    }
 
 }
 else
@@ -174,8 +246,14 @@ else
 echo "<h1>Система не выбрана</h1>";
 }
 
-$time = microtime(true) - $start;
-echo "<h0>".$time."</h0>";
+
+
+
+
+
+
+
+
 
 ?>
 

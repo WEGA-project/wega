@@ -23,7 +23,7 @@ END
 // Функция sql процедура перевода фоторезистора в люксы 
 mysqli_query($link, "
 
-CREATE FUNCTION `fpR`(rawP FLOAT) RETURNS float
+CREATE DEFINER=`root`@`localhost` FUNCTION `fpR`(rawP FLOAT) RETURNS float
 BEGIN
 
 IF @fpRf is null THEN
@@ -37,10 +37,10 @@ set @ppy2:=(select value from config where parameter='pR_val_p2' limit 1);
 set @ppy3:=(select value from config where parameter='pR_val_p3' limit 1);
 
 
-
-set @ppa:=-(-@ppx1*@ppy3 + @ppx1*@ppy2 - @ppx3*@ppy2 + @ppy3*@ppx2 + @ppy1*@ppx3 - @ppy1*@ppx2) /  (-pow(@ppx1,2)*@ppx3 + pow(@ppx1,2)*@ppx2 - @px1*pow(@ppx2,2) + @ppx1*pow(@ppx3,2) - pow(@ppx3,2)*@ppx2 + @ppx3*pow(@ppx2,2) ); 
-set @ppb:=( @ppy3*pow(@ppx2,2) - pow(@ppx2,2)*@ppy1 + pow(@ppx3,2)*@ppy1 + @ppy2*pow(@ppx1,2) - @ppy3*pow(@ppx1,2) - @ppy2 * pow(@ppx3,2) ) /  ( (-@ppx3+@ppx2) * (@ppx2*@ppx3 - @px2*@ppx1 + pow(@ppx1,2) - @ppx3*@ppx1 ) );
+set @ppa:=-(-@ppx1*@ppy3 + @ppx1*@ppy2 - @ppx3*@ppy2 + @ppy3*@ppx2 + @ppy1*@ppx3 - @ppy1*@ppx2) /  (-pow(@ppx1,2)*@ppx3 + pow(@ppx1,2)*@ppx2 - @ppx1*pow(@ppx2,2) + @ppx1*pow(@ppx3,2) - pow(@ppx3,2)*@ppx2 + @ppx3*pow(@ppx2,2) ); 
+set @ppb:=( @ppy3*pow(@ppx2,2) - pow(@ppx2,2)*@ppy1 + pow(@ppx3,2)*@ppy1 + @ppy2*pow(@ppx1,2) - @ppy3*pow(@ppx1,2) - @ppy2 * pow(@ppx3,2) ) /  ( (-@ppx3+@ppx2) * (@ppx2*@ppx3 - @ppx2*@ppx1 + pow(@ppx1,2) - @ppx3*@ppx1 ) );
 set @ppc:=( @ppy3*pow(@ppx1,2)*@ppx2 - @ppy2*pow(@ppx1,2)*@ppx3 - pow(@ppx2,2)*@ppx1*@ppy3 + pow(@ppx3,2)*@ppx1*@ppy2 + pow(@ppx2,2)*@ppy1*@ppx3 - pow(@ppx3,2)*@ppy1*@ppx2 ) /  ( (-@ppx3+@ppx2) * (@ppx2*@ppx3 - @ppx2*@ppx1 + pow(@ppx1,2) - @ppx3*@ppx1 ) );
+
 
 set @fpRf:=1;
 END IF;
@@ -113,6 +113,26 @@ RETURN @ECt+@eckorr;
 END
 ");
 
+// Перевод терморезистора 3950 в градусы
+
+mysqli_query($link, "
+
+CREATE FUNCTION `R3950`(Uraw FLOAT, Udcraw FLOAT) RETURNS float
+BEGIN
+
+set @B:=3950;
+set @t0:=25;
+set @Kelvin:=273.15;
+
+set @lnv:=ln( (-Uraw + Udcraw )/Uraw);
+
+RETURN -(-@B * @t0 + @Kelvin * @lnv * @t0 + @lnv * pow(@Kelvin,2) ) / (@B + @lnv * @t0 +  @lnv * @Kelvin);
+
+END
+
+");
+
+
 // Калибровка терморезистора 
 mysqli_query($link, "
 
@@ -120,6 +140,13 @@ CREATE FUNCTION `ftR`(rawT FLOAT) RETURNS float
 BEGIN
 
 IF @ftRf is null THEN
+
+set @tR_type:=(select value from config where parameter='tR_type' limit 1);
+set @tR_U:=(select value from config where parameter='tR_U' limit 1);
+set @tR_DAC:=(select value from config where parameter='tR_DAC' limit 1);
+set @tR_B:=(select value from config where parameter='tR_B' limit 1);
+set @lkorr:=(select value from config where parameter='tR_val_korr' limit 1);
+
 
 set @px1:=(select value from config where parameter='tR_raw_p1' limit 1);
 set @px2:=(select value from config where parameter='tR_raw_p2' limit 1);
@@ -129,7 +156,7 @@ set @py1:=(select value from config where parameter='tR_val_p1' limit 1);
 set @py2:=(select value from config where parameter='tR_val_p2' limit 1);
 set @py3:=(select value from config where parameter='tR_val_p3' limit 1);
 
-set @lkorr:=(select value from config where parameter='tR_val_korr' limit 1);
+
 
 set @ftRf:=1;
 END IF;
@@ -138,9 +165,47 @@ set @pa:=-(-@px1*@py3 + @px1*@py2 - @px3*@py2 + @py3*@px2 + @py1*@px3 - @py1*@px
 set @pb:=( @py3*pow(@px2,2) - pow(@px2,2)*@py1 + pow(@px3,2)*@py1 + @py2*pow(@px1,2) - @py3*pow(@px1,2) - @py2 * pow(@px3,2) ) /  ( (-@px3+@px2) * (@px2*@px3 - @px2*@px1 + pow(@px1,2) - @px3*@px1 ) );
 set @pc:=( @py3*pow(@px1,2)*@px2 - @py2*pow(@px1,2)*@px3 - pow(@px2,2)*@px1*@py3 + pow(@px3,2)*@px1*@py2 + pow(@px2,2)*@py1*@px3 - pow(@px3,2)*@py1*@px2 ) /  ( (-@px3+@px2) * (@px2*@px3 - @px2*@px1 + pow(@px1,2) - @px3*@px1 ) );
 
+set @rftr:=@pa*pow(rawT,2) + @pb*rawT + @pc+@lkorr;
+
+# Если датчик цифровой не требует дорасчета
+if @tR_type = 'digital' THEN
+set @rftr:= rawT+@lkorr;
+END IF;
+
+# Аналоговый мост прямое включение терморезистора
+if @tR_type = 'reverse' THEN
+set @B:=@tR_B;
+set @t0:=25;
+set @K:=237.15;
+set @Uraw:=rawT;
+#set @Umax:=@tR_U;
+#set @Badc:=@tR_U/@tR_DAC;
+
+#set @r:=ln(-@Uraw*@Badc / (@Uraw*@Badc-@Umax));
+
+set @r:=ln(@Uraw/(-@Uraw+@tR_DAC));
+set @rftr:= -(-@B*@t0+@r*@K*@t0+@r*pow(@K,2))/(@B+@r*@t0+@r*@K)+@lkorr;
+
+END IF;
+
+# Аналоговый мост обратное включение терморезистора
+if @tR_type = 'direct' THEN
+set @B:=@tR_B;
+set @t0:=25;
+set @K:=237.15;
+set @Uraw:=rawT;
+#set @Umax:=@tR_U;
+#set @Badc:=@tR_U/@tR_DAC;
+
+#set @r:=ln(-(@Uraw*@Badc-@Umax)/(@Uraw*@Badc) );
+
+set  @r:=ln((-@Uraw+@tR_DAC)/@Uraw);
+set @rftr:= (@B*@t0-@r*@K*@t0-@r*pow(@K,2))/(@B+@r*@t0+@r*@K)+@lkorr;
+
+END IF;
 
 
-RETURN @pa*pow(rawT,2) + @pb*rawT + @pc+@lkorr;
+RETURN @rftr;
 
 END
 
@@ -200,22 +265,40 @@ BEGIN
 
 IF @phf is null THEN
 
-set @x1:=(select value from config where parameter='pH_raw_p1' limit 1);
-set @y1:=(select value from config where parameter='pH_val_p1' limit 1);
-set @x2:=(select value from config where parameter='pH_raw_p2' limit 1);
-set @y2:=(select value from config where parameter='pH_val_p2' limit 1);
+set @px1:=(select value from config where parameter='pH_raw_p1' limit 1);
+set @py1:=(select value from config where parameter='pH_val_p1' limit 1);
+set @px2:=(select value from config where parameter='pH_raw_p2' limit 1);
+set @py2:=(select value from config where parameter='pH_val_p2' limit 1);
+set @px3:=(select value from config where parameter='pH_raw_p3' limit 1);
+set @py3:=(select value from config where parameter='pH_val_p3' limit 1);
 
-set @a:=(-@x1*@y2+@x2*@y1)/(@x2-@x1);
-set @k:=(@y2-@y1)/(@x2-@x1);
+
+set @pa:=-(-@px1*@py3 + @px1*@py2 - @px3*@py2 + @py3*@px2 + @py1*@px3 - @py1*@px2) /  (-pow(@px1,2)*@px3 + pow(@px1,2)*@px2 - @px1*pow(@px2,2) + @px1*pow(@px3,2) - pow(@px3,2)*@px2 + @px3*pow(@px2,2) ); 
+set @pb:=( @py3*pow(@px2,2) - pow(@px2,2)*@py1 + pow(@px3,2)*@py1 + @py2*pow(@px1,2) - @py3*pow(@px1,2) - @py2 * pow(@px3,2) ) /  ( (-@px3+@px2) * (@px2*@px3 - @px2*@px1 + pow(@px1,2) - @px3*@px1 ) );
+set @pc:=( @py3*pow(@px1,2)*@px2 - @py2*pow(@px1,2)*@px3 - pow(@px2,2)*@px1*@py3 + pow(@px3,2)*@px1*@py2 + pow(@px2,2)*@py1*@px3 - pow(@px3,2)*@py1*@px2 ) /  ( (-@px3+@px2) * (@px2*@px3 - @px2*@px1 + pow(@px1,2) - @px3*@px1 ) );
+
 
 set @phf:=1;
 END IF;
 
-set @y:=@a + @k *  x;
-RETURN @y;
+RETURN @pa*pow(x,2) + @pb*x + @pc;
+
 
 END
 ");
+
+// Функция расчета абсолюютной влажности
+mysqli_query($link, "
+
+CREATE FUNCTION `Pa`(tt float, rh float) RETURNS float
+BEGIN
+
+RETURN (4.579*pow(2.71828,((17.14*tt)/(235.3+tt))))*rh/100;
+
+
+END
+");
+
 
 ////////////////////////
 mysqli_close($link);

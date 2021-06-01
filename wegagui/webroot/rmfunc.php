@@ -19,6 +19,8 @@ mysqli_query($link, "DROP FUNCTION IF EXISTS ftR;");
 mysqli_query($link, "DROP FUNCTION IF EXISTS intpl;");
 mysqli_query($link, "DROP FUNCTION IF EXISTS levmin;");
 mysqli_query($link, "DROP FUNCTION IF EXISTS ph;");
+mysqli_query($link, "DROP FUNCTION IF EXISTS R3950;");
+
 
 mysqli_close($link);
 

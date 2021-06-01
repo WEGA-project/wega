@@ -3,17 +3,17 @@ include "menu.php";
 echo "<img src='wega.png'>";
 echo "<h1>Список доступных систем</h1>";
 
-echo "<table border=1>";
+echo "<table border=1; width=1000px>";
 
 echo "
-<th>Краткое имя
-<th>Подробное описание
-<th>t°C
-<th>RH
-<th>EC
-<th>pH
-<th>V
-<th>Обновлено
+<th style=color:red>Краткое имя
+<th style=color:red>Подробное описание
+<th style=color:red>t°C
+<th style=color:red>RH
+<th style=color:red>EC
+<th style=color:red>pH
+<th style=color:red>V
+<th style=color:red>Обновлено
 </th>";
 
 foreach (glob("../config/*.conf.php") as $filename) {

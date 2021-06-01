@@ -113,6 +113,41 @@ function form($ns,$parm,$comment)
    }
 }
 
+function gplotgen($xsize,$ysize,$gimg,$wsdt,$wpdt,$csv,$handler,$text,$gnups,$img,$name,$nplot1,$nplot2,$nplot3,$nplot4,$nplot5,$dimens)
+{
+   
+
+
+$text='
+set terminal png size '.$xsize.','.$ysize.'
+set output "'.$gimg.'"
+set datafile separator ";"
+set xdata time
+set format x "%d.%m\n%H:%M"
+set timefmt "%Y-%m-%d %H:%M:%S"
+set grid
+set multiplot layout 1,1
+
+set lmargin 10
+set rmargin 10
+set y2label
+set xrange ["'.$wsdt.'" : "'.$wpdt.'"]
+set title "'.$name.'"
+set ylabel "'.$dimens.'"
+plot    \
+	"'.$csv.'" using 1:2 w l title "'.$nplot1.'", \
+    "'.$csv.'" using 1:3 w l title "'.$nplot2.'", \
+    "'.$csv.'" using 1:4 w l title "'.$nplot3.'", \
+    "'.$csv.'" using 1:5 w l title "'.$nplot4.'", \
+    "'.$csv.'" using 1:6 w l title "'.$nplot5.'", \
+    ';
+
+fwrite($handler, $text);
+fclose($handler);
+$err=shell_exec('cat '.$gnups.'|gnuplot');
+echo "<br>";
+echo '<img src="'.$img.'" alt="альтернативный текст">';
+}
 
 
 
