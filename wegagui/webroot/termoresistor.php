@@ -92,7 +92,6 @@ dt,												# 1
 ".$p_RootTemp."
 
 
-
 from $tb 
 where dt  >  '".$wsdt."'
  and  dt  <  '".$wpdt."'

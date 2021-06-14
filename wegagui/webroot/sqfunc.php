@@ -20,35 +20,6 @@ END
 
 ");
 
-// Функция sql процедура перевода фоторезистора в люксы 
-mysqli_query($link, "
-
-CREATE DEFINER=`root`@`localhost` FUNCTION `fpR`(rawP FLOAT) RETURNS float
-BEGIN
-
-IF @fpRf is null THEN
-
-set @ppx1:=(select value from config where parameter='pR_raw_p1' limit 1);
-set @ppx2:=(select value from config where parameter='pR_raw_p2' limit 1);
-set @ppx3:=(select value from config where parameter='pR_raw_p3' limit 1);
-
-set @ppy1:=(select value from config where parameter='pR_val_p1' limit 1);
-set @ppy2:=(select value from config where parameter='pR_val_p2' limit 1);
-set @ppy3:=(select value from config where parameter='pR_val_p3' limit 1);
-
-
-set @ppa:=-(-@ppx1*@ppy3 + @ppx1*@ppy2 - @ppx3*@ppy2 + @ppy3*@ppx2 + @ppy1*@ppx3 - @ppy1*@ppx2) /  (-pow(@ppx1,2)*@ppx3 + pow(@ppx1,2)*@ppx2 - @ppx1*pow(@ppx2,2) + @ppx1*pow(@ppx3,2) - pow(@ppx3,2)*@ppx2 + @ppx3*pow(@ppx2,2) ); 
-set @ppb:=( @ppy3*pow(@ppx2,2) - pow(@ppx2,2)*@ppy1 + pow(@ppx3,2)*@ppy1 + @ppy2*pow(@ppx1,2) - @ppy3*pow(@ppx1,2) - @ppy2 * pow(@ppx3,2) ) /  ( (-@ppx3+@ppx2) * (@ppx2*@ppx3 - @ppx2*@ppx1 + pow(@ppx1,2) - @ppx3*@ppx1 ) );
-set @ppc:=( @ppy3*pow(@ppx1,2)*@ppx2 - @ppy2*pow(@ppx1,2)*@ppx3 - pow(@ppx2,2)*@ppx1*@ppy3 + pow(@ppx3,2)*@ppx1*@ppy2 + pow(@ppx2,2)*@ppy1*@ppx3 - pow(@ppx3,2)*@ppy1*@ppx2 ) /  ( (-@ppx3+@ppx2) * (@ppx2*@ppx3 - @ppx2*@ppx1 + pow(@ppx1,2) - @ppx3*@ppx1 ) );
-
-
-set @fpRf:=1;
-END IF;
-
-RETURN @ppa*pow(rawP,2) + @ppb*rawP + @ppc;
-
-END
-");
 
 // Процедура интерполяции по трем точкам
 mysqli_query($link, "
@@ -113,24 +84,102 @@ RETURN @ECt+@eckorr;
 END
 ");
 
-// Перевод терморезистора 3950 в градусы
-
+// Расчет резисторов через делитель без опорного напряжения
+// Обратное включение в мосту
 mysqli_query($link, "
+CREATE FUNCTION `R_reverse`(R1 FLOAT, Uraw FLOAT, DC FLOAT) RETURNS float
+BEGIN
+RETURN if (Uraw=DC,null,-Uraw*R1/(Uraw-DC)); 
+END
+");
 
-CREATE FUNCTION `R3950`(Uraw FLOAT, Udcraw FLOAT) RETURNS float
+// Прямое включение в мосту
+mysqli_query($link, "
+CREATE FUNCTION `R_direct`(R1 FLOAT, Uraw FLOAT, DC FLOAT) RETURNS float
+BEGIN
+RETURN if (Uraw=0,null,-R1*(Uraw-DC)/Uraw); 
+END
+");
+
+// Сопротивление фоторезистора
+mysqli_query($link, "
+CREATE FUNCTION `Rp`(Uraw FLOAT) RETURNS float
 BEGIN
 
-set @B:=3950;
-set @t0:=25;
-set @Kelvin:=273.15;
+IF @fRp is null THEN
 
-set @lnv:=ln( (-Uraw + Udcraw )/Uraw);
+set @pR_type:=(select value from config where parameter='pR_type' limit 1);
+set @pR_DAC:=(select value from config where parameter='pR_DAC' limit 1);
+set @pR1:=(select value from config where parameter='pR1' limit 1);
 
-RETURN -(-@B * @t0 + @Kelvin * @lnv * @t0 + @lnv * pow(@Kelvin,2) ) / (@B + @lnv * @t0 +  @lnv * @Kelvin);
+
+set @fRp:=1;
+END IF;
+
+# Аналоговый мост прямое включение терморезистора
+if @pR_type = 'direct' THEN
+RETURN if (Uraw <= 0,null,-@pR1*(Uraw-@pR_DAC)/Uraw); 
+END IF;
+
+# Аналоговый мост прямое включение терморезистора
+if @pR_type = 'reverse' THEN
+RETURN if (Uraw >= @pR_DAC,null,-Uraw*@pR1/(Uraw-@pR_DAC)); 
+END IF;
+
+RETURN null;
 
 END
-
 ");
+
+// Калибровка фоторезистора в люксы 
+mysqli_query($link, "
+
+CREATE DEFINER=`root`@`localhost` FUNCTION `fpR`(rawP FLOAT) RETURNS float
+BEGIN
+
+IF @fpRf is null THEN
+
+set @ppx1:=(select value from config where parameter='pR_raw_p1' limit 1);
+set @ppx2:=(select value from config where parameter='pR_raw_p2' limit 1);
+set @ppx3:=(select value from config where parameter='pR_raw_p3' limit 1);
+
+set @ppy1:=(select value from config where parameter='pR_val_p1' limit 1);
+set @ppy2:=(select value from config where parameter='pR_val_p2' limit 1);
+set @ppy3:=(select value from config where parameter='pR_val_p3' limit 1);
+
+set @pR_Rx:=(select value from config where parameter='pR_Rx' limit 1);
+set @pR_T:=(select value from config where parameter='pR_T' limit 1);
+set @pR_x:=(select value from config where parameter='pR_x' limit 1);
+set @pR_type:=(select value from config where parameter='pR_type' limit 1);
+
+
+set @ppa:=-(-@ppx1*@ppy3 + @ppx1*@ppy2 - @ppx3*@ppy2 + @ppy3*@ppx2 + @ppy1*@ppx3 - @ppy1*@ppx2) /  (-pow(@ppx1,2)*@ppx3 + pow(@ppx1,2)*@ppx2 - @ppx1*pow(@ppx2,2) + @ppx1*pow(@ppx3,2) - pow(@ppx3,2)*@ppx2 + @ppx3*pow(@ppx2,2) ); 
+set @ppb:=( @ppy3*pow(@ppx2,2) - pow(@ppx2,2)*@ppy1 + pow(@ppx3,2)*@ppy1 + @ppy2*pow(@ppx1,2) - @ppy3*pow(@ppx1,2) - @ppy2 * pow(@ppx3,2) ) /  ( (-@ppx3+@ppx2) * (@ppx2*@ppx3 - @ppx2*@ppx1 + pow(@ppx1,2) - @ppx3*@ppx1 ) );
+set @ppc:=( @ppy3*pow(@ppx1,2)*@ppx2 - @ppy2*pow(@ppx1,2)*@ppx3 - pow(@ppx2,2)*@ppx1*@ppy3 + pow(@ppx3,2)*@ppx1*@ppy2 + pow(@ppx2,2)*@ppy1*@ppx3 - pow(@ppx3,2)*@ppy1*@ppx2 ) /  ( (-@ppx3+@ppx2) * (@ppx2*@ppx3 - @ppx2*@ppx1 + pow(@ppx1,2) - @ppx3*@ppx1 ) );
+
+
+set @fpRf:=1;
+END IF;
+
+# Трехточечная калибровка для типа other
+if @pR_type = 'other' THEN
+RETURN @ppa*pow(rawP,2) + @ppb*rawP + @ppc;
+END IF;
+
+# Для аналогового сенсора direct и reverse
+if @pR_type = 'direct' or @pR_type = 'reverse' THEN
+set @R:=Rp(rawP);
+RETURN exp(ln(@pR_Rx/@R)/@pR_T)*@pR_x;
+END IF;
+
+# Для цифрового сенсора без изменений
+if @pR_type = 'digital' THEN
+RETURN rawP;
+END IF;
+
+END
+");
+
 
 
 // Калибровка терморезистора 

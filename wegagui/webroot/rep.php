@@ -137,11 +137,12 @@ if ($p_pHraw != 'null') {
     
     $strSQL ="select 
     dt,
-    ".$p_pH."
+    if (".$p_pH." < 10 and ".$p_pH." > 1, ".$p_pH.", null)
     
     from sens 
     where dt  >  '".$wsdt."'
      and  dt  <  '".$wpdt."'
+
     order by dt";
     include "sqltocsv.php";
     
@@ -234,7 +235,7 @@ if ($p_DstRAW != 'null' and $P_A1 != 'null' and $P_A2 != 'null') {
     
     $name="Суммарный вес растворенных солей";
     $dimens="Граммы";
-    $nplot1="Раствор";
+    $nplot1="Суммарно в системе";
 
     
     gplotgen($xsize,$ysize,$gimg,$wsdt,$wpdt,$csv,$handler,$text,$gnups,$img,$name,$nplot1,$nplot2,$nplot3,$nplot4,$nplot5,$dimens);
