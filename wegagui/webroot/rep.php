@@ -95,9 +95,13 @@ if ($p_AirHum != 'null') {
     gplotgen($xsize,$ysize,$gimg,$wsdt,$wpdt,$csv,$handler,$text,$gnups,$img,$name,$nplot1,$nplot2,$nplot3,$nplot4,$nplot5,$dimens);
     }
 
+echo "aaa";
+    echo $p_EC;
 
 // График EC
 if ($P_A1 != 'null' and $P_A2 != 'null') {
+
+
     $pref="ec";    
     $xsize=1000;
     $ysize=400;
@@ -108,7 +112,8 @@ if ($P_A1 != 'null' and $P_A2 != 'null') {
     
     $strSQL ="select 
     dt,
-    ".$p_EC."
+ 	".$p_EC.",
+    EC(".$P_A1.",".$P_A2.",25)
     
     from sens 
     where dt  >  '".$wsdt."'
@@ -118,7 +123,8 @@ if ($P_A1 != 'null' and $P_A2 != 'null') {
     
     $name="EC (Удельная электропроводность раствора)";
     $dimens="мСм/см";
-    $nplot1="Бак";
+    $nplot1="ЕС";
+    $nplot2="ЕС без термокомпенсации";
 
     
     gplotgen($xsize,$ysize,$gimg,$wsdt,$wpdt,$csv,$handler,$text,$gnups,$img,$name,$nplot1,$nplot2,$nplot3,$nplot4,$nplot5,$dimens);
@@ -214,7 +220,8 @@ if ($p_Dst != 'null') {
 
 // График остатка солей
 
-if ($p_DstRAW != 'null' and $P_A1 != 'null' and $P_A2 != 'null') {
+if ($p_Dst != 'null' and $P_A1 != 'null' and $P_A2 != 'null') {
+    echo $p_Dst;
     $pref="soil";
     $xsize=1000;
     $ysize=400;

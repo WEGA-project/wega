@@ -50,12 +50,17 @@ mysqli_query($link, "
 CREATE FUNCTION `EC`(A1 FLOAT,A2 FLOAT, Temp FLOAT) RETURNS float
 BEGIN
 
+IF Temp is null THEN
+RETURN null;
+END IF;
+
 IF @ECf is null THEN
 
 set @R1 := (select value from config where parameter='EC_R1' limit 1);
 set @Rx1 := (select value from config where parameter='EC_Rx1' limit 1);
 set @Rx2 := (select value from config where parameter='EC_RX2' limit 1);
 set @Dr := (select value from config where parameter='Dr' limit 1);
+set @tR_manual := (select value from config where parameter='tR_manual' limit 1);
 
 set @ec1 := (select value from config where parameter='EC_val_p1' limit 1);
 set @ec2 := (select value from config where parameter='EC_val_p2' limit 1);
@@ -64,6 +69,7 @@ set @ex2 := (select value from config where parameter='EC_R2_p2' limit 1);
 
 set @kt := (select value from config where parameter='EC_kT' limit 1);
 set @eckorr := (select value from config where parameter='EC_val_korr' limit 1);
+set @ECtempRAW := (select value from config where parameter='ECtempRAW' limit 1);
 
 set @eb:=(-log(@ec1/@ec2))/(log(@ex2/@ex1));
 set @ea:=pow(@ex1,(-@eb))*@ec1;
@@ -76,11 +82,19 @@ set @R2n:=(-(-A1*@R1-A1*@Rx2+@Rx2*@Dr)/(-A1+@Dr));
 set @R2:=(@R2p+@R2n)/2;
 
 
-
 set @ec:=if(@R2>0,@ea*pow(@R2,@eb),null);
+
+
+IF Temp is null THEN
+#RETURN @ec+@eckorr;
+RETURN 2;
+
+END IF;
 
 set @ECt:=@ec/(1+@kt*(Temp-25));
 RETURN @ECt+@eckorr;
+
+
 END
 ");
 
@@ -188,6 +202,10 @@ mysqli_query($link, "
 CREATE FUNCTION `ftR`(rawT FLOAT) RETURNS float
 BEGIN
 
+IF rawT is null THEN
+RETURN null;
+END IF;
+
 IF @ftRf is null THEN
 
 set @tR_type:=(select value from config where parameter='tR_type' limit 1);
@@ -252,6 +270,8 @@ set  @r:=ln((-@Uraw+@tR_DAC)/@Uraw);
 set @rftr:= (@B*@t0-@r*@K*@t0-@r*pow(@K,2))/(@B+@r*@t0+@r*@K)+@lkorr;
 
 END IF;
+
+
 
 
 RETURN @rftr;

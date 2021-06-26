@@ -5,8 +5,9 @@ include "../config/".$ns.".conf.php";
 $p_AirTemp=dbval("AirTemp",$ns);
 $p_AirHum=dbval("AirHum",$ns);
 $p_RootTemp=dbval("RootTemp",$ns);
+$p_RootTemp="if(".$p_RootTemp." != -127 and ".$p_RootTemp." != 85,".$p_RootTemp.",null)";
+
 $p_ECtempRAW=dbval("ECtempRAW",$ns);
-   $p_ECtemp="ftR(".$p_ECtempRAW.")";
 
 $p_pHraw=dbval("pHraw",$ns);
 $p_IntTempRaw=dbval("IntTempRaw",$ns);
@@ -14,13 +15,35 @@ $p_VddRaw=dbval("VddRaw",$ns);
 $p_LightRaw=dbval("LightRaw",$ns);
 $p_Dst=dbval("Dst",$ns);
 
+// Блок ЕС
 $P_A1=dbval("A1",$ns);
 $P_A2=dbval("A2",$ns);
 
+$R1=floatval(dbval("EC_R1",$ns));
+$Rx1=floatval(dbval("EC_Rx1",$ns));
+$Rx2=floatval(dbval("EC_Rx2",$ns));
+$Dr=floatval(dbval("Dr",$ns));
+
+$P_R2p="(-(-(".$P_A1.")*".$R1."-".$P_A1."*".$Rx2."+".$Rx2."*".$Dr.")/(-".$P_A1."+".$Dr."))";
+$P_R2n="(((-".$P_A2."*".$R1."-".$P_A2."*".$Rx1."+".$R1."*".$Dr."+".$Rx1."*".$Dr.")/".$P_A2."))";
+$P_R2="(".$P_R2p."+".$P_R2n.")/2";
+$P_R2_polarity=$P_R2p."-".$P_R2n;
+
+$R2p=round( sensval($P_R2p,$ns), 1);
+$R2n=round( sensval($P_R2n,$ns), 1);
+$R2=($R2p+$R2n)/2;
+$R2_polarity=round( sensval($P_R2_polarity,$ns), 2);
+
 $p_ECtemp="ftr(".$p_ECtempRAW.")";
+
+
 $p_Lux="fpr(".$p_LightRaw.")";
 $p_pH="pH(".$p_pHraw.")";
-$p_EC="EC(".$P_A1.",".$P_A2.",".$p_ECtemp.")";
+
+//$p_EC="EC(".$P_A1.",".$P_A2.",".$p_ECtemp.")";
+
+$p_EC="if ( ".$p_ECtemp." is null, null,EC(".$P_A1.",".$P_A2.",".$p_ECtemp."))";
+
 $p_lev="intpl(levmin(".$p_Dst."))";
 $p_Pa="Pa(".$p_AirTemp.",".$p_AirHum.")";
 

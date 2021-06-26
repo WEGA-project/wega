@@ -51,18 +51,18 @@ echo "<details><summary>Калибровка по трём точкам</summary
 echo "<br>Точка 1<br>";
 pedit("tR_val_p1",$ns,36,"tR Темература точки 1");
 pedit("tR_raw_p1",$ns,2300,"tR Значение АЦП RAW точки 1");
-
 echo "<br>Точка 2<br>";
 pedit("tR_val_p2",$ns,23,"tR Темература точки 2");
 pedit("tR_raw_p2",$ns,1677,"tR Значение АЦП RAW точки 2");
-
 echo "<br>Точка 3<br>";
 pedit("tR_val_p3",$ns,6,"tR Темература точки 3");
 pedit("tR_raw_p3",$ns,920,"tR Значение АЦП RAW точки 3");
-
 echo "</details><br>";
 
-
+echo "<details><summary>Ручной режим</summary>";
+pedit("tR_manual",$ns,25,"Ручная замена температуры в градусах");
+$tR_manual=floatval(dbval("tR_manual",$ns));
+echo "</details><br>";
 
 
 	$tR_val_p1=floatval(dbval("tR_val_p1",$ns));
