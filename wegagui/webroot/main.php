@@ -15,6 +15,9 @@ echo "<br><b>Объем питательного бака</b><br>";
 pedit("LevelFull",$ns,20,"Полный объем бака с питательным раствором");
  $LevelFull=dbval("LevelFull",$ns);
 
+ echo "<br><b>ЕС чистой воды для изготовления расвтора</b><br>";
+ pedit("helper_ecwater",$ns,0.01,"ЕС чистой воды");
+
 echo "<br><b>Запас раствора вне бака в литрах в трубках коробах в субстрате</b><br>";
 pedit("LevelAdd",$ns,2.5,"Запас раствора вне бака");
  $LevelAdd=dbval("LevelAdd",$ns);

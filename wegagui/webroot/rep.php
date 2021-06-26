@@ -95,8 +95,6 @@ if ($p_AirHum != 'null') {
     gplotgen($xsize,$ysize,$gimg,$wsdt,$wpdt,$csv,$handler,$text,$gnups,$img,$name,$nplot1,$nplot2,$nplot3,$nplot4,$nplot5,$dimens);
     }
 
-echo "aaa";
-    echo $p_EC;
 
 // График EC
 if ($P_A1 != 'null' and $P_A2 != 'null') {
@@ -221,7 +219,7 @@ if ($p_Dst != 'null') {
 // График остатка солей
 
 if ($p_Dst != 'null' and $P_A1 != 'null' and $P_A2 != 'null') {
-    echo $p_Dst;
+    
     $pref="soil";
     $xsize=1000;
     $ysize=400;
