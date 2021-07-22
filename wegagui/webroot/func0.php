@@ -116,6 +116,8 @@ function form($ns,$parm,$comment)
 function gplotgen($xsize,$ysize,$gimg,$wsdt,$wpdt,$csv,$handler,$text,$gnups,$img,$name,$nplot1,$nplot2,$nplot3,$nplot4,$nplot5,$dimens)
 {
    
+
+
 $text='
 set terminal png size '.$xsize.','.$ysize.'
 set output "'.$gimg.'"
@@ -150,34 +152,25 @@ echo '<img src="'.$img.'" alt="альтернативный текст">';
 function mixer_banks($pname)
 {
 include "../../db.php";
+//$vname="v2";
+//$pname="P2";
 $mixerdb="mixer";
 
 $link=mysqli_connect("$dbhost", "$login", "$password", "$mixerdb");
-$sqlstr="
-select 
-   dt as mdt, 
-   v as v, 
-   vbase as vbase,
-   v*ro as ves    
-from banks 
-   where volume = '".$pname."' 
-   order by dt desc 
-   limit 1";
+$sqlstr="select dt as mdt, v as v, vbase as vbase from banks where volume = '".$pname."' order by dt desc limit 1";
 $result=mysqli_query($link, $sqlstr);
 
 /* получение ассоциативного массива */
 $obj = mysqli_fetch_object($result);
 mysqli_close($link);
-  $mdt = $obj -> mdt; // Дата установки раствора на миксер
-  $v =  $obj -> v; // Объем емкости в мл
-  $vname = $obj -> vbase; // Поле содержащее отмеренный вес
-  $ves = $obj -> ves; // Вес полной емксти
+  $mdt = $obj -> mdt;
+  $v =  $obj -> v;
+  $vname = $obj -> vbase;
 
 $link=mysqli_connect("$dbhost", "$login", "$password", "$mixerdb");
-$sqlstr="select
-    if(sum($vname) is not null,sum($vname),0) as sumves, # Суммарный расход из емкости в граммах
-    $ves-if(sum($vname) is not null,sum($vname),0) as remain, # Остаток в емкости в граммах
-    ($ves-if(sum($vname) is not null,sum($vname),0))/$ves*100 as procent # Остаток в процентах
+$sqlstr="select 
+    $v-sum($vname) as remain,
+    ($v-sum($vname))/$v*100 as procent
 
 from weght 
 where dt > '".$mdt."' 
@@ -190,21 +183,20 @@ return $obj;
 }
 
 function gbar($prcnt,$name){
-echo "
+
+   echo "
+
 <style>
 .battery{
   position: relative;
-  top: 30px;
+  top: 10px;
   border: 1px solid;
-  width: 70px;
-  height: 120px;
-  margin: 20px;
-    margin-bottom: 0px;
+  width: 50px;
+  height: 100px;
+  margin: 10px;
+    margin-bottom: 40px;
   content: '';
   border-radius: 15px;
-  line-height: 50px;
-  text-align: center;
-  text-shadow: white 1px 1px 1px;
      }
 .battery::after{
   content: '';
@@ -213,23 +205,22 @@ echo "
   width: 20px;
   height: 6px;
   top: -10px;
-  left: 25px;
-}
+  left: 15px;
+  
+ }
 
 .low_".$name." {
   background: linear-gradient(0deg, #1ddede ".$prcnt."%, white 0%);
 }
 .Block{
-   position: absolute;
    display: inline;
-   margin: 0px;
-   padding: 50px 100px;
-   
+   margin: 63px;
+   float: left;
       }
 </style>
 
 <body>
-    <div class='battery low_".$name."'>".$name."</div>
+    <div class='battery low_".$name."'></div>
     
 </body>
 
@@ -237,44 +228,5 @@ echo "
 
 }
 
-function showDate( $date ) // $date --> время в формате Unix time
-{
-    $stf      = 0;
-    $cur_time = time();
-    $diff     = $cur_time - $date;
-    $seconds = array( 'секунда', 'секунды', 'секунд' );
-    $minutes = array( 'минута', 'минуты', 'минут' );
-    $hours   = array( 'час', 'часа', 'часов' );
-    $days    = array( 'день', 'дня', 'дней' );
-    $weeks   = array( 'неделя', 'недели', 'недель' );
-    $months  = array( 'месяц', 'месяца', 'месяцев' );
-    $years   = array( 'год', 'года', 'лет' );
-    $decades = array( 'десятилетие', 'десятилетия', 'десятилетий' );
- 
-    $phrase = array( $seconds, $minutes, $hours, $days, $weeks, $months, $years, $decades );
-    $length = array( 1, 60, 3600, 86400, 604800, 2630880, 31570560, 315705600 );
- 
-    for ( $i = sizeof( $length ) - 1; ( $i >= 0 ) && ( ( $no = $diff / $length[ $i ] ) <= 1 ); $i -- ) {
-        ;
-    }
-    if ( $i < 0 ) {
-        $i = 0;
-    }
-    $_time = $cur_time - ( $diff % $length[ $i ] );
-    $no    = floor( $no );
-    $value = sprintf( "%d %s ", $no, getPhrase( $no, $phrase[ $i ] ) );
- 
-    if ( ( $stf == 1 ) && ( $i >= 1 ) && ( ( $cur_time - $_time ) > 0 ) ) {
-        $value .= time_ago( $_time );
-    }
- 
-    return $value;
-}
- 
-function getPhrase( $number, $titles ) {
-    $cases = array( 2, 0, 1, 1, 1, 2 );
- 
-    return $titles[ ( $number % 100 > 4 && $number % 100 < 20 ) ? 2 : $cases[ min( $number % 10, 5 ) ] ];
-}
 
 ?>

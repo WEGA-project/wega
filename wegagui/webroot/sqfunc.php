@@ -340,6 +340,8 @@ set @px2:=(select value from config where parameter='pH_raw_p2' limit 1);
 set @py2:=(select value from config where parameter='pH_val_p2' limit 1);
 set @px3:=(select value from config where parameter='pH_raw_p3' limit 1);
 set @py3:=(select value from config where parameter='pH_val_p3' limit 1);
+set @pH_lkorr:=(select value from config where parameter='pH_lkorr' limit 1);
+
 
 
 set @pa:=-(-@px1*@py3 + @px1*@py2 - @px3*@py2 + @py3*@px2 + @py1*@px3 - @py1*@px2) /  (-pow(@px1,2)*@px3 + pow(@px1,2)*@px2 - @px1*pow(@px2,2) + @px1*pow(@px3,2) - pow(@px3,2)*@px2 + @px3*pow(@px2,2) ); 
@@ -350,7 +352,7 @@ set @pc:=( @py3*pow(@px1,2)*@px2 - @py2*pow(@px1,2)*@px3 - pow(@px2,2)*@px1*@py3
 set @phf:=1;
 END IF;
 
-RETURN @pa*pow(x,2) + @pb*x + @pc;
+RETURN @pa*pow(x,2) + @pb*x + @pc+@pH_lkorr;
 
 
 END
@@ -367,6 +369,11 @@ RETURN (4.579*pow(2.71828,((17.14*tt)/(235.3+tt))))*rh/100;
 
 END
 ");
+
+
+
+
+
 
 
 ////////////////////////

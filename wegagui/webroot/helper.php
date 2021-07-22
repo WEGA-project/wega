@@ -5,12 +5,12 @@
 $ns=$_GET['ns'];
 if ($ns){
 //include "../config/".$ns.".conf.php";
-
 include_once "func.php";
 include "sqvar.php";
-
-
 echo '<h2>Помощник</h2>';
+if (dbval("Dst",$ns) != 'null') {
+
+
 echo ("Текущий объем расвтора в системе: ".round($lev+$LevelAdd,1)." л");
 echo ("<br>Предельный объем раствора в системе: ".($LevelFull+$LevelAdd-$La)." л");
 echo ("<br>Текущий ЕС: ".round($ec,3)." мСм/см");
@@ -29,9 +29,12 @@ $V2=$EC1*$V1/($EC2-$helper_ecwater)-$V1;
 echo "<br>";
 echo "<br>Для приведения ЕС к заданному ".$ECPlan." мСм/см можно долить ".round($V2,2)." литра воды с ЕС=".$helper_ecwater." мСм/см" ;
 echo "<br>до уровня в баке ".round($V2+$lev,1)." литра";
+ 
+ }
+else
+ {
+    echo "Помощник доступен для систем имеющих контроль уровня раствора";
+ }
 }
-
-
-
 ?>
 

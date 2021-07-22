@@ -62,6 +62,7 @@ echo '
 					<li><a href="helperprev.php'.$stfind.'">Помощник</a></li>
 					<li><a href="temp.php'.$stfind.'">Температура</a></li>
 					<li><a href="owm.php'.$stfind.'">Погода</a></li>
+					<li><a href="mixer.php'.$stfind.'">Миксер</a></li>
 				</ul>
 
 			<li><a href="#">Параметры</a><ul>

@@ -110,8 +110,8 @@ if ($P_A1 != 'null' and $P_A2 != 'null') {
     
     $strSQL ="select 
     dt,
- 	".$p_EC.",
-    EC(".$P_A1.",".$P_A2.",25)
+ 	".$p_EC."
+    
     
     from sens 
     where dt  >  '".$wsdt."'
@@ -122,7 +122,7 @@ if ($P_A1 != 'null' and $P_A2 != 'null') {
     $name="EC (Удельная электропроводность раствора)";
     $dimens="мСм/см";
     $nplot1="ЕС";
-    $nplot2="ЕС без термокомпенсации";
+    //$nplot2="ЕС без термокомпенсации";
 
     
     gplotgen($xsize,$ysize,$gimg,$wsdt,$wpdt,$csv,$handler,$text,$gnups,$img,$name,$nplot1,$nplot2,$nplot3,$nplot4,$nplot5,$dimens);

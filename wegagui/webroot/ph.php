@@ -51,6 +51,11 @@ $pa=-(-$pH_raw_p1*$pH_val_p3 + $pH_raw_p1*$pH_val_p2 - $pH_raw_p3*$pH_val_p2 + $
 $pb=( $pH_val_p3*pow($pH_raw_p2,2) - pow($pH_raw_p2,2)*$pH_val_p1 + pow($pH_raw_p3,2)*$pH_val_p1 + $pH_val_p2*pow($pH_raw_p1,2) - $pH_val_p3*pow($pH_raw_p1,2) - $pH_val_p2 * pow($pH_raw_p3,2) ) /  ( (-$pH_raw_p3+$pH_raw_p2) * ($pH_raw_p2*$pH_raw_p3 - $pH_raw_p2*$pH_raw_p1 + pow($pH_raw_p1,2) - $pH_raw_p3*$pH_raw_p1 ) );
 $pc=( $pH_val_p3*pow($pH_raw_p1,2)*$pH_raw_p2 - $pH_val_p2*pow($pH_raw_p1,2)*$pH_raw_p3 - pow($pH_raw_p2,2)*$pH_raw_p1*$pH_val_p3 + pow($pH_raw_p3,2)*$pH_raw_p1*$pH_val_p2 + pow($pH_raw_p2,2)*$pH_val_p1*$pH_raw_p3 - pow($pH_raw_p3,2)*$pH_val_p1*$pH_raw_p2 ) /  ( (-$pH_raw_p3+$pH_raw_p2) * ($pH_raw_p2*$pH_raw_p3 - $pH_raw_p2*$pH_raw_p1 + pow($pH_raw_p1,2) - $pH_raw_p3*$pH_raw_p1 ) );
 
+echo "<br>";
+pedit("pH_lkorr",$ns,0,"Линейная коррекция pH");
+$pH_lkorr=floatval(dbval("pH_lkorr",$ns));
+
+
 echo "<br>Функция калибровки<br>";
 $phfuncint = round($pa,10).' * X² + '.round($pb,10).' * X + '.round($pc,3);
 //echo 'f(X) = '.round($pa,10).' * X² + '.round($pb,10).' * X + '.round($pc,3);

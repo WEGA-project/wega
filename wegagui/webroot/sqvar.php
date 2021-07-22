@@ -2,10 +2,21 @@
 include_once "func.php";
 include "../config/".$ns.".conf.php";
 
+
 $p_AirTemp=dbval("AirTemp",$ns);
+    if ($p_AirTemp != 'null'){
+        $p_AirTemp="if(".$p_AirTemp." != 0,".$p_AirTemp.",null)";
+    }
+
 $p_AirHum=dbval("AirHum",$ns);
+    if ($p_AirHum != 'null'){
+        $p_AirHum="if(".$p_AirHum." != 0 and ".$p_AirHum." < 100,".$p_AirHum.",null)";
+    }
+
 $p_RootTemp=dbval("RootTemp",$ns);
-$p_RootTemp="if(".$p_RootTemp." != -127 and ".$p_RootTemp." != 85,".$p_RootTemp.",null)";
+    if ($p_RootTemp != 'null'){
+        $p_RootTemp="if(".$p_RootTemp." != -127 and ".$p_RootTemp." != 85,".$p_RootTemp.",null)";
+    }
 
 $p_ECtempRAW=dbval("ECtempRAW",$ns);
 
@@ -99,6 +110,8 @@ $Max_EC=floatval(dbval("Ev_Max_EC",$ns));
 $Min_EC=floatval(dbval("Ev_Min_EC",$ns));
 $Max_pH=floatval(dbval("Ev_Max_pH",$ns));
 $Min_pH=floatval(dbval("Ev_Min_pH",$ns));
+
+$mixerdb=dbval("mixerdb",$ns);
 
 $csv="tmp/s.".$ns.".csv";
 $gnups="tmp/s.".$ns.".gnuplot";
