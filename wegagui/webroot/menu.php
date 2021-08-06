@@ -48,14 +48,18 @@ echo "<li><a href=../wega>Общий</a>";
     				$fl=explode("/", $filename);
     				$nm=explode(".", $fl[2]);
     				$cname=$nm[0];
-    				echo "<li><a href=".$_SERVER['PHP_SELF']."?ns=".$cname.">". $cname ."</a></li>";
+					//$ns=$cname;
+					//include "sqvar.php";
+
+    				echo "<li><a href=".$_SERVER['PHP_SELF']."?ns=".$cname.">". dbval("namesys",$cname) ."</a></li>";
 
 			 }
 
 echo '
                 </ul>
                         </li>
-
+';
+echo '
 			<li><a href="#">Анализ</a><ul>
 					<li><a href="status.php'.$stfind.'">Текущие измерения</a></li>
 					<li><a href="rep.php'.$stfind.'">Сводный анализ</a></li>
@@ -64,7 +68,9 @@ echo '
 					<li><a href="owm.php'.$stfind.'">Погода</a></li>
 					<li><a href="mixer.php'.$stfind.'">Миксер</a></li>
 				</ul>
+';
 
+echo '
 			<li><a href="#">Параметры</a><ul>
 					<li><a href="main.php'.$stfind.'">Основные параметры</a></li>
 					<li><a href="srctbl.php'.$stfind.'">База</a></li>
@@ -103,6 +109,7 @@ echo '
 
 <br><br>
 ';
+
 
 ?>
 

@@ -101,12 +101,12 @@ mysqli_query($link, "update $tb set
     ro='$ro',
     datecreate='$datecreate',
     vbase='$vbase'
-    where id='$id'");
+    where id='$id' " );
 }
 
 
 
-$strSQL ="select * from $tb  order by dt desc";
+$strSQL ="select * from $tb  order by vbase";
 
 
 // Выполняем запрос
@@ -149,7 +149,7 @@ echo "<br>";
 
 $link=mysqli_connect("$dbhost", "$login", "$password", "$my_db");
 
-$strSQL ="select volume,name,ro,dt,v,fi from $tb  order by volume";
+$strSQL ="select volume,name,ro,dt,v,fi from $tb  where vbase != '' order by volume";
 $rs=mysqli_query($link, $strSQL);
 while($id=mysqli_fetch_row($rs))
   {

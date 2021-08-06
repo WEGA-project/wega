@@ -97,8 +97,8 @@ unset title
 set title "Погодные условия - Температура"
 set ylabel "градусы"
 plot    \
-	"/var/log/sensors/owm.log" using 1:2 w l title "Улица", \
-
+	"/var/log/sensors/owm.log" using 1:2 w l title "Улица - температура", \
+	"/var/log/sensors/owm.log" using 1:($2-((1-($3/100))/0.05)) w l title "Улица - точка росы", \
 
 unset ylabel
 unset title
