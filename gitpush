@@ -1,14 +1,8 @@
 #!/bin/bash
 git pull
 
-mv wegagui/config/*.conf.php wegagui/config/examples/
-mv wegagui/config/examples/esp32wega.conf.php wegagui/config/
-rm wegagui/webroot/tmp/*
-touch wegagui/webroot/tmp/.gitkeep
 git add *
-git update-index --assume-unchanged db.php
-git update-index --assume-unchanged telegram.php
 git commit -a
 git push
-mv wegagui/config/examples/*.conf.php wegagui/config/
+
 
