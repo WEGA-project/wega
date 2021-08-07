@@ -1,0 +1,5 @@
+#!/bin/bash
+git update-index --assume-unchanged db.php
+git update-index --assume-unchanged wegagui/config/*
+git pull
+
