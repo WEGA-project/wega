@@ -2,4 +2,4 @@ wegagui/webroot/tmp/**
 wegagui/config/**
 !wegagui/config/example.conf.php
 db.php
-
+telegram.php
