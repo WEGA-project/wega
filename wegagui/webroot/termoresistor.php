@@ -89,7 +89,8 @@ $strSQL ="select
 dt,												# 1
 ".$p_ECtempRAW.",
 ".$p_ECtemp.",
-".$p_RootTemp."
+".$p_RootTemp.",
+".$p_RootTemp."-".$p_ECtemp."
 
 
 from $tb 
@@ -113,7 +114,7 @@ set xdata time
 set format x "%d.%m\n%H:%M"
 set timefmt "%Y-%m-%d %H:%M:%S"
 set grid
-set multiplot layout 4,1
+set multiplot layout 5,1
 set lmargin 10
 set rmargin 10
 set y2label
@@ -133,7 +134,11 @@ plot    \
 plot    \
 	"'.$csv.'" using 1:3 w l title "ECtemp", \
 	"'.$csv.'" using 1:4 w l title "'.dbval("RootTemp",$ns).'", \
-	"'.$csv.'" using 1:5 w l title "E3950", \
+
+
+
+plot    \
+	"'.$csv.'" using 1:5 w l title "Погрешность калибровки", \
 
 ';
 
