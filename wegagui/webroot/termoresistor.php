@@ -90,7 +90,7 @@ dt,												# 1
 ".$p_ECtempRAW.",
 ".$p_ECtemp.",
 ".$p_RootTemp.",
-".$p_RootTemp."-".$p_ECtemp."
+(".$p_RootTemp."-".$p_ECtemp.")/".$p_RootTemp."*100
 
 
 from $tb 
@@ -138,7 +138,7 @@ plot    \
 
 
 plot    \
-	"'.$csv.'" using 1:5 w l title "Погрешность калибровки", \
+	"'.$csv.'" using 1:5 w l title "Относительная погрешность калибровки в %", \
 
 ';
 
