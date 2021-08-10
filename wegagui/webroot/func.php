@@ -94,7 +94,7 @@ function form($ns,$parm,$comment)
    echo " <form action='' method='get'>";
    echo "   <input type='hidden' name='ns' value='".$ns."'>";
    echo "   <select size='1' name='".$parm."'>";
-   dbpsel($ns,$parm);
+   dbpsel($ns,$parm,$comment);
    echo $comment;
    echo "   </select>";
    echo "  <input type='submit' value='Задать'>";
