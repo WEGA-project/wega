@@ -16,27 +16,14 @@ $cl=$_GET['cl'];
 echo "<h1>".$cl;
 echo "</h1>";
 
-$stfind="?ns=".$ns."&cl=".$cl;
-
+//$stfind="?ns=".$ns."&cl=".urlencode($cl);
+//$stfind="&cl=".urlencode($cl);
+$ns=$ns."&cl=".urlencode($cl);
 
 echo '<h2>Период анализа</h2>';
 
 
-echo '
-<form action="" method="get">
- <input type="hidden" name="ns" value="'.$_GET['ns'].'"/>
- <input type="hidden" name="cl" value="'.$_GET['cl'].'"/>
- Дата с: <input type="text" name="wsdt" value="'.$_GET['wsdt'].'"/>
- по: <input type="text" name="wpdt" value="'.$_GET['wpdt'].'"/>
- <input type="submit" value="Задать"/>
-</form>';
-echo '<a href='.$stfind.'&days=-0%20days>За сегодя </a>';
-echo '<a href='.$stfind.'&days=-1%20days>Со вчера</a>';
-echo '  <a href='.$stfind.'&days=-2%20days>2 дня</a>';
-echo '  <a href='.$stfind.'&days=-7%20days>Неделя</a>';
-echo '  <a href='.$stfind.'&days=-14%20days>2 недели</a>';
-echo '  <a href='.$stfind.'&days=-1%20month>за месяц</a>';
-
+include_once "datetime.php";
 
 // Подключаемся к базе
 $link = mysqli_connect("$dbhost", "$login", "$password", "$my_db");

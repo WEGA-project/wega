@@ -67,6 +67,7 @@ echo '
 					<li><a href="temp.php'.$stfind.'">Температура</a></li>
 					<li><a href="owm.php'.$stfind.'">Погода</a></li>
 					<li><a href="mixer.php'.$stfind.'">Миксер</a></li>
+					<li><a href="tmp/s.'.$ns.'.csv">Скачать csv</a></li>
 				</ul>
 ';
 
