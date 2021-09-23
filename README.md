@@ -1,6 +1,6 @@
 
 <div align="center">
-  <a href="https://raw.githubusercontent.com/WEGA-project/WEGA/master/wega.png"><img src="https://raw.githubusercontent.com/WEGA-project/WEGA/master/wega.png" width="250"></a>
+  <a href="https://raw.githubusercontent.com/WEGA-project/WEGA/master/wega.png"><img src="https://raw.githubusercontent.com/WEGA-project/WEGA/master/wega.png" width="350"></a>
 </div>
 
 
@@ -8,7 +8,7 @@
 
 Основная идея проекта - разработка простых, самостоятельных элементов облегчающих выращивание растений, при этом умеющих работать вместе в едином информационном взаимодействии.
 
-Ниже можно видеть всю экосистему, где блоки 1-5 и 13, это части `WEGA`
+Ниже можно видеть всю экосистему, где блоки 1-4 и 13, это части `WEGA`
 
 <div align="center">
   <a href="images/wega-ecosystem.jpeg"><img src="images/wega-ecosystem.jpeg" width="650"></a>
