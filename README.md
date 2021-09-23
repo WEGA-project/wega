@@ -16,7 +16,7 @@
 
 
 ---
-### Что такое WEGA server и как настроить
+### Что такое WEGA server и как его настроить
 
 Больше информации о том, что же такое `WEGA` можно почитать на [Wiki](https://github.com/WEGA-project/WEGA/wiki)
 
