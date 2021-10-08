@@ -64,7 +64,7 @@ echo 'f(X) = '.$phfuncint;
 echo "<br>";
 echo "<br><b>Текущие значения</b>";
 $phraw=sensval(dbval("pHraw",$ns),$ns);
-echo "<br>pH(RAW)=".round($phraw,3)." <br>";
+echo "<br>pH(mV)=".round($phraw,3)." <br>";
 
 $ph=sensval("ph(".dbval("pHraw",$ns).")",$ns);
 echo "pH=".round($ph,3)." <br><br>";
@@ -80,15 +80,15 @@ set xdata time
 set grid
 set y2label
 
-set xrange ['.$pH_raw_p1.'+1000:'.$pH_raw_p3.'-1000]
+set xrange ['.$pH_raw_p1*1.4.':'.$pH_raw_p3*1.4.']
 
 unset format
-set label "   pH '.$pH_val_p1.'" at '.$pH_raw_p1.','.$pH_val_p1.' point pointtype 7
-set label "   pH '.$pH_val_p2.'" at '.$pH_raw_p2.','.$pH_val_p2.' point pointtype 7
-set label "   pH '.$pH_val_p3.'" at '.$pH_raw_p3.','.$pH_val_p3.' point pointtype 7
+set label "   pH '.$pH_val_p1.'" at '.$pH_raw_p1.','.$pH_val_p1.'+'.$pH_lkorr.' point pointtype 7
+set label "   pH '.$pH_val_p2.'" at '.$pH_raw_p2.','.$pH_val_p2.'+'.$pH_lkorr.' point pointtype 7
+set label "   pH '.$pH_val_p3.'" at '.$pH_raw_p3.','.$pH_val_p3.'+'.$pH_lkorr.' point pointtype 7
 set label "pH '.round($ph,4).'   " right at '.$phraw.','.$ph.' point pointtype 7
 
-f(x)= '.$pa.'*x**2 + '.$pb.'*x + '.$pc.'
+f(x)= '.$pa.'*x**2 + '.$pb.'*x + '.$pc.'+'.$pH_lkorr.'
 plot f(x) w l title "'.$phfuncint.'"
 ';
 

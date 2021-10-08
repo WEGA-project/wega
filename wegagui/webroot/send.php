@@ -22,8 +22,8 @@ if ($RootTemp > $Max_RootTemp) { $EventBody=$EventBody."Превышение т�
 if ($RootTemp < $Min_RootTemp) { $EventBody=$EventBody."Низкая температуры зоны корней ". $RootTemp." < ".$Min_RootTemp."\n";}
 
 // Температура бака
-if ($tempEC > $Max_WaterTemp) { $EventBody=$EventBody."Превышение температуры расвтора ". round($tempEC,2)." > ".$Max_WaterTemp."\n";}
-if ($tempEC < $Min_WaterTemp) { $EventBody=$EventBody."Низкая температура раствра ". round($tempEC,2)." < ".$Min_WaterTemp."\n";}
+if ($tempEC > $Max_WaterTemp) { $EventBody=$EventBody."Превышение температуры раствора ". round($tempEC,2)." > ".$Max_WaterTemp."\n";}
+if ($tempEC < $Min_WaterTemp) { $EventBody=$EventBody."Низкая температура раствора ". round($tempEC,2)." < ".$Min_WaterTemp."\n";}
 
 // Влажность воздуха
 if ($AirHum > $Max_AirHum) { $EventBody=$EventBody."Высокая влажность воздуха ". $AirHum."% > ".$Max_AirHum."%\n";}
@@ -42,13 +42,13 @@ if ($lev < $Min_Level) {
 }
 
 // ЕС
-if ($ec > $Max_EC) { $EventBody=$EventBody."Высокий EC расвтора ". round($ec,3)." > ".$Max_EC."\n";}
-if ($ec < $Min_EC) { $EventBody=$EventBody."Низкий EC расвтора ". round($ec,3)." < ".$Min_EC."\n";}
+if ($ec > $Max_EC) { $EventBody=$EventBody."Высокий EC раствора ". round($ec,3)." > ".$Max_EC."\n";}
+if ($ec < $Min_EC) { $EventBody=$EventBody."Низкий EC раствора ". round($ec,3)." < ".$Min_EC."\n";}
 
 // pH
 if (dbval("pHraw",$ns) != "null"){
-      if ($ph > $Max_pH) { $EventBody=$EventBody."Высокий pH расвтора ". round($ph,3)." > ".$Max_pH."\n";}
-      if ($ph < $Min_pH) { $EventBody=$EventBody."Низкий pH расвтора ". round($ph,3)." < ".$Min_pH."\n";}
+      if ($ph > $Max_pH) { $EventBody=$EventBody."Высокий pH раствора ". round($ph,3)." > ".$Max_pH."\n";}
+      if ($ph < $Min_pH) { $EventBody=$EventBody."Низкий pH раствора ". round($ph,3)." < ".$Min_pH."\n";}
   }
 }
 
