@@ -22,33 +22,47 @@ $result = mysqli_query($link, $query);
 
 
 $query  = explode('&', $_SERVER['QUERY_STRING']);
+$dt=date('Y.m.d H:i:s');
+
+$arr['dt']=$dt;
 
 $var="";
 foreach($query as $param)
 {
     list($name, $value) = explode('=', $param, 2);
   if ($name  != "db" and $name !="auth"){
-      echo $name,"=",$value;
+      $arr[$name]=$value;
+      //echo $name,"=",$value;
       mysqli_query($link,"alter table $tb add column $name double");
       $var=$var . "," . $name;
       $val=$val . ",'" . $value."'";
   }
 }
-$dt=date('Y.m.d H:i:s');
 
-echo "<br>";
+
 $var=substr($var, 1);
 $var = "(dt," . $var . ")";
-echo $var;
-echo "<br>";
+
 $val=substr($val, 1);
 $val = "('$dt'," . $val . ")";
-echo $val;
+//echo $val;
 
 mysqli_query($link,"insert into $tb $var values $val");
 mysqli_close($link);
 
-echo "<br>";
+// config
+$link=mysqli_connect($dbhost, $login, $password, $my_db);
+$result = mysqli_query($link,"select parameter,value from config");
+while($id=mysqli_fetch_row($result))
+        { 
+          $arr[$id[0]]=$id[1];
+        }
+
+mysqli_close($link);
+
+
+
+echo json_encode($arr);
 }
 else
 {

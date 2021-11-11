@@ -114,7 +114,7 @@ if ($P_A1 != 'null' and $P_A2 != 'null') {
     from sens 
     where dt  >  '".$wsdt."'
      and  dt  <  '".$wpdt."'
-	 and ".$P_R2." < 1000 
+	 and ".$P_R2." < 10000 
     order by dt";
     include "sqltocsv.php";
     
