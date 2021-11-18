@@ -62,7 +62,12 @@ $nplot1="Воздух";
 $nplot2="Зона корней";
 $nplot3="Бак";
 
+$LimitUP=$Max_AirTemp ;
+$LimitDOWN=$Min_AirTemp;
 gplotgen($xsize,$ysize,$gimg,$wsdt,$wpdt,$csv,$handler,$text,$gnups,$img,$name,$nplot1,$nplot2,$nplot3,$nplot4,$nplot5,$dimens);
+$LimitUP="";
+$LimitDOWN="";
+
 }
 
 
@@ -71,7 +76,6 @@ if ($p_AirHum != 'null') {
     $pref="hum";
     $xsize=1000;
     $ysize=400;
-    
  
     $gimg=$gimg.$pref;
     $img=$img.$pref;
@@ -91,8 +95,11 @@ if ($p_AirHum != 'null') {
     $dimens="%";
     $nplot1="Воздух";
 
-    
+    $LimitUP=$Max_AirHum ;
+    $LimitDOWN=$Min_AirHum;
     gplotgen($xsize,$ysize,$gimg,$wsdt,$wpdt,$csv,$handler,$text,$gnups,$img,$name,$nplot1,$nplot2,$nplot3,$nplot4,$nplot5,$dimens);
+    $LimitUP="";
+    $LimitDOWN="";
     }
 
 
@@ -124,8 +131,11 @@ if ($P_A1 != 'null' and $P_A2 != 'null') {
     $nplot1="ЕС";
     //$nplot2="ЕС без термокомпенсации";
 
-    
+    $LimitUP=$Max_EC ;
+    $LimitDOWN=$Min_EC;
     gplotgen($xsize,$ysize,$gimg,$wsdt,$wpdt,$csv,$handler,$text,$gnups,$img,$name,$nplot1,$nplot2,$nplot3,$nplot4,$nplot5,$dimens);
+    $LimitUP="";
+    $LimitDOWN="";
     }
 
 // График pH
@@ -154,8 +164,11 @@ if ($p_pHraw != 'null') {
     $dimens="";
     $nplot1="Бак";
 
-    
+    $LimitUP=$Max_pH ;
+    $LimitDOWN=$Min_pH;
     gplotgen($xsize,$ysize,$gimg,$wsdt,$wpdt,$csv,$handler,$text,$gnups,$img,$name,$nplot1,$nplot2,$nplot3,$nplot4,$nplot5,$dimens);
+    $LimitUP="" ;
+    $LimitDOWN="";
     }
 
 
@@ -212,8 +225,12 @@ if ($p_Dst != 'null') {
     $dimens="Литры";
     $nplot1="Бак";
 
-    
+   
+    $LimitUP=$Max_Level ;
+    $LimitDOWN=$Min_Level;
     gplotgen($xsize,$ysize,$gimg,$wsdt,$wpdt,$csv,$handler,$text,$gnups,$img,$name,$nplot1,$nplot2,$nplot3,$nplot4,$nplot5,$dimens);
+    $LimitUP="";
+    $LimitDOWN="";   
     }
 
 // График остатка солей
