@@ -115,7 +115,9 @@ function form($ns,$parm,$comment)
 
 function gplotgen($xsize,$ysize,$gimg,$wsdt,$wpdt,$csv,$handler,$text,$gnups,$img,$name,$nplot1,$nplot2,$nplot3,$nplot4,$nplot5,$dimens)
 {
-   
+global $LimitUP;
+global $LimitDOWN; 
+
 $text='
 set terminal png size '.$xsize.','.$ysize.'
 set output "'.$gimg.'"
@@ -130,16 +132,25 @@ set lmargin 10
 set rmargin 10
 set y2label
 set xrange ["'.$wsdt.'" : "'.$wpdt.'"]
+#set yrange [" '.$LimitDOWN.' ":" '.$LimitUP.' "]
+#set yrange ['.$LimitDOWN.':'.$LimitUP.']
 set title "'.$name.'"
 set ylabel "'.$dimens.'"
+
+fmax(x) = '.$LimitUP.'
+fmin(x) ='.$LimitDOWN.'
+
 plot    \
 	"'.$csv.'" using 1:2 w l title "'.$nplot1.'", \
     "'.$csv.'" using 1:3 w l title "'.$nplot2.'", \
     "'.$csv.'" using 1:4 w l title "'.$nplot3.'", \
     "'.$csv.'" using 1:5 w l title "'.$nplot4.'", \
-    "'.$csv.'" using 1:6 w l title "'.$nplot5.'", \
-    ';
+    "'.$csv.'" using 1:6 w l title "'.$nplot5.'" ';
 
+if($LimitUP != ""){ $text=$text.',fmax(x) w l title ""'; }
+if($LimitDOWN != ""){ $text=$text.',fmin(x) w l title ""'; }
+
+//echo $text;
 fwrite($handler, $text);
 fclose($handler);
 $err=shell_exec('cat '.$gnups.'|gnuplot');

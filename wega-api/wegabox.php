@@ -52,7 +52,7 @@ mysqli_close($link);
 
 // config
 $link=mysqli_connect($dbhost, $login, $password, $my_db);
-$result = mysqli_query($link,"select parameter,value from config");
+$result = mysqli_query($link,"select parameter,value from config where value !=''");
 while($id=mysqli_fetch_row($result))
         { 
           $arr[$id[0]]=$id[1];
