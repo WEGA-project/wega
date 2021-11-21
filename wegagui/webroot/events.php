@@ -28,7 +28,9 @@ if ( $_GET['ns'] ){
     pedit("Ev_Min_EC",$ns,0.5,"Минимальный ЕС");
     pedit("Ev_Max_pH",$ns,7,"Максимальный pH");
     pedit("Ev_Min_pH",$ns,5,"Минимальный pH");
-    
+    pedit("Ev_Max_CO2",$ns,3000,"Максимальный CO2");
+    pedit("Ev_Min_CO2",$ns,300,"Минимальный CO2");
+
     echo "<br>";
     
     echo "<h3>Настройки телеграм</h3>";

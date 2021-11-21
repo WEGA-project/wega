@@ -284,11 +284,11 @@ where dt  >  '".$wsdt."'
 order by dt";
 include "sqltocsv.php";
 
-$name="Температура";
-$dimens="°C";
-$nplot1="Воздух";
-$nplot2="Зона корней";
-$nplot3="Бак";
+// $name="Температура";
+// $dimens="°C";
+// $nplot1="Воздух";
+// $nplot2="Зона корней";
+// $nplot3="Бак";
 
 $text='
 set terminal png size '.$xsize.','.$ysize.'
@@ -298,17 +298,17 @@ set output "'.$gimg.'"
 set grid
 
 
-set xrange [1:1000000]
-set yrange [0.001:10]
-set logscale x
+set xrange [0:10]
+set yrange [0:10]
+#set logscale x
 #set logscale y
 
-set label "   EC '.$ec1.'" at '.$ex1.','.$ec1.' point pointtype 7
-set label "   EC '.$ec2.'" at '.$ex2.','.$ec2.' point pointtype 7
-set label "   EC '.round($ec,3).'" at '.$R2.','.$ec.' point pointtype 7
+set label "   EC '.$ec1.'" at '.(1/$ex1*1000).','.$ec1.' point pointtype 7
+set label "   EC '.$ec2.'" at '.(1/$ex2*1000).','.$ec2.' point pointtype 7
+set label "   EC '.round($ec,3).'   " right at '.(1/$R2*1000).','.$ec.' point pointtype 4
 
 f(x)= '.$gpfunc.'
-plot f(x) w l title "Кривая калибровки ЕС"
+plot f(1/x*1000) w l title "Кривая калибровки ЕС"
 ';
 
 fwrite($handler, $text);

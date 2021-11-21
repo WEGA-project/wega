@@ -50,6 +50,13 @@ if (dbval("pHraw",$ns) != "null"){
       if ($ph > $Max_pH) { $EventBody=$EventBody."Высокий pH раствора ". round($ph,3)." > ".$Max_pH."\n";}
       if ($ph < $Min_pH) { $EventBody=$EventBody."Низкий pH раствора ". round($ph,3)." < ".$Min_pH."\n";}
   }
+
+
+// CO2
+if (dbval("CO2",$ns) != "null"){
+      if ($CO2 > $Max_CO2) { $EventBody=$EventBody."Высокий CO2 ". round($CO2,3)." > ".$Max_CO2."\n";}
+      if ($CO2 < $Min_CO2) { $EventBody=$EventBody."Низкий CO2 ". round($CO2,3)." < ".$Min_CO2."\n";}
+  }
 }
 
 else // Если данные давно не поступали

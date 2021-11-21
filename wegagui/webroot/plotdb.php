@@ -16,12 +16,7 @@ $cl=$_GET['cl'];
 echo "<h1>".$cl;
 echo "</h1>";
 
-//$stfind="?ns=".$ns."&cl=".urlencode($cl);
-//$stfind="&cl=".urlencode($cl);
 $ns=$ns."&cl=".urlencode($cl);
-
-echo '<h2>Период анализа</h2>';
-
 
 include_once "datetime.php";
 

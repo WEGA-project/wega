@@ -25,6 +25,8 @@ $p_IntTempRaw=dbval("IntTempRaw",$ns);
 $p_VddRaw=dbval("VddRaw",$ns);
 $p_LightRaw=dbval("LightRaw",$ns);
 $p_Dst=dbval("Dst",$ns);
+$p_CO2=dbval("CO2",$ns);
+$p_tVOC=dbval("tVOC",$ns);
 
 // Блок ЕС
 $P_A1=dbval("A1",$ns);
@@ -50,6 +52,7 @@ $p_ECtemp="ftr(".$p_ECtempRAW.")";
 
 $p_Lux="fpr(".$p_LightRaw.")";
 $p_pH="pH(".$p_pHraw.")";
+
 
 //$p_EC="EC(".$P_A1.",".$P_A2.",".$p_ECtemp.")";
 
@@ -81,6 +84,10 @@ $DstRAW=sensval($p_Dst,$ns);
 $tempEC=sensval("ftR(".$ECtempRAW.")",$ns);
  $WaterTemp=$tempEC;
 $Lux=sensval("fpR(".dbval("LightRAW",$ns).")",$ns);
+
+$CO2=sensval($p_CO2,$ns);
+$tVOC=sensval($p_tVOC,$ns);
+
 $ec=sensval("EC($P_A1,$P_A2,".$tempEC.")",$ns);
 $ph=sensval("ph(".dbval("pHraw",$ns).")",$ns);
 $lev=sensval("intpl(levmin(".$p_Dst."))",$ns);
@@ -110,6 +117,8 @@ $Max_EC=floatval(dbval("Ev_Max_EC",$ns));
 $Min_EC=floatval(dbval("Ev_Min_EC",$ns));
 $Max_pH=floatval(dbval("Ev_Max_pH",$ns));
 $Min_pH=floatval(dbval("Ev_Min_pH",$ns));
+$Max_CO2=floatval(dbval("Ev_Max_CO2",$ns));
+$Min_CO2=floatval(dbval("Ev_Min_CO2",$ns));
 
 $mixerdb=dbval("mixerdb",$ns);
 

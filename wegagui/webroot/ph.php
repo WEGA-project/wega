@@ -86,7 +86,7 @@ unset format
 set label "   pH '.$pH_val_p1.'" at '.$pH_raw_p1.','.$pH_val_p1.'+'.$pH_lkorr.' point pointtype 7
 set label "   pH '.$pH_val_p2.'" at '.$pH_raw_p2.','.$pH_val_p2.'+'.$pH_lkorr.' point pointtype 7
 set label "   pH '.$pH_val_p3.'" at '.$pH_raw_p3.','.$pH_val_p3.'+'.$pH_lkorr.' point pointtype 7
-set label "pH '.round($ph,4).'   " right at '.$phraw.','.$ph.' point pointtype 7
+set label "pH '.round($ph,4).'   " right at '.$phraw.','.$ph.' point pointtype 4
 
 f(x)= '.$pa.'*x**2 + '.$pb.'*x + '.$pc.'+'.$pH_lkorr.'
 plot f(x) w l title "'.$phfuncint.'"

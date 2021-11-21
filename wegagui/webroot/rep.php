@@ -23,7 +23,7 @@ echo "<br>";
 
 include "tstatus.php";
 
-if ($p_DstRAW != 'null' and $P_A1 != 'null' and $P_A2 != 'null') {
+if ($p_DstRAW != 'null' and $P_A1 != 'null' and $P_A2 != 'null' and $p_DstRAW and $P_A1 and $P_A2) {
 echo "<br>";
     include_once "helper.php";
 }
@@ -72,7 +72,7 @@ $LimitDOWN="";
 
 
 // Влажность
-if ($p_AirHum != 'null') {
+if ($p_AirHum != 'null' and $p_AirHum) {
     $pref="hum";
     $xsize=1000;
     $ysize=400;
@@ -102,9 +102,40 @@ if ($p_AirHum != 'null') {
     $LimitDOWN="";
     }
 
+// Уровень CO2
+if ($p_CO2 != 'null' and $p_CO2) {
+    $pref="hum";
+    $xsize=1000;
+    $ysize=400;
+ 
+    $gimg=$gimg.$pref;
+    $img=$img.$pref;
+    
+    $strSQL ="select 
+    dt,
+    ".$p_CO2."
+
+    
+    from sens 
+    where dt  >  '".$wsdt."'
+     and  dt  <  '".$wpdt."'
+    order by dt";
+    include "sqltocsv.php";
+    
+    $name="Уровень CO2";
+    $dimens="ppm";
+    $nplot1="CO2 - Воздух";
+
+    $LimitUP=$Max_CO2 ;
+    $LimitDOWN=$Min_CO2;
+    gplotgen($xsize,$ysize,$gimg,$wsdt,$wpdt,$csv,$handler,$text,$gnups,$img,$name,$nplot1,$nplot2,$nplot3,$nplot4,$nplot5,$dimens);
+    $LimitUP="";
+    $LimitDOWN="";
+    }
+
 
 // График EC
-if ($P_A1 != 'null' and $P_A2 != 'null') {
+if ($P_A1 != 'null' and $P_A2 != 'null' and $P_A1 and $P_A2) {
 
 
     $pref="ec";    
@@ -140,7 +171,7 @@ if ($P_A1 != 'null' and $P_A2 != 'null') {
 
 // График pH
 
-if ($p_pHraw != 'null') {
+if ($p_pHraw != 'null' and $p_pHraw) {
     $pref="ph";
     $xsize=1000;
     $ysize=400;
@@ -174,7 +205,7 @@ if ($p_pHraw != 'null') {
 
 // График света
 
-if ($p_LightRaw != 'null') {
+if ($p_LightRaw != 'null' and $p_LightRaw) {
     $pref="light";
     $xsize=1000;
     $ysize=400;
@@ -202,7 +233,7 @@ if ($p_LightRaw != 'null') {
     }
 
 // График уровня раствора
-if ($p_Dst != 'null') {
+if ($p_Dst != 'null' and $p_Dst) {
     $pref="level";
     $xsize=1000;
     $ysize=400;
@@ -235,7 +266,7 @@ if ($p_Dst != 'null') {
 
 // График остатка солей
 
-if ($p_Dst != 'null' and $P_A1 != 'null' and $P_A2 != 'null') {
+if ($p_Dst != 'null' and $P_A1 != 'null' and $P_A2 != 'null' and $p_Dst and $P_A1 and $P_A2) {
     
     $pref="soil";
     $xsize=1000;
