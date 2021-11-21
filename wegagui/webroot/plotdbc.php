@@ -1,35 +1,4 @@
 <?php
-//include "menu.php";
-
-//$ns=$_GET['ns'];
-
-
-//if (empty($_GET['days'])){$_GET['days']="-0 days";}
-//if (empty($_GET['wsdt'])){$_GET['wsdt']=date("Y-m-d",strtotime($_GET['days']))." 00:00:00";}
-//if (empty($_GET['wpdt'])){$_GET['wpdt']=date("Y-m-d")." 23:59:59";}
-//if (empty($_GET['limit'])){$_GET['limit']="100000";}
-
-//include "../config/".$ns.".conf.php";
-//include version.php;
-//$version="123";
-//$version=date("d M Y H:i:s", filemtime('../../.git/index'));
-
-//$wsdt=$_GET['wsdt'];
-//$wpdt=$_GET['wpdt'];
-//$limit=$_GET['limit'];
-
-//$stfind="?ns=".$ns."&wsdt=".$wsdt."&wpdt=".$wpdt;
-
-//include "../config/".$ns.".conf.php";
-
-//echo "<h1>".$namesys;
-//echo "</h1>";
-//echo $comment;
-//echo "<br>";
-
-
-//include "datetime.php";
-
 
 // Подключаемся к базе
 $link = mysqli_connect("$dbhost", "$login", "$password", "$my_db");
