@@ -23,7 +23,7 @@ echo "<br>";
 
 include "tstatus.php";
 
-if ($p_DstRAW != 'null' and $P_A1 != 'null' and $P_A2 != 'null' and $p_DstRAW and $P_A1 and $P_A2) {
+if ($p_DstRAW != 'null' and $P_A1 != 'null' and $P_A2 != 'null' and $DstRAW and $A1 and $A2) {
 echo "<br>";
     include_once "helper.php";
 }
@@ -72,7 +72,7 @@ $LimitDOWN="";
 
 
 // Влажность
-if ($p_AirHum != 'null' and $p_AirHum) {
+if ($p_AirHum != 'null' and $AirHum) {
     $pref="hum";
     $xsize=1000;
     $ysize=400;
@@ -103,7 +103,7 @@ if ($p_AirHum != 'null' and $p_AirHum) {
     }
 
 // Уровень CO2
-if ($p_CO2 != 'null' and $p_CO2) {
+if ($p_CO2 != 'null' and $CO2) {
     $pref="hum";
     $xsize=1000;
     $ysize=400;
@@ -135,7 +135,7 @@ if ($p_CO2 != 'null' and $p_CO2) {
 
 
 // График EC
-if ($P_A1 != 'null' and $P_A2 != 'null' and $P_A1 and $P_A2) {
+if ($P_A1 != 'null' and $P_A2 != 'null' and $A1 and $A2) {
 
 
     $pref="ec";    
@@ -205,7 +205,7 @@ if ($p_pHraw != 'null' and $p_pHraw) {
 
 // График света
 
-if ($p_LightRaw != 'null' and $p_LightRaw) {
+if ($p_LightRaw != 'null' and $LightRaw) {
     $pref="light";
     $xsize=1000;
     $ysize=400;
@@ -233,7 +233,7 @@ if ($p_LightRaw != 'null' and $p_LightRaw) {
     }
 
 // График уровня раствора
-if ($p_Dst != 'null' and $p_Dst) {
+if ($p_Dst != 'null' and $lev) {
     $pref="level";
     $xsize=1000;
     $ysize=400;
@@ -266,7 +266,7 @@ if ($p_Dst != 'null' and $p_Dst) {
 
 // График остатка солей
 
-if ($p_Dst != 'null' and $P_A1 != 'null' and $P_A2 != 'null' and $p_Dst and $P_A1 and $P_A2) {
+if ($p_Dst != 'null' and $P_A1 != 'null' and $P_A2 != 'null' and $lev and $A1 and $A2) {
     
     $pref="soil";
     $xsize=1000;
@@ -290,8 +290,11 @@ if ($p_Dst != 'null' and $P_A1 != 'null' and $P_A2 != 'null' and $p_Dst and $P_A
     $dimens="Граммы";
     $nplot1="Суммарно в системе";
 
-    
+    $LimitUP=($LevelFull+$LevelAdd)*($ECPlan*$Slk);
+    $LimitDOWN=0.1;
     gplotgen($xsize,$ysize,$gimg,$wsdt,$wpdt,$csv,$handler,$text,$gnups,$img,$name,$nplot1,$nplot2,$nplot3,$nplot4,$nplot5,$dimens);
+    $LimitUP="";
+    $LimitDOWN="";   
     }
 
 }

@@ -98,7 +98,7 @@ $L1=$lev+$LevelAdd;
 $L2=$LevelFull-$lev-$La;
 $ECn=(-($ec*$L1 - $ECPlan*$L1 - $ECPlan*$L2 )/$L2);
 $Soiln=$ECn*$Slk*($L2);
-$p_soil="($p_lev+".$L1.")*$p_EC*$Slk";
+$p_soil="($p_lev+".$LevelAdd.")*($p_EC*$Slk)";
 
 // Пределы
 $Max_OutDate=floatval(dbval("Ev_Max_Dt",$ns));

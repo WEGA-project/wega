@@ -147,24 +147,25 @@ if ($P_A1 != 'null' and $P_A2 != 'null') {
     
     $strSQL ="select 
     dt,
-	".$P_R2_polarity."
+	(".$P_R2p."-".$P_R2n.")/".$P_R2n."*100
 
     from sens 
     where dt  >  '".$wsdt."'
      and  dt  <  '".$wpdt."'
-     and abs(".$P_R2_polarity.")<1000
+
     order by dt";
     include "sqltocsv.php";
     
-    $name="Поляризация R2, расхождение в измерении сопротивления в разных фазах полярности";
-    $dimens="Ω";
+    $name="Поляризация R2, погрешность в схождении измерений сопротивления среды в разных фазах полярности";
+    $dimens="%";
     $nplot1="";
 	$nplot2="";
     
     gplotgen($xsize,$ysize,$gimg,$wsdt,$wpdt,$csv,$handler,$text,$gnups,$img,$name,$nplot1,$nplot2,$nplot3,$nplot4,$nplot5,$dimens);
 
     echo "<br><br>Текущее значение поляризации<br>";
-    echo "R2_polarity=".$R2_polarity."Ω";
+    echo "R2_polarity=".$R2_polarity."Ω ".round(($R2p-$R2n)/$R2n*100,2)."%";
+    
 }
 
     echo "<br><br><h3>Калибровка ЕС по сопротивлению и температуре</h3>";
@@ -259,6 +260,51 @@ gplotgen($xsize,$ysize,$gimg,$wsdt,$wpdt,$csv,$handler,$text,$gnups,$img,$name,$
 }
 
 
+// // Калибровочный график
+// if ($ea != 'null' and $eb != 'null') {
+
+//     $gpfunc="x**".$eb."*".$ea;
+//     //$gpfunc="1611.2184*x**-1.116";
+//     $pref="eccalibr";
+//     $xsize=1000;
+//     $ysize=400;
+
+
+// $gimg=$gimg.$pref;
+// $img=$img.$pref;
+
+
+// $text='
+// set terminal png size '.$xsize.','.$ysize.'
+// set title "График калибровочной кривой EC (mS*cm) по 1/R2 (mS)"
+// set terminal png size 800,800
+// set output "'.$gimg.'"
+// set grid
+
+// set ylabel "мСм/см"
+// set xlabel "мСм (1/Ω*1000)"
+
+// set xrange [0:10]
+// set yrange [0:10]
+// #set logscale x
+// #set logscale y
+
+// set label "   EC '.$ec1.'" at '.(1/$ex1*1000).','.$ec1.' point pointtype 7
+// set label "   EC '.$ec2.'" at '.(1/$ex2*1000).','.$ec2.' point pointtype 7
+// set label "   EC '.round($ec,3).'   " right at '.(1/$R2*1000).','.$ec.' point pointtype 4
+
+// f(x)= '.$gpfunc.'
+// plot f(1/x*1000) w l title "Кривая калибровки ЕС"
+// ';
+
+// fwrite($handler, $text);
+// fclose($handler);
+// $err=shell_exec('cat '.$gnups.'|gnuplot');
+// echo "<br>";
+// echo '<img src="'.$img.'" alt="альтернативный текст">';
+// }
+
+
 // Калибровочный график
 if ($ea != 'null' and $eb != 'null') {
 
@@ -284,31 +330,27 @@ where dt  >  '".$wsdt."'
 order by dt";
 include "sqltocsv.php";
 
-// $name="Температура";
-// $dimens="°C";
-// $nplot1="Воздух";
-// $nplot2="Зона корней";
-// $nplot3="Бак";
-
 $text='
 set terminal png size '.$xsize.','.$ysize.'
-set title "График калибровочной кривой EC по R2"
+set title "График калибровочной кривой EC"
 set terminal png size 800,800
 set output "'.$gimg.'"
 set grid
 
+set ylabel "мСм/см"
+set xlabel "Ω"
 
-set xrange [0:10]
-set yrange [0:10]
-#set logscale x
-#set logscale y
+set xrange [0:1500]
+set yrange [0:8]
+//set logscale x
+//set logscale y
 
-set label "   EC '.$ec1.'" at '.(1/$ex1*1000).','.$ec1.' point pointtype 7
-set label "   EC '.$ec2.'" at '.(1/$ex2*1000).','.$ec2.' point pointtype 7
-set label "   EC '.round($ec,3).'   " right at '.(1/$R2*1000).','.$ec.' point pointtype 4
+set label "   EC '.$ec1.'" at '.($ex1).','.$ec1.' point pointtype 7
+set label "   EC '.$ec2.'" at '.($ex2).','.$ec2.' point pointtype 7
+set label "   EC '.round($ec,3).'   " right at '.($R2).','.$ec.' point pointtype 4
 
 f(x)= '.$gpfunc.'
-plot f(1/x*1000) w l title "Кривая калибровки ЕС"
+plot f(x) w l title "Кривая калибровки ЕС"
 ';
 
 fwrite($handler, $text);
@@ -317,6 +359,11 @@ $err=shell_exec('cat '.$gnups.'|gnuplot');
 echo "<br>";
 echo '<img src="'.$img.'" alt="альтернативный текст">';
 }
+
+
+
+
+
 }
 
 
