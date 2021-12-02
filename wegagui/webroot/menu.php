@@ -50,8 +50,12 @@ echo "<li><a href=../wega>Общий</a>";
     				$cname=$nm[0];
 					//$ns=$cname;
 					//include "sqvar.php";
-
+					
+				if (dbval("namesys",$cname) ){
     				echo "<li><a href=".$_SERVER['PHP_SELF']."?ns=".$cname.">". dbval("namesys",$cname) ."</a></li>";
+				}else{
+					echo "<li><a href=".$_SERVER['PHP_SELF']."?ns=".$cname.">". $cname ."</a></li>";
+				}
 
 			 }
 

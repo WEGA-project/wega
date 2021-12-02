@@ -31,7 +31,14 @@ echo "<tr>";
 
 echo "<td>";
   echo "<a href=status.php?ns=".$ns.">";
-  echo dbval("namesys",$cname);
+
+  if (dbval("namesys",$cname)){
+    echo dbval("namesys",$cname);
+  }
+  else{
+    echo $cname;
+  }
+
   echo "</a>";
 echo "<td>";
   echo dbcomment("namesys",$cname);
