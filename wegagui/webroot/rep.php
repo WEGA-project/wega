@@ -44,11 +44,12 @@ if ($p_AirTemp != 'null' or $p_RootTemp != 'null' or $p_ECtemp !='null') {
 $gimg=$gimg.$pref;
 $img=$img.$pref;
 
-$strSQL ="select 
-dt,
-".$p_AirTemp.",
-".$p_RootTemp.",
-".$p_ECtemp."
+$strSQL = "select dt";
+if ($AirTemp){$strSQL = $strSQL . "," . $p_AirTemp;}
+if ($RootTemp){$strSQL = $strSQL . "," . $p_RootTemp;}
+if ($ECtempRAW){$strSQL = $strSQL . "," . $p_ECtemp;}
+
+$strSQL = $strSQL . "
 
 from sens 
 where dt  >  '".$wsdt."'
@@ -58,9 +59,9 @@ include "sqltocsv.php";
 
 $name="Температура";
 $dimens="°C";
-$nplot1="Воздух";
-$nplot2="Зона корней";
-$nplot3="Бак";
+if ($AirTemp){$nplot1="воздуха";}
+if ($RootTemp){$nplot2="зоны корней";}
+if ($ECtempRAW){$nplot3="раствора в баке";}
 
 $LimitUP=$Max_AirTemp ;
 $LimitDOWN=$Min_AirTemp;
@@ -93,7 +94,7 @@ if ($p_AirHum != 'null' and $AirHum) {
     
     $name="Относительная влажность";
     $dimens="%";
-    $nplot1="Воздух";
+    $nplot1="воздуха";
 
     $LimitUP=$Max_AirHum ;
     $LimitDOWN=$Min_AirHum;
@@ -124,7 +125,7 @@ if ($p_CO2 != 'null' and $CO2) {
     
     $name="Уровень CO2";
     $dimens="ppm";
-    $nplot1="CO2 - Воздух";
+    $nplot1="";
 
     $LimitUP=$Max_CO2 ;
     $LimitDOWN=$Min_CO2;
