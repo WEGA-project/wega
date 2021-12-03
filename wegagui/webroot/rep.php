@@ -62,8 +62,8 @@ $name="Температура";
 $dimens="°C";
 
 $nplot1="Воздух";
-$nplot2="Корни";
-$nplot3="Раствор";
+$nplot2="В зоне корней";
+$nplot3="В баке";
 $nplot4="Система";
 
 $LimitUP=$Max_AirTemp ;
