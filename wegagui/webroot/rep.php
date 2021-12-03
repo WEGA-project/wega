@@ -45,9 +45,10 @@ $gimg=$gimg.$pref;
 $img=$img.$pref;
 
 $strSQL = "select dt";
-if ($AirTemp){$strSQL = $strSQL . "," . $p_AirTemp;}
-if ($RootTemp){$strSQL = $strSQL . "," . $p_RootTemp;}
-if ($ECtempRAW){$strSQL = $strSQL . "," . $p_ECtemp;}
+if ($AirTemp){$strSQL = $strSQL . "," . $p_AirTemp;}    else {$strSQL = $strSQL . ",null";}
+if ($RootTemp){$strSQL = $strSQL . "," . $p_RootTemp;}  else {$strSQL = $strSQL . ",null";}
+if ($ECtempRAW){$strSQL = $strSQL . "," . $p_ECtemp;}   else {$strSQL = $strSQL . ",null";}
+if ($IntTempRaw){$strSQL = $strSQL . "," . $IntTempRaw;}   else {$strSQL = $strSQL . ",null";}
 
 $strSQL = $strSQL . "
 
@@ -59,9 +60,11 @@ include "sqltocsv.php";
 
 $name="Температура";
 $dimens="°C";
-if ($AirTemp){$nplot1="воздуха";}
-if ($RootTemp){$nplot2="зоны корней";}
-if ($ECtempRAW){$nplot3="раствора в баке";}
+
+$nplot1="Воздух";
+$nplot2="Корни";
+$nplot3="Раствор";
+$nplot4="Система";
 
 $LimitUP=$Max_AirTemp ;
 $LimitDOWN=$Min_AirTemp;
@@ -94,7 +97,7 @@ if ($p_AirHum != 'null' and $AirHum) {
     
     $name="Относительная влажность";
     $dimens="%";
-    $nplot1="воздуха";
+    $nplot1="воздух";
 
     $LimitUP=$Max_AirHum ;
     $LimitDOWN=$Min_AirHum;
