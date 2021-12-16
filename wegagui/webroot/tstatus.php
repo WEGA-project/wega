@@ -39,7 +39,7 @@ if ($p_ph != 'null' and $ph)  {
 
 }
 
-if ($p_LightRaw != 'null' and $LightRaw)  {
+if ($p_LightRaw != 'null' and $Lux)  {
     echo "<td><a href=plotdb.php?ns=".$ns."&cl=".urlencode($p_Lux).">Освещенность</a><td>".round($Lux,3)." kLux<td></tr>";
 }
 

@@ -209,7 +209,7 @@ if ($p_pHraw != 'null' and $p_pHraw) {
 
 // График света
 
-if ($p_LightRaw != 'null' and $LightRaw) {
+if ($p_LightRaw != 'null' and $Lux) {
     $pref="light";
     $xsize=1000;
     $ysize=400;
