@@ -13,6 +13,11 @@ $p_AirHum=dbval("AirHum",$ns);
         $p_AirHum="if(".$p_AirHum." != 0 and ".$p_AirHum." < 100,".$p_AirHum.",null)";
     }
 
+$p_AirPress=dbval("AirPress",$ns);
+    if ($p_AirPress != 'null'){
+        $p_AirPress="if(".$p_AirPress." != 0,".$p_AirPress.",null)";
+    }    
+
 $p_RootTemp=dbval("RootTemp",$ns);
     if ($p_RootTemp != 'null'){
         $p_RootTemp="if(".$p_RootTemp." != -127 and ".$p_RootTemp." != 85,".$p_RootTemp.",null)";
@@ -78,6 +83,7 @@ $A1=sensval($P_A1,$ns);
 $A2=sensval($P_A2,$ns);
 $AirHum=sensval($p_AirHum,$ns);
 $AirTemp=sensval($p_AirTemp,$ns);
+$AirPress=sensval($p_AirPress,$ns);
 $RootTemp=sensval($p_RootTemp,$ns);
 $ECtempRAW=sensval($p_ECtempRAW,$ns);
 $DstRAW=sensval($p_Dst,$ns);
@@ -111,6 +117,8 @@ $Max_WaterTemp=floatval(dbval("Ev_Max_WaterTemp",$ns));
 $Min_WaterTemp=floatval(dbval("Ev_Min_WaterTemp",$ns));
 $Max_AirHum=floatval(dbval("Ev_Max_AirHum",$ns));
 $Min_AirHum=floatval(dbval("Ev_Min_AirHum",$ns));
+$Max_AirPress=floatval(dbval("Ev_Max_AirPress",$ns));
+$Min_AirPress=floatval(dbval("Ev_Min_AirPress",$ns));
 $Min_Level=floatval(dbval("Ev_Min_Level",$ns));
 $Crit_Level=floatval(dbval("Ev_Crit_Level",$ns));
 $Max_EC=floatval(dbval("Ev_Max_EC",$ns));

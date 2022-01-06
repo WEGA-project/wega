@@ -17,6 +17,12 @@ if ($p_AirTemp != 'null' and $AirTemp)  {
 
 }
 
+if ($p_AirPress != 'null' and $AirPress)  {
+    if ($AirPress < $Max_AirPress and $AirPress > $Min_AirPress ) {$AirPress_Status = "Норма";} else {$AirPress_Status = "Проблема";}
+    echo "<td><a href=plotdb.php?ns=".$ns."&cl=".urlencode($p_AirPress).">Давление воздуха</a><td>".round($AirPress,2)." мм. рт. ст. <td>".$AirPress_Status."</tr>";
+
+}
+
 if ($p_RootTemp != 'null' and $RootTemp)  {
     if ($RootTemp < $Max_RootTemp and $RootTemp > $Min_RootTemp ) {$RootTemp_Status = "Норма";} else {$RootTemp_Status = "Проблема";}
     echo "<td><a href=plotdb.php?ns=".$ns."&cl=".urlencode($p_RootTemp).">Температура в зоне корней</a><td>".round($RootTemp,2)."°C <td>".$RootTemp_Status."</tr>";

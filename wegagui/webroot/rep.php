@@ -106,6 +106,37 @@ if ($p_AirHum != 'null' and $AirHum) {
     $LimitDOWN="";
     }
 
+// Давление
+if ($p_AirPress != 'null' and $AirPress) {
+    $pref="press";
+    $xsize=1000;
+    $ysize=400;
+ 
+    $gimg=$gimg.$pref;
+    $img=$img.$pref;
+    
+    $strSQL ="select 
+    dt,
+    ".$p_AirPress."
+
+    
+    from sens 
+    where dt  >  '".$wsdt."'
+     and  dt  <  '".$wpdt."'
+    order by dt";
+    include "sqltocsv.php";
+    
+    $name="Давление";
+    $dimens="мм.рт.ст.";
+    $nplot1="воздух";
+
+    $LimitUP=$Max_AirPress ;
+    $LimitDOWN=$Min_AirPress;
+    gplotgen($xsize,$ysize,$gimg,$wsdt,$wpdt,$csv,$handler,$text,$gnups,$img,$name,$nplot1,$nplot2,$nplot3,$nplot4,$nplot5,$dimens);
+    $LimitUP="";
+    $LimitDOWN="";
+    }
+
 // Уровень CO2
 if ($p_CO2 != 'null' and $CO2) {
     $pref="hum";
