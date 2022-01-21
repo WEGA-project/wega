@@ -8,7 +8,7 @@ read -p "[yes/no]: " OS_UPDATE
 WEGA_USER_NAME="wega"
 
 apt update
-if [ $OS_UPDATE == 'yes' ]
+if [[ "$OS_UPDATE" == 'yes' ]]
 then
   apt dist-upgrade -y
 fi
@@ -96,7 +96,7 @@ printf "\n"
 echo "#######################"
 echo "### WEGA SERVER URL ###"
 echo "#######################"
-if [ $(dmidecode -s system-product-name) == 'VirtualBox' ]
+if [[ "$(dmidecode -s system-product-name)" == 'VirtualBox' ]]
 then
     SERVER_IP=$(ip -f inet addr show | grep inet | grep -v '127.0.0.1' | awk '/inet / {print $2}' | cut -d/ -f1)
     echo 'http://'$SERVER_IP'/wega'
@@ -111,7 +111,7 @@ printf "\n"
 echo "######################################################"
 echo "### WEGABOX config ###"
 echo "######################################################"
-if [ $(dmidecode -s system-product-name) == 'VirtualBox' ]
+if [[ "$(dmidecode -s system-product-name)" == 'VirtualBox' ]]
 then
     SERVER_IP=$(ip -f inet addr show | grep inet | grep -v '127.0.0.1' | awk '/inet / {print $2}' | cut -d/ -f1)
     echo 'String wegaapi  = "http://'$SERVER_IP'/wega-api/wegabox.php";'
