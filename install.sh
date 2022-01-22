@@ -20,7 +20,7 @@ echo "#############################"
 printf "\n"
 sleep 5
 
-apt install lamp-server^ php-curl gnuplot git curl -y
+apt install lamp-server^ php-curl gnuplot git curl syslog-ng -y
 
 echo "##############################"
 echo "######## MySQL config ########"
@@ -49,6 +49,10 @@ printf "\n"
 sleep 5
 
 git clone https://github.com/WEGA-project/WEGA.git /var/WEGA
+
+# Syslog config 
+cp /var/WEGA/wegabox.conf /etc/syslog-ng/conf.d/wegabox.conf
+systemctl restart syslog-ng
 
 echo "###################################"
 echo "###### Configure WEGA server ######"
