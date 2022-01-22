@@ -88,7 +88,7 @@ printf "\n"
 
 # POST config info
 
-echo "################################"
+echo "###############################"
 echo "###### Post config info  ######"
 echo "###############################"
 printf "\n"
@@ -108,14 +108,36 @@ echo "WEGA_UI_PASSWORD: $WEGA_UI_PSWD"
 
 printf "\n"
 printf "\n"
-echo "######################################################"
+echo "######################"
 echo "### WEGABOX config ###"
-echo "######################################################"
+echo "######################"
+printf "\n"
+echo "#########################################################"
+echo "                _       __ ______ ______ ___ "
+echo "               | |     / // ____// ____//   |"
+echo "               | | /| / // __/  / / __ / /| |"
+echo "               | |/ |/ // /___ / /_/ // ___ |"
+echo "               |__/|__//_____/ \____//_/  |_|"
+printf "\n\n"
+echo "           _____  ______ ____  _    __ ______ ____ "
+echo '          / ___/ / ____// __ \| |  / // ____// __ \'
+echo '          \__ \ / __/  / /_/ /| | / // __/  / /_/ /'
+echo "         ___/ // /___ / _, _/ | |/ // /___ / _, _/ "
+echo "        /____//_____//_/ |_|  |___//_____//_/ |_|  "
+echo "#########################################################"
+printf "\n"
 if [[ "$(dmidecode -s system-product-name)" == 'VirtualBox' ]]
 then
     SERVER_IP=$(ip -f inet addr show | grep inet | grep -v '127.0.0.1' | awk '/inet / {print $2}' | cut -d/ -f1)
     echo 'String wegaapi  = "http://'$SERVER_IP'/wega-api/wegabox.php";'
+elif [[  "$(curl -s ipinfo.io | grep -o Amazon)" == "Amazon" ]]
+then
+    AWS_PUBLIC_IP=$(curl -s 'http://169.254.169.254/latest/meta-data/public-ipv4')
+    echo 'String wegaapi  = "http://'$AWS_PUBLIC_IP'/wega-api/wegabox.php";'
 else
+    echo "######################################################"
+    printf "Unknown VM or Cloud provider, please, find your's server IP\n\n"
+    printf "Не известная виртуальная платформа или клауд сервис, найдите свой IP адрес самостоятельно!\n\n"
     echo 'String wegaapi  = "http://WEGA_SERVER_IP/wega-api/wegabox.php";'
 fi
 echo 'String wegaauth = "'$WEGA_API_TOKEN'";'
