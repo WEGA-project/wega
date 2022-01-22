@@ -100,9 +100,9 @@ echo '
 
                         <li><a href="#">О проекте</a><ul>
                                         <li><h6>Версия от: '.$version.'</h6></li>
-                                        <li><a href="https://github.com/siv237/wega/commits/master">Обновления GIT</a></li>
-                                        <li><a href="https://t.me/WEGA_project">Группа поддержки</a></li>
-                                        <li><a href="https://github.com/siv237/WEGA/wiki">WiKI проекта</a></li>
+                                        <li><a href="https://github.com/WEGA-project/wega">Обновления GIT</a></li>
+                                        <li><a href="https://t.me/WEGA_SERVER">Группа поддержки</a></li>
+                                        <li><a href="https://github.com/WEGA-project/wega/wiki">WiKI проекта</a></li>
                                 </ul>
                         </li>
 
