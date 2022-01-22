@@ -42,7 +42,7 @@ curl -s https://raw.githubusercontent.com/WEGA-project/wega/master/install.sh | 
 
 ### Видео, о том как установить WEGA SERVER
 
-[![WEGA SERVER + WEGABOX - Установка WEGA SERVER](https://i9.ytimg.com/vi_webp/TOMY-anSX0E/mqdefault.webp?v=61eb5313&sqp=CLj0rY8G&rs=AOn4CLAu0gZrUT-Qk0Bk-kGe_3MFTQF2kw)](https://youtu.be/TOMY-anSX0E "WEGA SERVER + WEGABOX - Установка WEGA SERVER")
+[![WEGA SERVER + WEGABOX - Установка WEGA SERVER](images/title_out.jpg)](https://youtu.be/TOMY-anSX0E "WEGA SERVER + WEGABOX - Установка WEGA SERVER")
 ### Более детальную и пошаговую инструкцию можно найти по ссылке ниже
 
 Установка и конфигурирование сервера описана так же в [Wiki-install](https://github.com/WEGA-project/WEGA/wiki/install)
