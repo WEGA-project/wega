@@ -50,7 +50,7 @@ sleep 5
 
 git clone https://github.com/WEGA-project/WEGA.git /var/WEGA
 
-echo "####################################"
+echo "###################################"
 echo "###### Configure WEGA server ######"
 echo "###################################"
 printf "\n"
