@@ -109,13 +109,14 @@ printf "\n\n"
 echo "#######################"
 echo "### WEGA SERVER URL ###"
 echo "#######################"
-if [[ "$(dmidecode -s system-product-name)" == 'VirtualBox' ]]
+if [[  "$(curl -s ipinfo.io | grep -o Amazon)" == "Amazon" ]]
 then
-    SERVER_IP=$(ip -f inet addr show | grep inet | grep -v '127.0.0.1' | awk '/inet / {print $2}' | cut -d/ -f1)
-    echo 'http://'$SERVER_IP'/wega'
+    AWS_PUBLIC_IP=$(curl -s 'http://169.254.169.254/latest/meta-data/public-ipv4')
+    echo 'WEGA_SERVER_IP: http://'$AWS_PUBLIC_IP'/wega'
 else
-    echo 'String wegaapi  = "http://WEGA_SERVER_IP/wega'
+    echo "WEGA_SERVER_IP: http://$(hostname -I | sed -e "s/\s$//g")/wega"
 fi
+
 echo "WEGA_UI_USERNAME: $WEGA_USER_NAME"
 echo "WEGA_UI_PASSWORD: $WEGA_UI_PSWD"
 
@@ -124,23 +125,15 @@ printf "\n"
 echo "######################"
 echo "### WEGABOX config ###"
 echo "######################"
-if [[ "$(dmidecode -s system-product-name)" == 'VirtualBox' ]]
-then
-    SERVER_IP=$(ip -f inet addr show | grep inet | grep -v '127.0.0.1' | awk '/inet / {print $2}' | cut -d/ -f1)
-    echo 'String wegaapi  = "http://'$SERVER_IP'/wega-api/wegabox.php";'
-    echo '#define SYSLOG_SERVER "'$SERVER_IP'"'
-elif [[  "$(curl -s ipinfo.io | grep -o Amazon)" == "Amazon" ]]
+if [[  "$(curl -s ipinfo.io | grep -o Amazon)" == "Amazon" ]]
 then
     AWS_PUBLIC_IP=$(curl -s 'http://169.254.169.254/latest/meta-data/public-ipv4')
     echo 'String wegaapi  = "http://'$AWS_PUBLIC_IP'/wega-api/wegabox.php";'
     echo '#define SYSLOG_SERVER "'$AWS_PUBLIC_IP'"'
 else
-    echo "######################################################"
-    printf "Unknown VM or Cloud provider, please, find your's server IP\n\n"
-    printf "Не известная виртуальная платформа или клауд сервис, найдите свой IP адрес самостоятельно!\n\n"
-    echo 'String wegaapi  = "http://WEGA_SERVER_IP/wega-api/wegabox.php";'
-    echo '#define SYSLOG_SERVER "WEGA_SERVER_IP"'
+    SERVER_IP=$(hostname -I | sed -e "s/\s$//g")
+    echo 'String wegaapi  = "http://'$SERVER_IP'/wega-api/wegabox.php";'
+    echo '#define SYSLOG_SERVER "'$SERVER_IP'"'
 fi
 echo 'String wegaauth = "'$WEGA_API_TOKEN'";'
 echo 'String wegadb   = "esp32wega";'
-echo "Адрес сервера WEGA_SERVER_IP: `hostname -I`"
