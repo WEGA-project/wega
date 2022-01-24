@@ -20,7 +20,7 @@ echo "#############################"
 printf "\n"
 sleep 5
 
-apt install lamp-server^ php-curl gnuplot git curl syslog-ng -y
+apt install lamp-server^ php-curl gnuplot-nox git curl syslog-ng -y
 
 echo "##############################"
 echo "######## MySQL config ########"
@@ -143,3 +143,4 @@ else
 fi
 echo 'String wegaauth = "'$WEGA_API_TOKEN'";'
 echo 'String wegadb   = "esp32wega";'
+echo "Адрес сервера WEGA_SERVER_IP: `hostname -I`"
