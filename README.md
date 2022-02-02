@@ -34,8 +34,7 @@
 * Скопировать и выполнить на сервере следущее
 ``` 
 sudo su
-apt update && apt install curl
-curl -s https://raw.githubusercontent.com/WEGA-project/wega/master/install.sh | bash
+wget -O - https://raw.githubusercontent.com/WEGA-project/wega/master/install.sh | bash
 ```
 * Пойти выпить чаю или еще чего, пока идет настройка и конфигурирование
 * Прочитать информацию после установки, где будет написано, как зайти через веб интерфейс на ваш свеже-установленный `WEGA SERVER`
