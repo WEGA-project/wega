@@ -13,7 +13,6 @@ then
   apt dist-upgrade -y
 fi
 
-
 echo "#############################"
 echo "###### Installing Soft ######"
 echo "#############################"
