@@ -1,5 +1,7 @@
 <?php
 include_once "func.php";
+if($ns)
+{
 include "../config/".$ns.".conf.php";
 
 
@@ -129,7 +131,7 @@ $Max_CO2=floatval(dbval("Ev_Max_CO2",$ns));
 $Min_CO2=floatval(dbval("Ev_Min_CO2",$ns));
 
 $mixerdb=dbval("mixerdb",$ns);
-
+}
 $csv="tmp/s.".$ns.".csv";
 $gnups="tmp/s.".$ns.".gnuplot";
 $img="tmp/s.".$ns.".png";
