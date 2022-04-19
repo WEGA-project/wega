@@ -16,7 +16,7 @@ $p_AirHum=dbval("AirHum",$ns);
     }
 
 $p_AirPress=dbval("AirPress",$ns);
-    if ($p_AirPress != 'null'){
+    if ($p_AirPress != 'null' and $p_AirPress != ''){
         $p_AirPress="if(".$p_AirPress." != 0,".$p_AirPress.",null)";
     }    
 
