@@ -66,7 +66,7 @@ if ($P_A1 != 'null' and $P_A2 != 'null' and $P_A1 != '' and $P_A2 != '')  {
     }
 }
 
-if ($p_ph != 'null' and $p_ph != '')  {
+if ($p_pHraw != 'null' and $p_pHraw != '')  {       
     if ($ph < $Max_pH and $ph > $Min_pH ) {$pH_Status = "Норма";} else {$pH_Status = "Проблема";}
     if (!$ph){
         echo "<td><a href=plotdb.php?ns=".$ns."&cl=".urlencode($p_ph).">Датчик pH</a><td>Нет данных<td>Проблема</tr>";
