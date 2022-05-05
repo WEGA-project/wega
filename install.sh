@@ -67,6 +67,7 @@ sed -i "s/DATABASE_PASSWORD/$MYSQL_PSWD/g" /var/WEGA/db.php
 chown -R www-data:www-data /var/WEGA
 
 # WEGA API secret config
+cp 
 WEGA_API_TOKEN=$(openssl rand -hex 18)
 sed -i "s/adab637320e5c47624cdd15169276981/$WEGA_API_TOKEN/g"  /var/WEGA/wega-api/wegabox.php
 
@@ -130,7 +131,7 @@ then
     echo 'String wegaapi  = "http://'$AWS_PUBLIC_IP'/wega-api/wegabox.php";'
     echo '#define SYSLOG_SERVER "'$AWS_PUBLIC_IP'"'
 else
-    SERVER_IP=$(hostname -I | sed -e "s/\s$//g")
+    SERVER_IP=$(hostname -I | sed -e "s/\s$//g"|awk '{print $1}')
     echo 'String wegaapi  = "http://'$SERVER_IP'/wega-api/wegabox.php";'
     echo '#define SYSLOG_SERVER "'$SERVER_IP'"'
 fi
