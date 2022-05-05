@@ -2,4 +2,5 @@ wegagui/webroot/tmp/**
 wegagui/config/**
 !wegagui/config/example
 !wegagui/config/example/example.conf.php
+wega-api/*
 db.php
