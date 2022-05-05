@@ -67,7 +67,7 @@ sed -i "s/DATABASE_PASSWORD/$MYSQL_PSWD/g" /var/WEGA/db.php
 chown -R www-data:www-data /var/WEGA
 
 # WEGA API secret config
-cp 
+cp /var/WEGA/example/wega-api/wegabox.php.example /var/WEGA/wega-api/wegabox.php
 WEGA_API_TOKEN=$(openssl rand -hex 18)
 sed -i "s/adab637320e5c47624cdd15169276981/$WEGA_API_TOKEN/g"  /var/WEGA/wega-api/wegabox.php
 
