@@ -48,6 +48,69 @@ function sensval($p_name,$ns)
    mysqli_close($link);
 }
 
+function vallast($p_name,$sec,$ns)
+{
+   include "../config/".$ns.".conf.php";
+   $tb="sens";
+   $link=mysqli_connect("$dbhost", "$login", "$password", "$my_db"); 
+   return mysqli_fetch_object(mysqli_query($link, "select ".$p_name." as val,dt as dt from sens order by dt desc  limit 1"));
+   mysqli_close($link);
+}
+
+function valprev($p_name,$sec,$ns)
+{
+   include "../config/".$ns.".conf.php";
+   $tb="sens";
+   $link=mysqli_connect("$dbhost", "$login", "$password", "$my_db"); 
+   return mysqli_fetch_object(mysqli_query($link, "select ".$p_name." as val,dt as dt from sens where UNIX_TIMESTAMP(now())-UNIX_TIMESTAMP(dt) > ".$sec." order by dt desc  limit 1"));
+   mysqli_close($link);
+}
+
+function valpred($p_name,$sec,$ns)
+{
+   include "../config/".$ns.".conf.php";
+   $tb="sens";
+   $link=mysqli_connect("$dbhost", "$login", "$password", "$my_db"); 
+   return mysqli_fetch_object(mysqli_query($link, "select max(".$p_name.") as valmax,min(".$p_name.") as valmin from sens where UNIX_TIMESTAMP(now())-UNIX_TIMESTAMP(dt) > ".$sec." limit 1"));
+   mysqli_close($link);
+}
+
+   //echo $last[lastdt];
+   //$res[lastdt]=$last -> lastdt;
+   //echo $last -> dt;
+   //$res[lastval]=$last -> lastval;
+
+   // $lastval=$last -> $p_name;
+
+   // $prev=mysqli_fetch_object(mysqli_query($link, "select ".$p_name." as prevval,dt as prevdt from sens where now()-dt > ".$sec." order by dt desc  limit 1"));
+   // //$res[prevdt]=$prev -> prevdt;
+   // //$res[prevval]=$prev -> prevval;
+   // // $prevdt=$prev -> dt;
+   // // $prevval=$prev -> $p_name;
+
+   // $res=[$last,$prev];
+   // echo "<br>";
+
+   // var_dump($last);
+   // echo "<br>";
+
+   // //$res=
+   // var_dump($res);
+   // $result=array_merge_recursive($last,$prev);
+   // var_dump($result);
+   //echo $res[lastval];
+   // echo $lastdt;
+   // echo "<br>";
+   // echo $lastval;
+   // echo "<br>";
+   // echo $prevdt;
+   // echo "<br>";
+   // echo $prevval;
+
+   //$result=mysqli_query($link, $sqlstr);
+   //return mysqli_fetch_object($result)->$p_name;
+   //return mysqli_fetch_object($result);
+
 
 function pedit($str,$ns,$defv,$defc)
 {
