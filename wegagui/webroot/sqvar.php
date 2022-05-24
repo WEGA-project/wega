@@ -99,6 +99,47 @@ $tVOC=sensval($p_tVOC,$ns);
 $ec=sensval("EC($P_A1,$P_A2,".$tempEC.")",$ns);
 $ph=sensval("ph(".dbval("pHraw",$ns).")",$ns);
 $lev=sensval("intpl(levmin(".$p_Dst."))",$ns);
+
+
+// $timed=60*60*24;
+// $val_last=vallast($p_Dst,$timed,$ns) -> val ;
+// $dt_last=vallast($p_Dst,$timed,$ns) -> dt ;
+
+// $val_prev=valprev($p_Dst,$timed,$ns) -> val ;
+// $dt_prev=valprev($p_Dst,$timed,$ns) -> dt ;
+
+
+
+// echo "dt_last=".$dt_last . "<br>";
+// echo "dt_prev=".$dt_prev . "<br>";
+
+// $val_min=valpred($p_Dst,$timed,$ns) -> valmin ;
+// echo "val_min=".$val_min . "<br>";
+
+// $val_max=valpred($p_Dst,$timed,$ns) -> valmax ;
+// echo "val_max=".$val_max . "<br>";
+
+// $sec=strtotime($dt_last)-strtotime($dt_prev);
+
+
+// echo $sec . "sec<br>";
+// $lev_last= sensval("intpl(levmin(".$val_last."))",$ns);
+// echo "lev_last=".$lev_last . "<br>";
+// $lev_prev= sensval("intpl(levmin(".$val_prev."))",$ns);
+// echo "lev_prev=".$lev_prev . "<br>";
+// echo "</table>";
+// $levdelta=($lev_prev-$lev_last)/$sec*60*60*24;
+// echo $levdelta;
+
+
+
+
+
+
+
+
+
+
 //$Pa=sensval("Pa($p_AirTemp,$p_AirHum)",$ns);
 $Pa=sensval("$p_Pa",$ns);
 
@@ -137,6 +178,34 @@ $gnups="tmp/s.".$ns.".gnuplot";
 $img="tmp/s.".$ns.".png";
 $gimg=$img;
 
+//// Statistic
+// pH changes
+$timed=60*60*72;
+$val_last=vallast($p_pH,$timed,$ns) -> val ;
+$dt_last=vallast($p_pH,$timed,$ns) -> dt ;
+$val_prev=valprev($p_pH,$timed,$ns) -> val ;
+$dt_prev=valprev($p_pH,$timed,$ns) -> dt ;
+$sec=strtotime($dt_last)-strtotime($dt_prev);
+$pHchanges = ($val_last-$val_prev)/$sec*60*60*24;
+
+
+// Level changes
+$timed=60*60*24;
+$val_last=vallast($p_lev,$timed,$ns) -> val ;
+$dt_last=vallast($p_lev,$timed,$ns) -> dt ;
+$val_prev=valprev($p_lev,$timed,$ns) -> val ;
+$dt_prev=valprev($p_lev,$timed,$ns) -> dt ;
+$sec=strtotime($dt_last)-strtotime($dt_prev);
+$LevChanges=($val_last-$val_prev)/$sec*60*60*24;
+
+// EC Changes
+$timed=60*60*24;
+$val_last=vallast($p_EC,$timed,$ns) -> val ;
+$dt_last=vallast($p_EC,$timed,$ns) -> dt ;
+$val_prev=valprev($p_EC,$timed,$ns) -> val ;
+$dt_prev=valprev($p_EC,$timed,$ns) -> dt ;
+$sec=strtotime($dt_last)-strtotime($dt_prev);
+$ECchanges = ($val_last-$val_prev)/$sec*60*60*24;
 
 
 ?>
