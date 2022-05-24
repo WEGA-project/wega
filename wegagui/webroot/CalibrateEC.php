@@ -95,6 +95,8 @@ if ($P_A1 != 'null' and $P_A2 != 'null') {
     pedit("EC_Rx1",$ns,-110,"EC Внутреннее сопротивление порта 1");
     pedit("EC_Rx2",$ns,-10,"EC Внутреннее сопротивление порта 2");
     pedit("Dr",$ns,4095,"Разрядность АЦП");
+    $rx1rx2link="rx1rx2.php?ns=".urlencode($ns)."&wsdt=".urlencode($wsdt)."&wpdt=".urlencode($wpdt);
+    echo "<p><a href=".$rx1rx2link.">Расчет значений Rx1 и Rx2</a>";
 // График сопротивлений
 if ($P_A1 != 'null' and $P_A2 != 'null') {
     $pref="ecR";    
