@@ -76,7 +76,9 @@ if ( $_GET['ns'] )
       }
     }
   }
-  $return_url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+  //echo $_SERVER['HTTP_REFERER'];
+  //$return_url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+  $return_url = $_SERVER['HTTP_REFERER'];
   $return_url = str_replace("rx1rx2.php", "CalibrateEC.php", $return_url);
   echo "<form><form action='' method='get'>";
   echo "<input type='hidden' name='ns' value='".$ns."'>";

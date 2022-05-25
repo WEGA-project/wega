@@ -38,6 +38,22 @@ if (dbval("A1",$ns) != "null" and dbval("A2",$ns) != "null") {
 echo "<h2>Калибровка EC</h2>";
 echo "Дата и время последнего замера: ".sensval("dt",$ns);
 
+echo "<br><br>";
+
+pedit("EC_date1",$ns,"2022-05-20 11:00:00","Дата/время контрольной точки 1");
+$dateval=dbval("EC_date1",$ns);
+echo "EC в точке 1 = ".valdate("EC(".$P_A1.",".$P_A2.",".$tempEC.")",$dateval,$ns) -> value;
+echo "<br><br>";
+
+pedit("EC_date2",$ns,"2022-05-20 12:00:00","Дата/время контрольной точки 2");
+$dateval=dbval("EC_date2",$ns);
+echo "EC в точке 2 = ".valdate("EC(".$P_A1.",".$P_A2.",".$tempEC.")",$dateval,$ns) -> value;
+echo "<br><br>";
+
+pedit("EC_date3",$ns,"2022-05-20 13:00:00","Дата/время контрольной точки 3");
+$dateval=dbval("EC_date3",$ns);
+echo "EC в точке 3 = ".valdate("EC(".$P_A1.",".$P_A2.",".$tempEC.")",$dateval,$ns) -> value;
+echo "<br><br>";
 
 include "sqfunc.php";
 include "datetime.php";

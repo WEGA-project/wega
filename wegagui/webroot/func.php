@@ -75,6 +75,13 @@ function valpred($p_name,$sec,$ns)
    mysqli_close($link);
 }
 
+function valdate($p_name,$date,$ns)
+{
+   include "../config/".$ns.".conf.php";
+   $link=mysqli_connect("$dbhost", "$login", "$password", "$my_db"); 
+   return mysqli_fetch_object(mysqli_query($link, "select ".$p_name." as value,dt as dt from sens where dt > '".$date."' order by dt limit 1"));
+   mysqli_close($link);
+}
    //echo $last[lastdt];
    //$res[lastdt]=$last -> lastdt;
    //echo $last -> dt;
