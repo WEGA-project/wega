@@ -32,13 +32,13 @@ echo "pH в точке 1 = ".valdate($p_pH,$dateval,$ns) -> value;
 echo "<br>Прошло: ".showDate( strtotime($dateval) );
 echo "<br><br>";
 
-pedit("pH_date2",$ns,"2022-05-20 12:00:00","Дата/время контрольной точки 1");
+pedit("pH_date2",$ns,"2022-05-20 12:00:00","Дата/время контрольной точки 2");
 $dateval=dbval("EC_date2",$ns);
 echo "pH в точке 2 = ".valdate($p_pH,$dateval,$ns) -> value;
 echo "<br>Прошло: ".showDate( strtotime($dateval) );
 echo "<br><br>";
 
-pedit("pH_date3",$ns,"2022-05-20 13:00:00","Дата/время контрольной точки 1");
+pedit("pH_date3",$ns,"2022-05-20 13:00:00","Дата/время контрольной точки 3");
 $dateval=dbval("EC_date1",$ns);
 echo "pH в точке 3 = ".valdate($p_pH,$dateval,$ns) -> value;
 echo "<br>Прошло: ".showDate( strtotime($dateval) );
