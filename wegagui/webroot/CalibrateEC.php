@@ -43,16 +43,20 @@ echo "<br><br>";
 pedit("EC_date1",$ns,"2022-05-20 11:00:00","Дата/время контрольной точки 1");
 $dateval=dbval("EC_date1",$ns);
 echo "EC в точке 1 = ".valdate("EC(".$P_A1.",".$P_A2.",".$tempEC.")",$dateval,$ns) -> value;
+echo "<br>Прошло: ".showDate( strtotime($dateval) );
 echo "<br><br>";
+
 
 pedit("EC_date2",$ns,"2022-05-20 12:00:00","Дата/время контрольной точки 2");
 $dateval=dbval("EC_date2",$ns);
 echo "EC в точке 2 = ".valdate("EC(".$P_A1.",".$P_A2.",".$tempEC.")",$dateval,$ns) -> value;
+echo "<br>Прошло: ".showDate( strtotime($dateval) );
 echo "<br><br>";
 
 pedit("EC_date3",$ns,"2022-05-20 13:00:00","Дата/время контрольной точки 3");
 $dateval=dbval("EC_date3",$ns);
 echo "EC в точке 3 = ".valdate("EC(".$P_A1.",".$P_A2.",".$tempEC.")",$dateval,$ns) -> value;
+echo "<br>Прошло: ".showDate( strtotime($dateval) );
 echo "<br><br>";
 
 include "sqfunc.php";
@@ -276,51 +280,6 @@ $nplot3="Бак";
 
 gplotgen($xsize,$ysize,$gimg,$wsdt,$wpdt,$csv,$handler,$text,$gnups,$img,$name,$nplot1,$nplot2,$nplot3,$nplot4,$nplot5,$dimens);
 }
-
-
-// // Калибровочный график
-// if ($ea != 'null' and $eb != 'null') {
-
-//     $gpfunc="x**".$eb."*".$ea;
-//     //$gpfunc="1611.2184*x**-1.116";
-//     $pref="eccalibr";
-//     $xsize=1000;
-//     $ysize=400;
-
-
-// $gimg=$gimg.$pref;
-// $img=$img.$pref;
-
-
-// $text='
-// set terminal png size '.$xsize.','.$ysize.'
-// set title "График калибровочной кривой EC (mS*cm) по 1/R2 (mS)"
-// set terminal png size 800,800
-// set output "'.$gimg.'"
-// set grid
-
-// set ylabel "мСм/см"
-// set xlabel "мСм (1/Ω*1000)"
-
-// set xrange [0:10]
-// set yrange [0:10]
-// #set logscale x
-// #set logscale y
-
-// set label "   EC '.$ec1.'" at '.(1/$ex1*1000).','.$ec1.' point pointtype 7
-// set label "   EC '.$ec2.'" at '.(1/$ex2*1000).','.$ec2.' point pointtype 7
-// set label "   EC '.round($ec,3).'   " right at '.(1/$R2*1000).','.$ec.' point pointtype 4
-
-// f(x)= '.$gpfunc.'
-// plot f(1/x*1000) w l title "Кривая калибровки ЕС"
-// ';
-
-// fwrite($handler, $text);
-// fclose($handler);
-// $err=shell_exec('cat '.$gnups.'|gnuplot');
-// echo "<br>";
-// echo '<img src="'.$img.'" alt="альтернативный текст">';
-// }
 
 
 // Калибровочный график
