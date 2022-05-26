@@ -39,7 +39,7 @@ echo "<br>Прошло: ".showDate( strtotime($dateval) );
 echo "<br><br>";
 
 pedit("pH_date3",$ns,"2022-05-20 13:00:00","Дата/время контрольной точки 3");
-$dateval=dbval("pH_date1",$ns);
+$dateval=dbval("pH_date3",$ns);
 echo "pH в точке 3 = ".valdate($p_pH,$dateval,$ns) -> value;
 echo "<br>Прошло: ".showDate( strtotime($dateval) );
 echo "<br><br>";
