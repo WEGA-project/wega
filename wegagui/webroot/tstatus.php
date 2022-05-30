@@ -125,8 +125,7 @@ if ($p_Dst != 'null' and $p_Dst != '')  {
     echo "</tr>";
     echo "<td>Общий остаток раствора в системе <td>".round($L1,1)." литр. <td>";
     echo "<td></tr>";
-    echo "</table>";
     }    
 }
-
+echo "</table>";
 ?>
