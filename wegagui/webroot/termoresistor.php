@@ -10,7 +10,7 @@ echo "<h1>".$namesys."</h1>";
 echo $comment;
 echo "<br>";
 
-echo "<h2>Датчик температурной компенсации расвтора</h2>";
+echo "<h2>Датчик температурной компенсации раствора</h2>";
 
 
 include_once "func.php";
@@ -49,13 +49,13 @@ echo "</details><br>";
 
 echo "<details><summary>Калибровка по трём точкам</summary>";
 echo "<br>Точка 1<br>";
-pedit("tR_val_p1",$ns,36,"tR Темература точки 1");
+pedit("tR_val_p1",$ns,36,"tR температура точки 1");
 pedit("tR_raw_p1",$ns,2300,"tR Значение АЦП RAW точки 1");
 echo "<br>Точка 2<br>";
-pedit("tR_val_p2",$ns,23,"tR Темература точки 2");
+pedit("tR_val_p2",$ns,23,"tR температура точки 2");
 pedit("tR_raw_p2",$ns,1677,"tR Значение АЦП RAW точки 2");
 echo "<br>Точка 3<br>";
-pedit("tR_val_p3",$ns,6,"tR Темература точки 3");
+pedit("tR_val_p3",$ns,6,"tR температура точки 3");
 pedit("tR_raw_p3",$ns,920,"tR Значение АЦП RAW точки 3");
 echo "</details><br>";
 

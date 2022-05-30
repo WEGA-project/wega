@@ -11,7 +11,7 @@ echo '<h2>Помощник</h2>';
 if (dbval("Dst",$ns) != 'null') {
 
 
-echo ("Текущий объем расвтора в системе: ".round($lev+$LevelAdd,1)." л");
+echo ("Текущий объем раствора в системе: ".round($lev+$LevelAdd,1)." л");
 echo ("<br>Предельный объем раствора в системе: ".($LevelFull+$LevelAdd-$La)." л");
 echo ("<br>Текущий ЕС: ".round($ec,3)." мСм/см");
 echo "<br>";
