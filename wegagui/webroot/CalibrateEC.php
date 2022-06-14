@@ -42,21 +42,33 @@ echo "<br><br>";
 
 pedit("EC_date1",$ns,"2022-05-20 11:00:00","Дата/время контрольной точки 1");
 $dateval=dbval("EC_date1",$ns);
-echo "EC в точке 1 = ".valdate("EC(".$P_A1.",".$P_A2.",".$tempEC.")",$dateval,$ns) -> value;
+echo "EC в точке 1 = ".round(valdate($p_EC,$dateval,$ns) -> value, 3);
+echo "<br>";
+echo "R2 в точке 1 = ".round(valdate($P_R2,$dateval,$ns) -> value, 3);
+echo "<br>";
+echo "Температура в точке 1 = ".round(valdate($p_ECtemp,$dateval,$ns) -> value, 3);
 echo "<br>Прошло: ".showDate( strtotime($dateval) );
 echo "<br><br>";
 
 
 pedit("EC_date2",$ns,"2022-05-20 12:00:00","Дата/время контрольной точки 2");
 $dateval=dbval("EC_date2",$ns);
-echo "EC в точке 2 = ".valdate("EC(".$P_A1.",".$P_A2.",".$tempEC.")",$dateval,$ns) -> value;
+echo "EC в точке 2 = ".round(valdate($p_EC,$dateval,$ns) -> value, 3);
+echo "<br>";
+echo "R2 в точке 2 = ".round(valdate($P_R2,$dateval,$ns) -> value, 3);
+echo "<br>";
+echo "Температура в точке 2 = ".round(valdate($p_ECtemp,$dateval,$ns) -> value, 3);
 echo "<br>Прошло: ".showDate( strtotime($dateval) );
 echo "<br><br>";
 
 pedit("EC_date3",$ns,"2022-05-20 13:00:00","Дата/время контрольной точки 3");
 $dateval=dbval("EC_date3",$ns);
-echo "EC в точке 3 = ".valdate("EC(".$P_A1.",".$P_A2.",".$tempEC.")",$dateval,$ns) -> value;
-echo "<br>Прошло: ".showDate( strtotime($dateval) );
+echo "EC в точке 3 = ".round(valdate($p_EC,$dateval,$ns) -> value, 3);
+echo "<br>";
+echo "R2 в точке 3 = ".round(valdate($P_R2,$dateval,$ns) -> value, 3);
+echo "<br>";
+echo "Температура в точке 3 = ".round(valdate($p_ECtemp,$dateval,$ns) -> value, 3);
+echo "<br>Прошло: ".round(showDate( strtotime($dateval) ), 3);
 echo "<br><br>";
 
 include "sqfunc.php";
