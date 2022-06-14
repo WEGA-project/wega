@@ -161,7 +161,7 @@ while($id=mysqli_fetch_row($rs))
     $fi = $id[5];     // Концентрация раствора г/л
 
     // Получаем остаток в емкости в
-    $Weight = mixer_banks("$pomp")-> sumves; // Израсходованно расвтора в граммах
+    $Weight = mixer_banks("$pomp")-> sumves; // Израсходованно раствора в граммах
     $Volume = $Weight / $ro;                 // Израсходованно в мл.
     $rWeight  = mixer_banks("$pomp")-> remain; // Остаток в емкости в граммах
     $rPercent = mixer_banks("$pomp")-> procent; // Остаточный процент
