@@ -61,11 +61,14 @@ if ( $_GET['ns'] )
         $delta = 0;
         foreach($dataset as $row)
         {
-          $a1 = $row['Ap'];
-          $a2 = $row['An'];
-          $R2p = -1 * (-1 * $a1 * $r1 - $a1 * $rx2 + $rx2 * $dr) / (-1 * $a1 + $dr);
-          $R2n = (-1 * $a2 * $r1 - $a2 * $rx1 + $r1 * $dr + $rx1 * $dr) / $a2;
-          $delta += abs($R2p - $R2n);
+          if($row['Ap'] && $row['An'])
+          {
+            $a1 = $row['Ap'];
+            $a2 = $row['An'];
+            $R2p = -1 * (-1 * $a1 * $r1 - $a1 * $rx2 + $rx2 * $dr) / (-1 * $a1 + $dr);
+            $R2n = (-1 * $a2 * $r1 - $a2 * $rx1 + $r1 * $dr + $rx1 * $dr) / $a2;
+            $delta += abs($R2p - $R2n);
+          }
         }
         if($delta < $min_delta)
         {
