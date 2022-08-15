@@ -1,0 +1,3 @@
+#!/bin/bash
+dbpass=`cat db.php|grep "password="|awk -F '\"' '{print $2}'`
+mysql -uroot -p$dbpass < syslog.sql
