@@ -6,3 +6,4 @@ wega-api/*
 !wega-api/mixerdb.php.example
 !wega-api/wegabox.php.example
 db.php
+wega-slim/cache/**
