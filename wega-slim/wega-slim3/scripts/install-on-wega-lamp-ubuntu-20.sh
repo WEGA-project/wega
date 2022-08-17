@@ -4,7 +4,7 @@ WEGA_ROOT_PATH=/var/WEGA
 export COMPOSER_ALLOW_SUPERUSER=1
 
 #Parse WEGA constants.
-WEGA_SLIM_INSTALL_DIR=/var/www/wega-slim3
+WEGA_SLIM_INSTALL_DIR=/var/WEGA/wega-slim
 DB_PASS=$(echo "<?php include '$WEGA_ROOT_PATH/db.php'; echo \$password;" | /usr/bin/php)
 DB_HOST=$(echo "<?php include '$WEGA_ROOT_PATH/db.php'; echo \$dbhost;" | /usr/bin/php)
 DB_PASS=$(echo "<?php include '/var/WEGA/db.php'; echo \$password;" | /usr/bin/php)
@@ -13,7 +13,7 @@ apt update -y
 apt install php-pdo-mysql php-zip -y
 
 #Get poject files
-git clone https://gitlab.com/ruslan.sfs/wega-slim3.git $WEGA_SLIM_INSTALL_DIR
+#git clone https://gitlab.com/ruslan.sfs/wega-slim3.git $WEGA_SLIM_INSTALL_DIR
 
 #Setup project
 cd $WEGA_SLIM_INSTALL_DIR
@@ -26,7 +26,7 @@ sed -i "s/^DB_DEVICE_PASS\=\".*\"/DB_DEVICE_PASS=\"$DB_PASS\"/g" .env
 sed -i "s/^DB_HOST\=\".*\"/DB_HOST=\"$DB_HOST\"/g" .env
 
 #Install wega-slim dependencies
-php ./composer.phar update
+#php ./composer.phar update
 
 #Set right file perms
 chown -R www-data:www-data $WEGA_SLIM_INSTALL_DIR
