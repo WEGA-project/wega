@@ -1,0 +1,6 @@
+FROM php:7.4.3-fpm
+
+WORKDIR /var/www
+
+RUN apt update -y && apt dist-upgrade -y && apt install curl libcurl4-gnutls-dev gnuplot gnuplot-nox -y && apt-get clean -y
+RUN docker-php-ext-install mysqli curl pdo_mysql

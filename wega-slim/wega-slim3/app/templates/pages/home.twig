@@ -1,0 +1,67 @@
+{% extends 'layout.html.twig' %}
+{% block title %}Панель управления
+{% endblock %}
+{% block body %}
+
+	{% if devices is empty %}
+		<h2 class="content-head is-center">Нет доступных систем</h2>
+	{% else %}
+
+		<h2 class="content-head is-center">Список доступных систем</h2>
+		<table class="pure-table with-full" style="margin-top: 3rem">
+			<thead>
+				<tr>
+					<th scope="col">Краткое имя</th>
+					<th scope="col">Подробное описание</th>
+					<th scope="col">t°C</th>
+					<th scope="col">RH</th>
+					<th scope="col">EC</th>
+					<th scope="col">pH</th>
+					<th scope="col">V</th>
+					<th scope="col">Обновлено</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for key, device in devices %}
+					<tr>
+						<td>
+							<a href="{{ path_for('status', { 'device': device.db }) }}">
+								{{ one_of(device.namesys, device.name)}}
+							</a>
+						</td>
+						<td>
+							{{ string_value(device.comment) }}
+
+						</td>
+						<td>
+							{{ float_value(device.air_temp, 1, '', '-') }}
+						</td>
+						<td>
+
+							{{ float_value(device.air_hum, 1, '%', '-') }}
+
+						</td>
+						<td>
+
+							{{ float_value(device.ec, 1, '', '-') }}
+
+						</td>
+						<td>
+							{{ float_value(device.ph, 1, '', '-') }}
+
+						</td>
+						<td>
+							{{ float_value(device.lev, 1, '', '-') }}
+
+						</td>
+						<td>
+							{{ string_value(device.date) }}
+
+						</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	{% endif %}
+
+{% endblock %}

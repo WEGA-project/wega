@@ -1,0 +1,45 @@
+{% extends 'pages/device-base.twig' %}
+{% block title %}Статус
+{% endblock %}
+{% block pageTitle %}
+	Текущие контрольные показания
+{% endblock %}
+
+{% block pageContent %}
+
+
+	<table class="pure-table with-full">
+		<thead>
+			<tr>
+				<th scope="col">Параметр</th>
+				<th scope="col">Значение</th>
+				<th scope="col">Статус</th>
+				<th scope="col">Изменение</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for sensor in sensors %}
+				{% if sensor.configured %}
+
+					{# <pre>{{ dump(sensor.instance) }}</pre> #}
+					<tr>
+						<td>
+							<a href="{{ path_for('sensor', { 'device': device_db_name, sensor: cls_uncamel(sensor.instance) }) }}">{{ sensor.title }}</a>
+						</td>
+						<td>
+
+							{{ sensor.rendered }}
+						</td>
+						<td>
+							{{ status(sensor.status) }}
+						</td>
+						<td>
+							{{ sensor.changes }}
+						</td>
+					</tr>
+				{% endif %}
+			{% endfor %}
+		</tbody>
+	</table>
+
+{% endblock %}

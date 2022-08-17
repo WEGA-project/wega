@@ -1,0 +1,36 @@
+*,
+*:before,
+*:after {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  font-family: "Arial", sans-serif;
+}
+
+.main-layout-container {
+  padding-top: 80px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.is-center {
+  text-align: center;
+}
+
+.with-full {
+  width: 100%;
+}
+
+.sub-title {
+  color: #777;
+}
+
+.text-success {
+  color: rgb(59, 134, 68);
+}
+
+.text-danger {
+  color: rgb(225, 94, 94);
+}

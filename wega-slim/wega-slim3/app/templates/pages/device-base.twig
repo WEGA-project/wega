@@ -1,0 +1,21 @@
+{% extends 'layout.html.twig' %}
+
+{% block body %}
+
+	<div class="content-head">
+		<h2 class=" is-center">
+			{{ device_name }}
+		</h2>
+		<h3 class="content-head is-center sub-title">
+			{{ device_comment }}
+		</h3>
+	</div>
+
+	<h3 class="is-center" style="margin-top: 3rem; margin-bottom: 1rem ">
+		{% block pageTitle %}{% endblock %}
+	</h3>
+	<div class="page-cotent">
+		{% block pageContent %}{% endblock %}
+	</div>
+
+{% endblock %}

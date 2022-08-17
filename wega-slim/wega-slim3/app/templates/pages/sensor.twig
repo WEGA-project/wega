@@ -1,0 +1,12 @@
+{% extends 'pages/device-base.twig' %}
+{% block title %}Датчик
+{% endblock %}
+{% block pageTitle %}
+	{{ sens_title }}
+{% endblock %}
+
+{% block pageContent %}
+
+	<img src="{{ path_for('graph', { 'device': device_db_name, sensor: cls_uncamel(sensor_instance) }) }}"/>
+
+{% endblock %}

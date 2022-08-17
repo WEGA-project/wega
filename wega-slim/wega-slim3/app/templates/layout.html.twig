@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<link href='{{ base_url() }}/css/pure-min.css' rel='stylesheet' type='text/css' crossorigin="anonymous|use-credentials">
+		<link href='{{ base_url() }}/css/style.css' rel='stylesheet' type='text/css' crossorigin="anonymous|use-credentials">
+		<title>
+			WEGA|
+			{% block title %}{% endblock %}
+		</title>
+	</head>
+
+	<body>
+
+		<header class="header">
+			{% include 'nav.html.twig' %}
+		</header>
+
+		<section class="content-wrapper main-layout-container">
+			<div class="content"> {% block body %}{% endblock %}
+				</div>
+			</section>
+		</body>
+	</html>
