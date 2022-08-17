@@ -26,7 +26,7 @@ sed -i "s/^DB_DEVICE_PASS\=\".*\"/DB_DEVICE_PASS=\"$DB_PASS\"/g" .env
 sed -i "s/^DB_HOST\=\".*\"/DB_HOST=\"$DB_HOST\"/g" .env
 
 #Install wega-slim dependencies
-#php ./composer.phar update
+php ./composer.phar update
 
 #Set right file perms
 chown -R www-data:www-data $WEGA_SLIM_INSTALL_DIR
