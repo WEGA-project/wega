@@ -10,7 +10,7 @@ DB_HOST=$(echo "<?php include '$WEGA_ROOT_PATH/db.php'; echo \$dbhost;" | /usr/b
 DB_PASS=$(echo "<?php include '/var/WEGA/db.php'; echo \$password;" | /usr/bin/php)
 #Install deps for wega-sim
 apt update -y
-apt install php-pdo-mysql php-zip -y
+apt install php-pdo-mysql zip php-zip -y
 
 #Get poject files
 #git clone https://gitlab.com/ruslan.sfs/wega-slim3.git $WEGA_SLIM_INSTALL_DIR
