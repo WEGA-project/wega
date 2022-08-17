@@ -9,3 +9,4 @@ db.php
 wega-slim/vendor/
 wega-slim/log/*
 wega-slim/cache/*
+wega-slim/.env
