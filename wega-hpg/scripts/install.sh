@@ -31,6 +31,8 @@ systemctl daemon-reload
 systemctl enable wega-hpg.service
 systemctl restart wega-hpg.service
 a2enmod headers
+python manage_prod.py collectstatic --noinput
+python manage_prod.py migrate  --noinput
 touch /var/WEGA/wega-hpg/WEGA_HPG_PASSWORD
 WEGA_HPG_PASSWORD=$(cat /var/WEGA/wega-hpg/WEGA_HPG_PASSWORD)
 if  [[ -n "$WEGA_HPG_PASSWORD" ]]
@@ -43,8 +45,7 @@ fi
 P_STRING="from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.filter(username='admin').delete(); User.objects.create_superuser('admin', 'admin@wega.ru', '$WEGA_HPG_PASSWORD')"
 echo $P_STRING | python manage_prod.py shell
 echo $WEGA_HPG_PASSWORD > /var/WEGA/wega-hpg/WEGA_HPG_PASSWORD
-python manage_prod.py collectstatic --noinput
-python manage_prod.py migrate  --noinput
+
 echo "######  WEGA-WEB-HPG INSTALED ######"
 
 systemctl reload apache2
