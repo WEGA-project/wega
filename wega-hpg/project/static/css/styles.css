@@ -1,0 +1,22 @@
+.right {
+    margin-left: auto;
+}
+.login-form{
+    max-width: 600px;
+}
+.logo {
+	background: url('../images/logo.png') no-repeat 10px 5px;
+	width: 70px;
+	height: 60px;
+}
+
+.table-container {
+	 overflow-x: auto;
+}
+.container-fluid{padding: 0;}
+.col-1-w{
+	width: 10.0%!important;
+}
+.mt-50{
+	margin-top: 65%;
+}

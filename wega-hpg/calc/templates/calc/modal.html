@@ -1,0 +1,32 @@
+<div class="modal fade" id="{{ id }}" tabindex="-1" aria-labelledby="{{ id }}Label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="{{ id }}Label">{{ h5 }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="{% if action %}{% url action %}{% endif %}" method="post" enctype="multipart/form-data"
+                      class="login-form m-auto d-flex justify-content-between" id="form-{{ id }}">
+                    <div class="row">
+                    {% csrf_token %}
+                    {% for f in form %}
+                        <div class="mb-3 {% if f.name == 'name' %}col-12{% else %}col-4{% endif %}">
+                            <label for="{{ f.id_for_label }}" class="form-label">{{ f.label }}</label>
+                            {{ f }}
+                            <div class="error">{{ f.errors }}</div>
+                        </div>
+                    {% endfor %}
+                    </div>
+
+
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary d-block m-auto" type="submit" form="form-{{ id }}">{{ btn_name }}</button>
+            </div>
+        </div>
+    </div>
+</div>
+

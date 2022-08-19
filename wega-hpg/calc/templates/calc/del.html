@@ -1,0 +1,37 @@
+{% extends 'project/base.html' %}
+{% load render_table from django_tables2 %}
+{% block content %}
+    <h1 class="text-center">{{title}}</h1>
+    <div class="container">
+
+
+
+     <div class="row">
+                <form action="{% url "plant_profile_del" instance.pk %}" method="post" class="login-form m-auto d-flex justify-content-between"
+                      id="form-{{ instance.pk }}">
+                    <div class="row">
+                    {% csrf_token %}
+                    {% for f in form %}
+                        <div class="mb-3 {% if f.name == 'name' %}col-12{% else %}col-4{% endif %}">
+                            <label for="{{ f.id_for_label }}" class="form-label">{{ f.label }}</label>
+                            {{ f }}
+                            <div class="error">{{ f.errors }}</div>
+                        </div>
+                    {% endfor %}
+                    </div>
+
+
+
+                </form>
+<div class="row">
+    <div class="col-6 m-auto">
+                <button class="btn btn-primary d-block m-auto" type="submit" form="form-{{ instance.pk }}">{{ btn_name }}</button>
+        </div>
+    </div>
+
+    </div>
+
+
+    </div>
+
+{% endblock %}

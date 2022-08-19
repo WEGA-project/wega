@@ -1,0 +1,52 @@
+{% extends 'project/base.html' %}
+{% load render_table from django_tables2 %}
+{% block content %}
+    <h1 class="text-center">{{title}}</h1>
+    <div class="container">
+    <div class="row">
+        <div class="col-12">
+              <form    method="get" class="login-form m-auto w-100 " id="form-filter">
+                  <input type="hidden" value="on" name="filter">
+                    <div class="row w-100">
+
+                    {% for f in filter %}
+                        <div class="mb-3 {% if f.name == 'name' %}col-12{% else %}col-4{% endif %}">
+                            <label for="{{ f.id_for_label }}" class="form-label">{{ f.label }}</label>
+                            {{ f }}
+                            <div class="error">{{ f.errors }}</div>
+                        </div>
+                    {% endfor %}
+                    </div>
+                </form>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <button type="button" class="btn btn-primary mw-25 d-inline-block" data-bs-toggle="modal"  data-bs-target="#add_plant_profile">
+                <i class="bi bi-plus-circle"></i>
+            </button>
+              <button type="button" class="btn btn-primary mw-25 d-inline-block" data-bs-toggle="modal"  data-bs-target="#upload_plant_profile">
+             <i class="bi bi-cloud-arrow-up"></i>
+            </button>
+        </div>
+
+
+
+
+    </div>
+
+
+        <div class="row">
+            <div class="col-12">
+                {% render_table table %}
+            </div>
+        </div>
+        {% include 'calc/modal.html' with id='add_plant_profile' h5="Добавить профиль питания" btn_name=btn_name form=form action="plant_profile_new" %}
+
+        {% include 'calc/modal.html' with id='upload_plant_profile' h5="Загрузить с файла профиль питания" btn_name=btn_name form=upload_form action="upload_plant_profile" %}
+
+
+    </div>
+
+{% endblock %}
