@@ -1,9 +1,6 @@
 #!/bin/bash
-
 echo 'starting'
 set -xe
 cd /var/WEGA/wega-hpg/
 source /var/WEGA/wega-hpg/venv/bin/activate
-python manage_prod.py collectstatic --noinput
-python manage_prod.py migrate  --noinput
-python runserver.py --port 5003
+var/WEGA/wega-hpg/venv/bin/gunicorn --workers 3 --bind 0.0.0.0:5003 project.wsgi:application

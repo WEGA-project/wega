@@ -40,7 +40,10 @@ then
   echo "$P_STRING | python manage_prod.py shell"
 fi
 echo $WEGA_HPG_PASSWORD > /var/WEGA/wega-hpg/WEGA_HPG_PASSWORD
+python manage_prod.py collectstatic --noinput
+python manage_prod.py migrate  --noinput
 echo "######  WEGA-WEB-HPG INSTALED ######"
+
 systemctl reload apache2
 
 echo 'String WEGA-HPG user = 'admin@wega.ru''
