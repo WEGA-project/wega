@@ -8,6 +8,7 @@ echo "###################################"
 echo "###### Install WEGA-WEB-HPG ######"
 echo "###################################"
 cd /var/WEGA/wega-hpg/
+ln -s /var/WEGA/apache/wega-hpg.conf /etc/apache2/conf-enabled/
 echo "Create database"
 MYSQL=`which mysql`
 DB_PASS=$(echo "<?php include '/var/WEGA/db.php'; echo \$password;" | /usr/bin/php)
