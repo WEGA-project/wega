@@ -10,7 +10,7 @@ from wega_auth.forms import LoginUserForm, RegisterUserForm
 from project.utils import DataMixin
 
 from django.contrib.auth import authenticate, login, logout
-
+from django.conf import settings
 
 
 
@@ -39,6 +39,15 @@ class LoginUser(DataMixin, View):
     queryset = User.objects.all()
     
     def get(self, request, *args, **kwargs):
+        
+        if not request.user.is_authenticated:
+            if settings.WEGA_DEFAULT_USER and settings.WEGA_DEFAULT_PASSWORD:
+                user = authenticate(request, username=settings.WEGA_DEFAULT_USER, password=settings.WEGA_DEFAULT_PASSWORD)
+                if user:
+                    login(request, user)
+                    return redirect(self.success_url)
+                
+                
         context = self.get_user_context(title="Авторизация", btn_name='Войти')
         context['form'] = self.form_class
         return render(request, template_name=self.template_name, context=context)

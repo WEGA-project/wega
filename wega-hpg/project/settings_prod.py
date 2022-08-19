@@ -24,3 +24,4 @@ DATABASES = {
     }
 }
 
+from .default_user import *

@@ -46,6 +46,8 @@ fi
 P_STRING="from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.filter(username='admin').delete(); User.objects.create_superuser('admin', 'admin@wega.ru', '$WEGA_HPG_PASSWORD')"
 echo $P_STRING | python manage_prod.py shell
 echo $WEGA_HPG_PASSWORD > /var/WEGA/wega-hpg/WEGA_HPG_PASSWORD
+echo "WEGA_DEFAULT_USER = 'admin@wega.ru'" > /var/WEGA/wega-hpg/project/default_user.py
+echo "WEGA_DEFAULT_PASSWORD = '$WEGA_HPG_PASSWORD'" >> /var/WEGA/wega-hpg/project/default_user.py
 
 echo "######  WEGA-WEB-HPG INSTALED ######"
 

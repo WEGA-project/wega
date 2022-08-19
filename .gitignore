@@ -8,3 +8,4 @@ wega-api/*
 db.php
 wega-slim/cache/**
 /.idea/
+/venv/

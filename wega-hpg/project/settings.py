@@ -132,3 +132,5 @@ STATICFILES_FINDERS = (
 
     'compressor.finders.CompressorFinder',
 )
+
+WEGA_DEFAULT_USER = 'admin'
