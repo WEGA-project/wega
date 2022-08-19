@@ -1,0 +1,8 @@
+[Unit]
+After=network.target
+
+[Service]
+ExecStart=/var/WEGA/wega-hpg/entrypoint.sh
+
+[Install]
+WantedBy=default.target
