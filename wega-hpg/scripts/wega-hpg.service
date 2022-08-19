@@ -1,8 +1,11 @@
 [Unit]
+Description=wega-hpg daemon
+Requires=wega-hpg
 After=network.target
-
 [Service]
-ExecStart=/var/WEGA/wega-hpg/entrypoint.sh
-
+User=root
+Group=www-data
+WorkingDirectory=/var/WEGA/wega-hpg/
+ExecStart=/var/WEGA/wega-hpg/venv/bin/gunicorn --workers 3 --bind 0.0.0.0:5003 project.wsgi:application
 [Install]
-WantedBy=default.target
+WantedBy=multi-user.target

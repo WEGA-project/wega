@@ -1,7 +1,7 @@
 Django==4.1
 django-tables2==2.4.1
 wheel
-bjoern
+gunicorn
 requests
 django_compressor
 beautifulsoup4
@@ -11,3 +11,4 @@ calmjs.parse
 brotli
 csscompressor
 mysqlclient
+netifaces

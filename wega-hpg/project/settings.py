@@ -1,15 +1,18 @@
 import os
 from pathlib import Path
+import netifaces
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-t(7-hv3y)0zp^i)q(40kc^06zd8_%x2d)@og*mf0k!=c6d&$x!'
 DEBUG = True
 
-
-import socket
 def get_ipaddress():
-    host_name = socket.gethostname()
-    ip_address = socket.gethostbyname(host_name)
-    return "http://" + ip_address + ":4200"
+    adr = []
+    for interface in netifaces.interfaces():
+        for link in netifaces.ifaddresses(interface)[netifaces.AF_INET]:
+            adr.append(f"http://{link[ 'addr']}")
+            adr.append(f"https://{link['addr']}")
+        
+    return adr
 
 ALLOWED_HOSTS=["*"]
 CSRF_TRUSTED_ORIGINS=[get_ipaddress()]
