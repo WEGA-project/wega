@@ -1,3 +1,9 @@
+if [ -f "\var\WEGA\db.php" ]; then
+    echo "Настройки найдены - устанавливаем."
+else
+    echo "Не найден файл настроек базы с WEGA проекта - пройдите чистую установку"
+fi
+
 echo "###################################"
 echo "###### Install WEGA-WEB-HPG ######"
 echo "###################################"
@@ -35,7 +41,7 @@ then
 fi
 echo $WEGA_HPG_PASSWORD > /var/WEGA/wega-hpg/WEGA_HPG_PASSWORD
 echo "######  WEGA-WEB-HPG INSTALED ######"
-
+systemctl reload apache2
 
 echo 'String WEGA-HPG user = 'admin@wega.ru''
 echo "String WEGA-HPG password   = '$WEGA_HPG_PASSWORD'"
