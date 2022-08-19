@@ -1,3 +1,5 @@
+#!/bin/bash
+
 echo 'starting'
 set -xe
 cd /var/WEGA/wega-hpg/
