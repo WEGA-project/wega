@@ -52,7 +52,7 @@ git clone https://github.com/WEGA-project/WEGA.git /var/WEGA
 # Syslog config 
 cp /var/WEGA/wegabox.conf /etc/syslog-ng/conf.d/wegabox.conf
 echo "password(\""$MYSQL_PSWD"\")" > /etc/syslog-ng/patterndb.d/dbpass
-mysql -uroot -p$MYSQL_PSWD < syslog.sql
+mysql -uroot -p$MYSQL_PSWD < /var/WEGA/syslog.sql
 
 systemctl restart syslog-ng
 
