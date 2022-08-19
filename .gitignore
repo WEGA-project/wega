@@ -7,3 +7,4 @@ wega-api/*
 !wega-api/wegabox.php.example
 db.php
 wega-slim/cache/**
+/.idea/
