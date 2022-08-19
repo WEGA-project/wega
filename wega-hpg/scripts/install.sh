@@ -7,7 +7,7 @@ fi
 echo "###################################"
 echo "###### Install WEGA-WEB-HPG ######"
 echo "###################################"
-
+cd /var/WEGA/wega-hpg/
 echo "Create database"
 MYSQL=`which mysql`
 DB_PASS=$(echo "<?php include '/var/WEGA/db.php'; echo \$password;" | /usr/bin/php)
@@ -26,19 +26,22 @@ pip3 install -r /var/WEGA/wega-hpg/requirements.txt
 chmod 744 /var/WEGA/wega-hpg/entrypoint.sh
 cp /var/WEGA/wega-hpg/scripts/wega-hpg.service /etc/systemd/system/wega-hpg.service
 chmod 664 /etc/systemd/system/wega-hpg.service
+mkdir -p /var/log/gunicron/
 systemctl daemon-reload
 systemctl enable wega-hpg.service
 systemctl restart wega-hpg.service
 a2enmod headers
 touch /var/WEGA/wega-hpg/WEGA_HPG_PASSWORD
 WEGA_HPG_PASSWORD=$(cat /var/WEGA/wega-hpg/WEGA_HPG_PASSWORD)
-if [ -z "${VAR}" ]
+if  [[ -n "$WEGA_HPG_PASSWORD" ]]
 then
-  WEGA_HPG_PASSWORD=$(openssl rand -hex 12)
+  echo "we already have it"
+else
   echo "Generating new WEGA_HPG_PASSWORD"
-  P_STRING="from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.filter(username='admin').delete(); User.objects.create_superuser('admin', 'admin@wega.ru', '$WEGA_HPG_PASSWORD')"
-  echo "$P_STRING | python manage_prod.py shell"
+  WEGA_HPG_PASSWORD=$(openssl rand -hex 12)
 fi
+P_STRING="from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.filter(username='admin').delete(); User.objects.create_superuser('admin', 'admin@wega.ru', '$WEGA_HPG_PASSWORD')"
+echo $P_STRING | python manage_prod.py shell
 echo $WEGA_HPG_PASSWORD > /var/WEGA/wega-hpg/WEGA_HPG_PASSWORD
 python manage_prod.py collectstatic --noinput
 python manage_prod.py migrate  --noinput
