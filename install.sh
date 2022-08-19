@@ -104,9 +104,6 @@ cp /var/WEGA/wega-hpg/scripts/wega-hpg.service /etc/systemd/system/wega-hpg.serv
 chmod 664 /etc/systemd/system/wega-hpg.service
 ln -s /var/WEGA/apache/wega-hpg.conf /etc/apache2/conf-enabled/
 mkdir -p /var/log/gunicron/
-systemctl daemon-reload
-systemctl enable wega-hpg.service
-systemctl restart wega-hpg.service
 a2enmod headers
 python manage_prod.py collectstatic --noinput
 python manage_prod.py migrate --noinput
@@ -124,7 +121,9 @@ echo $WEGA_HPG_PASSWORD >/var/WEGA/wega-hpg/WEGA_HPG_PASSWORD
 
 echo "WEGA_DEFAULT_USER = 'admin@wega.ru'" > /var/WEGA/wega-hpg/project/default_user.py
 echo "WEGA_DEFAULT_PASSWORD = '$WEGA_HPG_PASSWORD'" >> /var/WEGA/wega-hpg/project/default_user.py
-
+systemctl daemon-reload
+systemctl enable wega-hpg.service
+systemctl restart wega-hpg.service
 echo "######  WEGA-WEB-HPG INSTALED ######"
 
 systemctl reload apache2
