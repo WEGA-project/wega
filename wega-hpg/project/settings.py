@@ -15,7 +15,7 @@ def get_ipaddress():
     return adr
 
 ALLOWED_HOSTS=["*"]
-CSRF_TRUSTED_ORIGINS=[get_ipaddress()]
+CSRF_TRUSTED_ORIGINS=get_ipaddress()
 
 LOGIN_URL = '/auth/login/'
 
