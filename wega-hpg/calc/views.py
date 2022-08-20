@@ -4,6 +4,7 @@ from decimal import Decimal
 
 import django_tables2
 from django.contrib.auth.decorators import login_required
+
 from django.db.models import F
 from django.shortcuts import redirect, render, HttpResponse
 from django.http import JsonResponse, Http404
@@ -17,6 +18,7 @@ from project.utils import DataMixin
 
 def is_ajax(request):
     return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
+
 @login_required
 def plant_profiles(request):
     context= DataMixin.get_user_context(title="Профили питания", btn_name="Добавить")

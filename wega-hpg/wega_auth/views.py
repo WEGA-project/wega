@@ -46,8 +46,7 @@ class LoginUser(DataMixin, View):
                 if user:
                     login(request, user)
                     return redirect(self.success_url)
-                
-                
+            
         context = self.get_user_context(title="Авторизация", btn_name='Войти')
         context['form'] = self.form_class
         return render(request, template_name=self.template_name, context=context)
@@ -55,7 +54,6 @@ class LoginUser(DataMixin, View):
     def post(self, request, *args, **kwargs):
         email = self.request.POST.get('email')
         password = self.request.POST.get('password')
-        
         user = authenticate(request, username=email, password=password)
         
         if not user:
