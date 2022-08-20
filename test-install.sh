@@ -78,7 +78,8 @@ WEGA_UI_PSWD=$(openssl rand -hex 10)
 cp /var/WEGA/wegagui/config/example/example.conf.php /var/WEGA/wegagui/config/esp32wega.conf.php
 htpasswd -b -c /etc/apache2/.htpasswd $WEGA_USER_NAME $WEGA_UI_PSWD
 
-
+cd /var/WEGA
+git switch web-hpg
 #Install WEGA-WEB-HPG
 source /var/WEGA/wega-hpg/scripts/install.sh
 
