@@ -47,7 +47,8 @@ printf "\n"
 sleep 5
 
 git clone https://github.com/WEGA-project/WEGA.git /var/WEGA
-
+cd /var/WEGA/
+git switch web-hpg
 # Syslog config
 cp /var/WEGA/wegabox.conf /etc/syslog-ng/conf.d/wegabox.conf
 echo "password(\""$MYSQL_PSWD"\")" >/etc/syslog-ng/patterndb.d/dbpass
