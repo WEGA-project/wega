@@ -102,10 +102,11 @@ class PlantProfile(models.Model):
             cur_cal = getattr(pp, cur_element.lower()) or Decimal(0)
             for i in self.macro_matrix:
                 val = getattr(pp, i.lower()) or Decimal(0)
-                if cur_cal == 0:
+                if val is None or cur_cal is None or cur_cal == 0:
                     row[i] = None
                     matrix_dict[f"{i}-{cur_element}"] = None
                 else:
+              
                     t = round(Decimal(val) / Decimal(cur_cal), 3)
                     row[i] = t
                     matrix_dict[f"{i}-{cur_element}"] = t
