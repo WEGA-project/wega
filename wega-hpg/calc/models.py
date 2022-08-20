@@ -4,6 +4,8 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from calc.decorators import decimal_exception
+
 
 class MM:
     mN  = Decimal(14.0067)
@@ -47,44 +49,44 @@ class PlantProfile(models.Model):
     
     calc_mode = models.CharField(max_length=2, choices=CalcMode.choices, default=CalcMode.K, )
     
-    n = models.DecimalField(max_digits=9, null=True, decimal_places=3, verbose_name='N')
-    no3 = models.DecimalField(max_digits=9, null=True, decimal_places=3, verbose_name='NO3')
-    nh4 = models.DecimalField(max_digits=9, null=True, decimal_places=3, verbose_name='NH4')
+    n = models.DecimalField(max_digits=9,   default=0, decimal_places=3,   verbose_name='N')
+    no3 = models.DecimalField(max_digits=9, default=0, decimal_places=3, verbose_name='NO3')
+    nh4 = models.DecimalField(max_digits=9, default=0, decimal_places=3, verbose_name='NH4')
     
-    p = models.DecimalField(max_digits=9, null=True, decimal_places=3, verbose_name='P')
-    k = models.DecimalField(max_digits=9, null=True, decimal_places=3, verbose_name='K')
-    ca = models.DecimalField(max_digits=9, null=True, decimal_places=3, verbose_name='Ca')
-    mg = models.DecimalField(max_digits=9, null=True, decimal_places=3, verbose_name='Mg')
-    s = models.DecimalField(max_digits=9, null=True, decimal_places=3, verbose_name='S')
-    cl = models.DecimalField(max_digits=9, null=True, decimal_places=3, verbose_name='Cl')
+    p = models.DecimalField(max_digits=9, default=0, decimal_places=3, verbose_name='P')
+    k = models.DecimalField(max_digits=9, default=0, decimal_places=3, verbose_name='K')
+    ca = models.DecimalField(max_digits=9, default=0, decimal_places=3, verbose_name='Ca')
+    mg = models.DecimalField(max_digits=9, default=0, decimal_places=3, verbose_name='Mg')
+    s = models.DecimalField(max_digits=9, default=0, decimal_places=3, verbose_name='S')
+    cl = models.DecimalField(max_digits=9, default=0, decimal_places=3, verbose_name='Cl')
     
-    fe = models.DecimalField(max_digits=9, null=True, decimal_places=3, verbose_name='Fe')
-    mn = models.DecimalField(max_digits=9, null=True, decimal_places=3, verbose_name='Mn')
-    b = models.DecimalField(max_digits=9, null=True, decimal_places=3, verbose_name='B')
-    zn = models.DecimalField(max_digits=9, null=True, decimal_places=3, verbose_name='Zn')
-    cu = models.DecimalField(max_digits=9, null=True, decimal_places=3, verbose_name='Cu')
-    mo = models.DecimalField(max_digits=9, null=True, decimal_places=3, verbose_name='Mo')
-    co = models.DecimalField(max_digits=9, null=True, decimal_places=3, verbose_name='Co')
-    si = models.DecimalField(max_digits=9, null=True, decimal_places=3, verbose_name='Si')
+    fe = models.DecimalField(max_digits=9, default=0, decimal_places=3, verbose_name='Fe')
+    mn = models.DecimalField(max_digits=9, default=0, decimal_places=3, verbose_name='Mn')
+    b = models.DecimalField(max_digits=9, default=0, decimal_places=3, verbose_name='B')
+    zn = models.DecimalField(max_digits=9, default=0, decimal_places=3, verbose_name='Zn')
+    cu = models.DecimalField(max_digits=9, default=0, decimal_places=3, verbose_name='Cu')
+    mo = models.DecimalField(max_digits=9, default=0, decimal_places=3, verbose_name='Mo')
+    co = models.DecimalField(max_digits=9, default=0, decimal_places=3, verbose_name='Co')
+    si = models.DecimalField(max_digits=9, default=0, decimal_places=3, verbose_name='Si')
     
-    cano3_ca = models.DecimalField(max_digits=9, null=True, decimal_places=3, verbose_name='CaNO3_Ca')
-    cano3_no3 = models.DecimalField(max_digits=9, null=True, decimal_places=3, verbose_name='CaNO3_NO3')
-    cano3_nh4 = models.DecimalField(max_digits=9, null=True, decimal_places=3, verbose_name='CaNO3_NH4')
+    cano3_ca = models.DecimalField(max_digits=9, default=0, decimal_places=3, verbose_name='CaNO3_Ca')
+    cano3_no3 = models.DecimalField(max_digits=9, default=0, decimal_places=3, verbose_name='CaNO3_NO3')
+    cano3_nh4 = models.DecimalField(max_digits=9, default=0, decimal_places=3, verbose_name='CaNO3_NH4')
     
-    kno3_k = models.DecimalField(max_digits=9, null=True, decimal_places=3, verbose_name='KNO3_K')
-    kno3_no3 = models.DecimalField(max_digits=9, null=True, decimal_places=3, verbose_name='KNO3_NO3')
-    nh4no3_nh4 = models.DecimalField(max_digits=9, null=True, decimal_places=3, verbose_name='NH4NO3_NH4')
-    nh4no3_no3 = models.DecimalField(max_digits=9, null=True, decimal_places=3, verbose_name='NH4NO3_NO3')
-    mgso4_mg = models.DecimalField(max_digits=9, null=True, decimal_places=3, verbose_name='MgSO4_Mg')
-    mgso4_s = models.DecimalField(max_digits=9, null=True, decimal_places=3, verbose_name='MgSO4_S')
-    kh2po4_k = models.DecimalField(max_digits=9, null=True, decimal_places=3, verbose_name='KH2PO4_K')
-    kh2po4_p = models.DecimalField(max_digits=9, null=True, decimal_places=3, verbose_name='KH2PO4_P')
-    k2so4_k = models.DecimalField(max_digits=9, null=True, decimal_places=3, verbose_name='K2SO4_K')
-    k2so4_s = models.DecimalField(max_digits=9, null=True, decimal_places=3, verbose_name='K2SO4_S')
-    mgno3_mg = models.DecimalField(max_digits=9, null=True, decimal_places=3, verbose_name='MgNO3_Mg')
-    mgno3_no3 = models.DecimalField(max_digits=9, null=True, decimal_places=3, verbose_name='MgNO3_NO3')
-    cacl2_ca = models.DecimalField(max_digits=9, null=True, decimal_places=3, verbose_name='CaCl2_Ca')
-    cacl2_cl = models.DecimalField(max_digits=9, null=True, decimal_places=3, verbose_name='CaCl2_Cl')
+    kno3_k = models.DecimalField(max_digits=9, default=0, decimal_places=3, verbose_name='KNO3_K')
+    kno3_no3 = models.DecimalField(max_digits=9, default=0, decimal_places=3, verbose_name='KNO3_NO3')
+    nh4no3_nh4 = models.DecimalField(max_digits=9, default=0, decimal_places=3, verbose_name='NH4NO3_NH4')
+    nh4no3_no3 = models.DecimalField(max_digits=9, default=0, decimal_places=3, verbose_name='NH4NO3_NO3')
+    mgso4_mg = models.DecimalField(max_digits=9, default=0, decimal_places=3, verbose_name='MgSO4_Mg')
+    mgso4_s = models.DecimalField(max_digits=9, default=0, decimal_places=3, verbose_name='MgSO4_S')
+    kh2po4_k = models.DecimalField(max_digits=9, default=0, decimal_places=3, verbose_name='KH2PO4_K')
+    kh2po4_p = models.DecimalField(max_digits=9, default=0, decimal_places=3, verbose_name='KH2PO4_P')
+    k2so4_k = models.DecimalField(max_digits=9, default=0, decimal_places=3, verbose_name='K2SO4_K')
+    k2so4_s = models.DecimalField(max_digits=9, default=0, decimal_places=3, verbose_name='K2SO4_S')
+    mgno3_mg = models.DecimalField(max_digits=9, default=0, decimal_places=3, verbose_name='MgNO3_Mg')
+    mgno3_no3 = models.DecimalField(max_digits=9, default=0, decimal_places=3, verbose_name='MgNO3_NO3')
+    cacl2_ca = models.DecimalField(max_digits=9, default=0, decimal_places=3, verbose_name='CaCl2_Ca')
+    cacl2_cl = models.DecimalField(max_digits=9, default=0, decimal_places=3, verbose_name='CaCl2_Cl')
 
     def get_matrix(self, as_dict=False):
         pp = self
@@ -123,7 +125,6 @@ class PlantProfile(models.Model):
         
         for i in self.salt_gramms:
             a = getattr(self, i)()
-            # print('i, "{:.3f}".format(a)', i, "{:.3f}".format(a))
             setattr(self, i, "{:.3f}".format(a/10))
         
     def to_json(self):
@@ -150,6 +151,7 @@ class PlantProfile(models.Model):
             
         return data
     
+    @decimal_exception
     def get_salt_dict(self):
         if self.calc_mode == self.CalcMode.K:
             if 'mgno3' in self.salt_dict:
@@ -160,11 +162,13 @@ class PlantProfile(models.Model):
                 del self.salt_dict['k2so4']
     
         return self.salt_dict
-    
+
+    @decimal_exception
     def kh2po4(self):
         a = Decimal(self.p) / Decimal(self.kh2po4_p)
         return a
-    
+
+    @decimal_exception
     def kno3(self):
         if self.calc_mode == self.CalcMode.K:
             a = Decimal(self.k) * Decimal(self.kh2po4_p) * Decimal(self.k2so4_s) * Decimal(self.mgso4_mg)
@@ -179,9 +183,8 @@ class PlantProfile(models.Model):
             b = Decimal(self.kno3_k) * Decimal(self.kh2po4_p)
             return a / b
         return 0
-    
 
-        
+    @decimal_exception
     def cano3(self):
         a = Decimal(self.ca) * Decimal(self.cacl2_cl) - Decimal(self.cl) * Decimal(self.cacl2_ca)
         b = Decimal(self.cano3_ca) * Decimal(self.cacl2_cl)
@@ -200,7 +203,8 @@ class PlantProfile(models.Model):
             c = a / b
             return c
         return 0
-    
+
+    @decimal_exception
     def k2so4(self):
         if self.calc_mode == self.CalcMode.K:
             a = Decimal(self.s) * Decimal(self.mgso4_mg) - Decimal(self.mg) * Decimal(self.mgso4_s)
@@ -208,7 +212,8 @@ class PlantProfile(models.Model):
             c = a / b
             return c
         return 0
-    
+
+    @decimal_exception
     def nh4no3(self):
         a = Decimal(self.nh4) * Decimal(self.cano3_ca) * Decimal(self.cacl2_cl)
         b = Decimal(self.cano3_nh4) * Decimal(self.ca) * Decimal(self.cacl2_cl)
@@ -216,13 +221,15 @@ class PlantProfile(models.Model):
         d = Decimal(self.nh4no3_nh4) * Decimal(self.cano3_ca) * Decimal(self.cacl2_cl)
         e = -(-a + b - c) / d
         return e
-    
+
+    @decimal_exception
     def cacl2(self):
         a = Decimal(self.cl)
         b = Decimal(self.cacl2_cl)
         c = a / b
         return c
-    
+
+    @decimal_exception
     def mgno3(self):
         if self.calc_mode == self.CalcMode.Mg:
             a = Decimal(self.mg) * Decimal(self.mgso4_s) - Decimal(self.mgso4_mg) * Decimal(self.s)
@@ -230,7 +237,8 @@ class PlantProfile(models.Model):
             c = a / b
             return c
         return 0
-    
+
+    @decimal_exception
     def calc_s(self):
         m=MM
         a = Decimal(self.nh4) * m.mCa * m.mMg * m.mK * m.mP * m.mCl

@@ -8,10 +8,13 @@ DEBUG = True
 def get_ipaddress():
     adr = []
     for interface in netifaces.interfaces():
-        for link in netifaces.ifaddresses(interface)[netifaces.AF_INET]:
-            adr.append(f"http://{link[ 'addr']}")
-            adr.append(f"https://{link['addr']}")
-        
+        if netifaces.ifaddresses(interface):
+            # print('netifaces.ifaddresses(interface)', netifaces.ifaddresses(interface))
+            if netifaces.AF_INET in netifaces.ifaddresses(interface):
+                for link in netifaces.ifaddresses(interface)[netifaces.AF_INET]:
+                    adr.append(f"http://{link[ 'addr']}")
+                    adr.append(f"https://{link['addr']}")
+            
     return adr
 
 ALLOWED_HOSTS=["*"]
@@ -116,8 +119,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 STATIC_URL = '/static/'
+
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+COMPRESS_ROOT = STATIC_ROOT
 MEDIA_URL = '/media/'
 PROJECT_DIR  = Path(__file__).resolve().parent
 STATICFILES_DIRS = [
@@ -133,4 +138,56 @@ STATICFILES_FINDERS = (
     'compressor.finders.CompressorFinder',
 )
 
-WEGA_DEFAULT_USER = 'admin'
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'simple': {
+            'format': '[%(asctime)s] %(levelname)s: %(message)s',
+            'datefmt': '%d/%m/%Y %H:%M:%S',
+        },
+        
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {lineno} {message}',
+            'style': '{',
+        },
+        
+    },
+    'handlers': {
+        
+        'mail_admins': {
+            'class': 'django.utils.log.AdminEmailHandler',
+            'level': 'INFO',
+            # But the emails are plain text by default - HTML is nicer
+            'include_html': True,
+        },
+        'console': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose'
+        },
+        #     # Log to a text file that can be rotated by logrotate
+        'logfile': {
+            'class': 'logging.handlers.WatchedFileHandler',
+            'filename': 'server.log',
+            'level': 'INFO',
+        },
+    },
+    'loggers': {
+        'django.request': {
+            'handlers': ['mail_admins', ],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        'django': {
+            'handlers': ['logfile', 'console', ],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+        
+    },
+}
+
+
+
+from .default_user import *

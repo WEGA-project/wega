@@ -76,9 +76,9 @@ def upload_plant_profile(request):
             
             for item in data.splitlines():
                 key, value = item.split('=')
-
+                
                 if key.lower() in PlantProfile.micro or key.lower() in PlantProfile.macro or key.lower() in PlantProfile.salt:
-                    create_kw[key.lower()]=x = "{:.3f}".format(float(value))
+                    create_kw[key.lower()] = "{:.3f}".format(float(value))
             
             try:
                 pp = PlantProfile(**create_kw)

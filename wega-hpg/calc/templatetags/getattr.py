@@ -23,6 +23,8 @@ def second_part(obj):
 @register.filter
 def divide(a, b):
     # return obj.fields.get(attribute)
+    if not a or not b:
+        return  0
     return a/b
 
 @register.filter

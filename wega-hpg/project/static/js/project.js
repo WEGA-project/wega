@@ -12,8 +12,8 @@ $(document).ready(function () {
     $('#id_hide_salt').click(function () {
         $(this).closest("form").submit();
     });
-
-    $('.precalc').change(function () {
+ 
+    $('.precalc').on('keypress change', function () {
         out_list = ['cano3', 'kno3', 'nh4no3', 'mgso4', 'kh2po4', 'k2so4', 'mgno3', 'cacl2',
             'cano3_ca', 'cano3_no3', 'cano3_nh4', 'kno3_k', 'kno3_no3', 'nh4no3_nh4', 'nh4no3_no3', 'mgso4_mg',
             'mgso4_s', 'kh2po4_k', 'kh2po4_p', 'k2so4_k', 'k2so4_s', 'mgno3_mg', 'mgno3_no3', 'cacl2_ca', 'cacl2_cl',
