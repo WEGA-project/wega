@@ -45,3 +45,11 @@ systemctl reload apache2
 echo "##########################################################"
 echo "################# WEGA-WEB-HPG IS READY  #################"
 echo "##########################################################"
+if [[ "$0" == "$BASH_SOURCE" ]]; then
+    echo 'String WEGA-HPG user = 'admin@wega.ru''
+    echo "String WEGA-HPG password   = '$WEGA_HPG_PASSWORD'"
+    echo "WEGA-HPG: http://$(hostname -I | sed -e "s/\s$//g")/wega-hpg/"
+    echo "Внимание! Не требует авторизации для однопользовательского режима!"
+fi
+
+
