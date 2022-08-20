@@ -190,7 +190,8 @@ class PlantProfile(models.Model):
         b = Decimal(self.cano3_ca) * Decimal(self.cacl2_cl)
         c = a / b
         return c
-    
+
+    @decimal_exception
     def mgso4(self):
         if self.calc_mode == self.CalcMode.K:
             a = Decimal(self.mg)
