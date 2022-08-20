@@ -1,6 +1,11 @@
 {% extends 'project/base.html' %}
 {% load getattr %}
 {% load render_table from django_tables2 %}
+{% block extra_js_up %}
+      <script  >
+        var recalc_url = "{% url 'plant_profile_precalc' instance.pk  %}";
+    </script>
+{% endblock %}
 {% block content %}
     <h1 class="text-center">{{title}}</h1>
     <div class="container">

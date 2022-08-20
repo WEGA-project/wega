@@ -21,8 +21,12 @@
     {% endcompress %}
 
 {% compress js inline %}
-    <script src="/static/js/jquery-3.6.0.min.js"  ></script>
+      <script src="/static/js/jquery-3.6.0.min.js"  ></script>
     <script src="/static/bootstrap-5.2.0/js/bootstrap.bundle.js"></script>
+{% endcompress %}
+{% block extra_js_up %}
+{% endblock %}
+{% compress js inline %}
     <script src="/static/js/project.js"></script>
 {% endcompress %}
 </head>

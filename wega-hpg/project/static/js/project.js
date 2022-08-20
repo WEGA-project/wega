@@ -29,12 +29,9 @@ $(document).ready(function () {
         }
 
 
-
-        console.log('sending', dicts);
         $.ajax({
             type: "POST",
-            url: "/calc/plant_profile/precalc/" + $("#pk").val() + "/",
-            // The key needs to match your method's input parameter (case-sensitive).
+            url: recalc_url,
             data: JSON.stringify(dicts),
             contentType: "application/json; charset=utf-8",
             dataType: "json",
