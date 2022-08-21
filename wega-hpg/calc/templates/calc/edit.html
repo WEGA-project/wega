@@ -11,21 +11,28 @@
     <div class="container">
 
 
-
+        <div class="row">
+              {% if form.errors %}
+                    {{ form.errors }}
+                {% endif %}
+        </div>
      <div class="row">
                 <form action="{% url "plant_profile_edit" instance.pk %}" method="post" class="  m-auto d-flex justify-content-between"
                       id="form-{{ instance.pk }}">
                   <input type="hidden" name="pk" id="pk" value="{{ instance.pk }}">
+
                     <div class="row">
                         {% csrf_token %}
+                          <div class="row">    {{ form.name }}</div>
                         <div class="row">
                             <h5>Макро</h5>
                         </div>
                         <div class="row">
+
                             {% for f in form %}
 
                                 {% if f.name in instance.macro %}
-                                    <div class="mb-3 {% if f.name == 'name' %}col-12{% else %}col-xl-1 col-md-2 col-sm-3 col-4{% endif %} p-1">
+                                    <div class="mb-3 col-xl-1 col-md-2 col-sm-3 col-4 p-1">
                                         <label for="{{ f.id_for_label }}" class="form-label">{{ f.label }}</label>
                                         {{ f }}
                                         <div class="error">{{ f.errors }}</div>

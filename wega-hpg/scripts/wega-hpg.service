@@ -6,6 +6,6 @@ After=network.target
 User=root
 Group=www-data
 WorkingDirectory=/var/WEGA/wega-hpg/
-ExecStart=/var/WEGA/wega-hpg/venv/bin/gunicorn --access-logfile /var/log/gunicron/access.log --error-logfile /var/log/gunicron/error.log --workers 3 --bind 0.0.0.0:5003 project.wsgi:application
+ExecStart=/var/WEGA/wega-hpg/venv/bin/gunicorn --access-logfile /var/log/gunicron/access.log --error-logfile /var/log/gunicron/error.log --workers 3 --bind 127.0.0.1:5003 project.wsgi:application
 [Install]
 WantedBy=multi-user.target

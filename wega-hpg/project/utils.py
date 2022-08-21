@@ -6,6 +6,8 @@ menu = [
     {'title': "О проекте", 'url_name': ''},
 ]
 
+
+
 class DataMixin:
     paginate_by = 2
     @classmethod

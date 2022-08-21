@@ -44,8 +44,9 @@ class PlantProfile(models.Model):
     
     name = models.CharField(max_length=1024, verbose_name='Имя профиля')
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    ec = models.DecimalField(max_digits=9, decimal_places=3, verbose_name='Ec')
-    ppm = models.DecimalField(max_digits=9, decimal_places=3, verbose_name='PPM')
+    ec = models.DecimalField(max_digits=9,default=0, decimal_places=3, verbose_name='Ec')
+    ppm = models.DecimalField(max_digits=9, default=0,decimal_places=3, verbose_name='PPM')
+    
     template = models.ForeignKey('PlantTemplate', on_delete=models.CASCADE, null=True, blank=True)
     from_template = models.ForeignKey('PlantTemplate', on_delete=models.CASCADE, null=True, blank=True, related_name='profile_from_template')
     calc_mode = models.CharField(max_length=2, choices=CalcMode.choices, default=CalcMode.K, )
@@ -89,6 +90,8 @@ class PlantProfile(models.Model):
     cacl2_ca = models.DecimalField(max_digits=9, default=0, decimal_places=3, verbose_name='CaCl2_Ca')
     cacl2_cl = models.DecimalField(max_digits=9, default=0, decimal_places=3, verbose_name='CaCl2_Cl')
 
+ 
+ 
     def get_matrix(self, as_dict=False):
         pp = self
         matrix = []
@@ -267,12 +270,20 @@ class PlantTemplate(models.Model):
     description = models.TextField(null=True, blank=True)
     profile_owner = models.CharField(max_length=1024, verbose_name='Автор', null=True, blank=True)
     
-    def save(
-        self, force_insert=False, force_update=False, using=None, update_fields=None
-    ):
+    def save( self, force_insert=False, force_update=False, using=None, update_fields=None ):
         self.name = self.name.capitalize()
         super(PlantTemplate, self).save()
         
+
+class PlantProfileHistory(models.Model):
+    class Meta:
+        ordering = ['pk', 'date']
+        
+    date = models.DateTimeField(auto_now_add=True)
+    profile = models.ForeignKey(PlantProfile, on_delete=models.CASCADE)
+    profile_data = models.JSONField(default=dict, null=True, blank=True)
+    changed_data = models.JSONField(default=dict, null=True, blank=True)
+    
     
     
 class Price(models.Model):

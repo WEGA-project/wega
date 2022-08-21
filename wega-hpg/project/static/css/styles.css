@@ -9,7 +9,9 @@
 	width: 70px;
 	height: 60px;
 }
-
+.container{
+	overflow-x: auto;
+}
 
 .container-fluid{padding: 0;}
 .col-1-w{

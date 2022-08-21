@@ -1,8 +1,12 @@
 <div class="btn-group">
   <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">действие
   </button>
-  <ul class="dropdown-menu">
+  <ul class="dropdown-menu overflow-visible">
       <li><a class="text-black m-2 text-decoration-none" href="{% url "plant_profile_edit" pk %}"><i class="bi bi-pencil m-1"></i>Редактировать</a></li>
+
+
+      <li><a class="text-black m-2 text-decoration-none" href="{% url "plant_profile_history" pk %}"><i class="bi bi-pencil m-1"></i>История</a></li>
+
 
       <li><a class="text-black m-2 text-decoration-none" href="#"><i class="bi bi-snow  m-1"></i>В миксер</a></li>
 
