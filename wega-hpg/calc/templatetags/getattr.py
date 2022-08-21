@@ -55,7 +55,9 @@ def git_ver():
  
         
         git_string = "ver. {v}".format(v=version)
+        if 'not a git repo' in git_string:
+            return ''
     except:
-        git_string = u'unknown'
+        git_string = ''
     
     return git_string

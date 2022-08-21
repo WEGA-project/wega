@@ -42,6 +42,7 @@ systemctl daemon-reload
 systemctl enable wega-hpg.service
 systemctl restart wega-hpg.service
 systemctl reload apache2
+git config --global --add safe.directory /var/WEGA
 echo "##########################################################"
 echo "################# WEGA-WEB-HPG IS READY  #################"
 echo "##########################################################"
@@ -51,5 +52,6 @@ if [[ "$0" == "$BASH_SOURCE" ]]; then
     echo "WEGA-HPG: http://$(hostname -I | sed -e "s/\s$//g")/wega-hpg/"
     echo "Внимание! Не требует авторизации для однопользовательского режима!"
 fi
+
 
 
