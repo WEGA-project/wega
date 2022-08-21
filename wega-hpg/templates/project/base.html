@@ -1,5 +1,6 @@
 {% load static %}
 {% load compress %}
+{% load getattr %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -31,7 +32,7 @@
 
             <a class="navbar-brand" href="#"><a href="{% url 'home' %}">
                 <div class="logo"></div>
-            </a> WEB-HPG</a>
+            </a> WEB-HPG  {% git_ver %} </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
                     aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>

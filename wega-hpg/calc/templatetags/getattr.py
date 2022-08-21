@@ -1,5 +1,9 @@
+import os
+import subprocess
 
 from django import template
+from django.conf import settings
+
 register = template.Library()
 
 @register.filter
@@ -30,3 +34,28 @@ def divide(a, b):
 @register.filter
 def index(indexable, i):
     return indexable[i]
+
+
+@register.simple_tag
+def git_ver():
+    '''
+    Retrieve and return the latest git commit hash ID and tag as a dict.
+    '''
+    
+    git_dir = os.path.dirname(settings.BASE_DIR)
+    
+    try:
+        # Date and hash ID
+        head = subprocess.Popen(
+            "git -C {dir} log -1 --pretty=format:\"%h on %cd\" --date=short".format(dir=git_dir),
+            shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        version = head.stdout.readline().strip().decode('utf-8')
+        
+        # Latest tag
+ 
+        
+        git_string = "ver. {v}".format(v=version)
+    except:
+        git_string = u'unknown'
+    
+    return git_string
