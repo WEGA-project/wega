@@ -13,3 +13,4 @@ csscompressor
 mysqlclient
 netifaces
 django-import-export
+simplejson
