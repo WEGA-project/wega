@@ -24,7 +24,6 @@ ln -s /var/WEGA/apache/wega-hpg.conf /etc/apache2/conf-enabled/
 mkdir -p /var/log/gunicron/
 a2enmod headers
 python manage_prod.py collectstatic --noinput
-python manage_prod.py migrate --noinput
 touch /var/WEGA/wega-hpg/WEGA_HPG_PASSWORD
 WEGA_HPG_PASSWORD=$(cat /var/WEGA/wega-hpg/WEGA_HPG_PASSWORD)
 if [[ -n "$WEGA_HPG_PASSWORD" ]]; then
@@ -38,6 +37,7 @@ echo $P_STRING | python manage_prod.py shell
 echo $WEGA_HPG_PASSWORD >/var/WEGA/wega-hpg/WEGA_HPG_PASSWORD
 echo "WEGA_DEFAULT_USER = 'admin@wega.ru'" > /var/WEGA/wega-hpg/project/default_user.py
 echo "WEGA_DEFAULT_PASSWORD = '$WEGA_HPG_PASSWORD'" >> /var/WEGA/wega-hpg/project/default_user.py
+python manage_prod.py migrate --noinput
 systemctl daemon-reload
 systemctl enable wega-hpg.service
 systemctl restart wega-hpg.service
