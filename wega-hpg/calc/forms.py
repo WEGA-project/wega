@@ -9,7 +9,7 @@ from calc.models import PlantProfile
 class PlantProfileAddForm(forms.ModelForm):
     class Meta:
         model = PlantProfile
-        exclude = ['user', 'ec', 'ppm']
+        fields = ['name', 'template']
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -17,6 +17,7 @@ class PlantProfileAddForm(forms.ModelForm):
             visible.field.widget.attrs['class'] = 'form-control d-inline-block'
             if visible.name != 'name':
                 visible.field.initial = 0
+                visible.field.widget.attrs['required'] = True
 
 
 class PlantProfileEditForm(forms.ModelForm):

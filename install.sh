@@ -146,3 +146,4 @@ echo 'String wegadb   = "esp32wega";'
 echo 'String WEGA-HPG user = 'admin@wega.ru''
 echo "String WEGA-HPG password   = '$WEGA_HPG_PASSWORD'"
 echo "WEGA-HPG: http://$(hostname -I | sed -e "s/\s$//g")/wega-hpg/"
+echo "Внимание! Не требует авторизации для однопользовательского режима!"

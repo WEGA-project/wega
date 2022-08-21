@@ -56,8 +56,7 @@ def plant_profiles(request):
 
     
     extra_columns.append(('action', ModalBtn(verbose_name='',) ) )
-    my_table = PlatProfileTable(PlantProfile.objects.filter(user=request.user).values(
-        *columns, action=F('pk'),
+    my_table = PlatProfileTable(PlantProfile.objects.filter(user=request.user, template=None).values( *columns, action=F('pk'),
     ), extra_columns=extra_columns)
     RequestConfig(request, paginate={'per_page': 10}).configure(my_table)
     context['table'] = my_table
@@ -100,10 +99,12 @@ def create_plant_profile(request):
     context= DataMixin.get_user_context(title="Новый профиль", btn_name="Добавить")
     form = PlantProfileAddForm(request.POST)
     if form.is_valid():
-        new = form.save(commit=False)
+        new = PlantProfile.objects.get(template=form.cleaned_data['template'])
+        new.pk = None
+        new.name = form.cleaned_data['name']
+        new.from_template = form.cleaned_data['template']
         new.user = request.user
-        new.ec = 0
-        new.ppm = 0
+        new.template=None
         new.save()
         return redirect('profile_index')
     else:

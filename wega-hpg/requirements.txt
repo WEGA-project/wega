@@ -12,3 +12,4 @@ brotli
 csscompressor
 mysqlclient
 netifaces
+django-import-export

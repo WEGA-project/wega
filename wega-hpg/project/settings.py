@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     
     'django_tables2',
     'compressor',
+    'import_export',
     
     'wega_auth',
     'calc',

@@ -11,7 +11,7 @@
                     <div class="row">
                     {% csrf_token %}
                     {% for f in form %}
-                        <div class="mb-3 {% if f.name == 'name' %}col-12{% else %}col-4{% endif %}">
+                        <div class="mb-3 {% if f.name == 'name' or f.name == 'template'%}col-12{% else %}col-4{% endif %}">
                             <label for="{{ f.id_for_label }}" class="form-label">{{ f.label }}</label>
                             {{ f }}
                             <div class="error">{{ f.errors }}</div>

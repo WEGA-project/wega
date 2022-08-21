@@ -46,7 +46,8 @@ class PlantProfile(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     ec = models.DecimalField(max_digits=9, decimal_places=3, verbose_name='Ec')
     ppm = models.DecimalField(max_digits=9, decimal_places=3, verbose_name='PPM')
-    
+    template = models.ForeignKey('PlantTemplate', on_delete=models.CASCADE, null=True, blank=True)
+    from_template = models.ForeignKey('PlantTemplate', on_delete=models.CASCADE, null=True, blank=True, related_name='profile_from_template')
     calc_mode = models.CharField(max_length=2, choices=CalcMode.choices, default=CalcMode.K, )
     
     n = models.DecimalField(max_digits=9,   default=0, decimal_places=3,   verbose_name='N')
@@ -255,6 +256,25 @@ class PlantProfile(models.Model):
         return total
 
 
+
+class PlantTemplate(models.Model):
+    def __str__(self):
+        return f'{self.name} by {self.profile_owner}'
+    
+    class Meta:
+        ordering = ['name', 'profile_owner']
+    name    = models.CharField(max_length=1024, verbose_name='Имя профиля')
+    description = models.TextField(null=True, blank=True)
+    profile_owner = models.CharField(max_length=1024, verbose_name='Автор', null=True, blank=True)
+    
+    def save(
+        self, force_insert=False, force_update=False, using=None, update_fields=None
+    ):
+        self.name = self.name.capitalize()
+        super(PlantTemplate, self).save()
+        
+    
+    
 class Price(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=1024)
