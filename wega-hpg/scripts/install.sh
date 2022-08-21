@@ -32,10 +32,10 @@ else
   echo "Generating new WEGA_HPG_PASSWORD"
   WEGA_HPG_PASSWORD=$(openssl rand -hex 12)
 fi
-P_STRING="from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.filter(username='admin').delete(); User.objects.create_superuser('admin', 'admin@wega.ru', '$WEGA_HPG_PASSWORD')"
+P_STRING="from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.filter(username='admin').delete(); User.objects.create_superuser('admin', 'admin@localhost.ru', '$WEGA_HPG_PASSWORD')"
 echo $P_STRING | python manage_prod.py shell
 echo $WEGA_HPG_PASSWORD >/var/WEGA/wega-hpg/WEGA_HPG_PASSWORD
-echo "WEGA_DEFAULT_USER = 'admin@wega.ru'" > /var/WEGA/wega-hpg/project/default_user.py
+echo "WEGA_DEFAULT_USER = 'admin@localhost.ru'" > /var/WEGA/wega-hpg/project/default_user.py
 echo "WEGA_DEFAULT_PASSWORD = '$WEGA_HPG_PASSWORD'" >> /var/WEGA/wega-hpg/project/default_user.py
 python manage_prod.py migrate --noinput
 systemctl daemon-reload
@@ -47,7 +47,7 @@ echo "##########################################################"
 echo "################# WEGA-WEB-HPG IS READY  #################"
 echo "##########################################################"
 if [[ "$0" == "$BASH_SOURCE" ]]; then
-    echo 'String WEGA-HPG user = 'admin@wega.ru''
+    echo 'String WEGA-HPG user = 'admin@localhost.ru''
     echo "String WEGA-HPG password   = '$WEGA_HPG_PASSWORD'"
     echo "WEGA-HPG: http://$(hostname -I | sed -e "s/\s$//g")/wega-hpg/"
     echo "Внимание! Не требует авторизации для однопользовательского режима!"
