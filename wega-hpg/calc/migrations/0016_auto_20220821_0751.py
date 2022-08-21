@@ -3,7 +3,28 @@
 from django.db import migrations
 
 
+def load_initial_data(apps, schema_editor):
+    from django.core import serializers
 
+    PlantProfile  = apps.get_model('calc', 'PlantProfile')
+    PlantTemplate = apps.get_model('calc', 'PlantTemplate')
+    # последовательсть докрутить необходимо
+    a = PlantProfile(user_id=1, ec=0, ppm=0)
+    error=True
+    counter = 0
+    while error:
+        try:
+            a.save()
+            error=False
+        except Exception as e:
+            error=True
+            counter+=1
+            if counter>100:
+                import logging
+                logging.exception(e)
+                raise e
+            pass
+    a.delete()
 
 class Migration(migrations.Migration):
 
@@ -12,5 +33,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-    
+        migrations.RunPython(load_initial_data),
     ]
