@@ -11,12 +11,18 @@ def load_initial_data(apps, schema_editor):
     
     a = PlantProfile(user_id=1, ec=0, ppm=0)
     error=True
+    counter = 0
     while error:
         try:
             a.save()
             error=False
-        except Exception:
+        except Exception as e:
             error=True
+            counter+=1
+            if counter>100:
+                import logging
+                logging.exception(e)
+                raise e
             pass
     a.delete()
 
