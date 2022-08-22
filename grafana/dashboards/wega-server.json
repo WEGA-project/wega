@@ -1,22 +1,5 @@
 {
-    "__inputs": [
-      {
-        "name": "DS_WEGABOX",
-        "label": "wegabox",
-        "description": "",
-        "type": "datasource",
-        "pluginId": "mysql",
-        "pluginName": "MySQL"
-      },
-      {
-        "name": "DS_BR",
-        "label": "br",
-        "description": "",
-        "type": "datasource",
-        "pluginId": "mysql",
-        "pluginName": "MySQL"
-      }
-    ],
+
     "__elements": {},
     "__requires": [
       {
@@ -89,7 +72,7 @@
       {
         "datasource": {
           "type": "mysql",
-          "uid": "${DS_WEGABOX}"
+          "uid": "${database}"
         },
         "description": "",
         "fieldConfig": {
@@ -141,7 +124,7 @@
           {
             "datasource": {
               "type": "mysql",
-              "uid": "${DS_WEGABOX}"
+              "uid": "${database}"
             },
             "format": "table",
             "group": [],
@@ -177,7 +160,7 @@
       {
         "datasource": {
           "type": "mysql",
-          "uid": "${DS_WEGABOX}"
+          "uid": "${database}"
         },
         "fieldConfig": {
           "defaults": {
@@ -254,7 +237,7 @@
           {
             "datasource": {
               "type": "mysql",
-              "uid": "${DS_WEGABOX}"
+              "uid": "${database}"
             },
             "format": "time_series",
             "group": [],
@@ -285,7 +268,7 @@
           {
             "datasource": {
               "type": "mysql",
-              "uid": "${DS_WEGABOX}"
+              "uid": "${database}"
             },
             "format": "time_series",
             "group": [],
@@ -316,7 +299,7 @@
           {
             "datasource": {
               "type": "mysql",
-              "uid": "${DS_WEGABOX}"
+              "uid": "${database}"
             },
             "format": "time_series",
             "group": [],
@@ -347,7 +330,7 @@
           {
             "datasource": {
               "type": "mysql",
-              "uid": "${DS_WEGABOX}"
+              "uid": "${database}"
             },
             "format": "time_series",
             "group": [],
@@ -382,7 +365,7 @@
       {
         "datasource": {
           "type": "mysql",
-          "uid": "${DS_WEGABOX}"
+          "uid": "${database}"
         },
         "description": "",
         "fieldConfig": {
@@ -460,7 +443,7 @@
           {
             "datasource": {
               "type": "mysql",
-              "uid": "${DS_WEGABOX}"
+              "uid": "${database}"
             },
             "format": "time_series",
             "group": [],
@@ -495,7 +478,7 @@
       {
         "datasource": {
           "type": "mysql",
-          "uid": "${DS_WEGABOX}"
+          "uid": "${database}"
         },
         "fieldConfig": {
           "defaults": {
@@ -570,7 +553,7 @@
           {
             "datasource": {
               "type": "mysql",
-              "uid": "${DS_WEGABOX}"
+              "uid": "${database}"
             },
             "format": "time_series",
             "group": [],
@@ -605,7 +588,7 @@
       {
         "datasource": {
           "type": "mysql",
-          "uid": "${DS_WEGABOX}"
+          "uid": "${database}"
         },
         "description": "",
         "fieldConfig": {
@@ -689,7 +672,7 @@
           {
             "datasource": {
               "type": "mysql",
-              "uid": "${DS_WEGABOX}"
+              "uid": "${database}"
             },
             "format": "time_series",
             "group": [],
@@ -720,7 +703,7 @@
           {
             "datasource": {
               "type": "mysql",
-              "uid": "${DS_WEGABOX}"
+              "uid": "${database}"
             },
             "format": "time_series",
             "group": [],
@@ -755,7 +738,7 @@
       {
         "datasource": {
           "type": "mysql",
-          "uid": "${DS_WEGABOX}"
+          "uid": "${database}"
         },
         "fieldConfig": {
           "defaults": {
@@ -834,7 +817,7 @@
           {
             "datasource": {
               "type": "mysql",
-              "uid": "${DS_WEGABOX}"
+              "uid": "${database}"
             },
             "format": "time_series",
             "group": [],
@@ -865,7 +848,7 @@
           {
             "datasource": {
               "type": "mysql",
-              "uid": "${DS_WEGABOX}"
+              "uid": "${database}"
             },
             "format": "table",
             "group": [],
@@ -902,7 +885,7 @@
       {
         "datasource": {
           "type": "mysql",
-          "uid": "${DS_WEGABOX}"
+          "uid": "${database}"
         },
         "fieldConfig": {
           "defaults": {
@@ -980,7 +963,7 @@
           {
             "datasource": {
               "type": "mysql",
-              "uid": "${DS_WEGABOX}"
+              "uid": "${database}"
             },
             "format": "time_series",
             "group": [],
@@ -1015,7 +998,7 @@
       {
         "datasource": {
           "type": "mysql",
-          "uid": "${DS_WEGABOX}"
+          "uid": "${database}"
         },
         "fieldConfig": {
           "defaults": {
@@ -1094,7 +1077,7 @@
           {
             "datasource": {
               "type": "mysql",
-              "uid": "${DS_WEGABOX}"
+              "uid": "${database}"
             },
             "format": "time_series",
             "group": [],
@@ -1128,7 +1111,7 @@
       {
         "datasource": {
           "type": "mysql",
-          "uid": "${DS_BR}"
+          "uid": "${database}"
         },
         "fieldConfig": {
           "defaults": {
@@ -1207,7 +1190,7 @@
           {
             "datasource": {
               "type": "mysql",
-              "uid": "${DS_BR}"
+              "uid": "${database}"
             },
             "format": "table",
             "group": [],
@@ -1244,7 +1227,7 @@
       {
         "datasource": {
           "type": "mysql",
-          "uid": "${DS_WEGABOX}"
+          "uid": "${database}"
         },
         "fieldConfig": {
           "defaults": {
@@ -1320,7 +1303,7 @@
           {
             "datasource": {
               "type": "mysql",
-              "uid": "${DS_WEGABOX}"
+              "uid": "${database}"
             },
             "format": "time_series",
             "group": [],
@@ -1355,7 +1338,7 @@
       {
         "datasource": {
           "type": "mysql",
-          "uid": "${DS_WEGABOX}"
+          "uid": "${database}"
         },
         "fieldConfig": {
           "defaults": {
@@ -1433,7 +1416,7 @@
           {
             "datasource": {
               "type": "mysql",
-              "uid": "${DS_WEGABOX}"
+              "uid": "${database}"
             },
             "format": "time_series",
             "group": [],
@@ -1463,7 +1446,7 @@
           {
             "datasource": {
               "type": "mysql",
-              "uid": "${DS_WEGABOX}"
+              "uid": "${database}"
             },
             "format": "table",
             "group": [],
@@ -1498,7 +1481,7 @@
       {
         "datasource": {
           "type": "mysql",
-          "uid": "${DS_WEGABOX}"
+          "uid": "${database}"
         },
         "fieldConfig": {
           "defaults": {
@@ -1553,7 +1536,7 @@
           {
             "datasource": {
               "type": "mysql",
-              "uid": "${DS_WEGABOX}"
+              "uid": "${database}"
             },
             "format": "time_series",
             "group": [],
