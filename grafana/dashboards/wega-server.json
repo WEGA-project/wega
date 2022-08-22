@@ -1569,7 +1569,7 @@
         "type": "stat"
       }
     ],
-    "refresh": "30s",
+    "refresh": "5m",
     "schemaVersion": 36,
     "style": "dark",
     "tags": [],
@@ -1623,7 +1623,7 @@
     "timepicker": {
       "hidden": false
     },
-    "timezone": "Asia/Vladivostok",
+
     "title": "WEGA-SERVER",
     "uid": "oj9weHm4k",
     "version": 53,
