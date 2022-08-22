@@ -132,13 +132,13 @@ class TestMatrix(TestCase):
         c = a/t_new
    
         print(
-            'old a', "{:.3f}".format(a),
-            'old b', "{:.3f}".format(b),
-            't_old', "{:.3f}".format(t_old),
-            't_new', "{:.3f}".format(t_new),
+            'old a', "{:.2f}".format(a),
+            'old b', "{:.2f}".format(b),
+            't_old', "{:.2f}".format(t_old),
+            't_new', "{:.2f}".format(t_new),
     
-            'a/c', "{:.3f}".format(a/c),
-            'c', "{:.3f}".format(c),
+            'a/c', "{:.2f}".format(a/c),
+            'c', "{:.2f}".format(c),
             
     
         )

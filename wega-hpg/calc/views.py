@@ -99,7 +99,10 @@ def plant_profile_history(request, pk):
     extra_columns = []
     history_column = HistoryColumn()
     extra_columns.append(('pk', django_tables2.Column()))
-    extra_columns.append(('date', django_tables2.Column()))
+    extra_columns.append(('date', HistoryColumn()))
+
+   
+    extra_columns.append(('calc_mode', history_column))
     extra_columns.append(('name', history_column))
 
     
@@ -167,6 +170,7 @@ def plant_profile_history(request, pk):
         
         vals['action'] = p.get('id')
         vals['pk'] = p.get('id')
+       
         vals['date'] = history.date
 
         

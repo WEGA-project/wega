@@ -2,148 +2,162 @@
 {% load getattr %}
 {% load render_table from django_tables2 %}
 {% block extra_js_up %}
-      <script  >
+    <script>
         var recalc_url = "{% url 'plant_profile_precalc' instance.pk  %}";
     </script>
 {% endblock %}
 {% block content %}
-    <h1 class="text-center">{{title}}</h1>
     <div class="container">
-
+    <h1 class="text-center">{{ title }}</h1>
 
         <div class="row">
-              {% if form.errors %}
-                    {{ form.errors }}
-                {% endif %}
+            {% if form.errors %}
+                {{ form.errors }}
+            {% endif %}
         </div>
-     <div class="row">
-                <form action="{% url "plant_profile_edit" instance.pk %}" method="post" class="  m-auto d-flex justify-content-between"
-                      id="form-{{ instance.pk }}">
-                  <input type="hidden" name="pk" id="pk" value="{{ instance.pk }}">
+        <div class="row">
+            <form action="{% url "plant_profile_edit" instance.pk %}" method="post"
+                  class="  m-auto d-flex justify-content-between"
+                  id="form-{{ instance.pk }}">
+                <input type="hidden" name="pk" id="pk" value="{{ instance.pk }}">
+
+                <div class="row">
+                    {% csrf_token %}
 
                     <div class="row">
-                        {% csrf_token %}
-                          <div class="row">    {{ form.name }}</div>
-                        <div class="row">
-                            <h5>Макро</h5>
+                        <div class="mb-3  col-4 p-1">
+                            <label for="{{ form.name.label.id_for_label }}"
+                                   class="form-label">{{ form.name.label }}</label>
+                            {{ form.name }}
+                            <div class="error">{{ form.name.errors }}</div>
                         </div>
-                        <div class="row">
-
-                            {% for f in form %}
-
-                                {% if f.name in instance.macro %}
-                                    <div class="mb-3 col-xl-1 col-md-2 col-sm-3 col-4 p-1">
-                                        <label for="{{ f.id_for_label }}" class="form-label">{{ f.label }}</label>
-                                        {{ f }}
-                                        <div class="error">{{ f.errors }}</div>
-                                    </div>
-                                {% endif %}
-
-                            {% endfor %}
-                            </div>
-
-
-                        <div class="row">
-                            <h5>Соотношения элементов</h5>
+                            <div class="mb-3  col-4 p-1">
+                            <label for="{{ form.calc_mode.label.id_for_label }}"
+                                   class="form-label">{{ form.calc_mode.label }}</label>
+                            {{ form.calc_mode }}
+                            <div class="error">{{ form.calc_mode.errors }}</div>
                         </div>
-                        <div class="row">
-
-                                {% for row in  instance.get_matrix  %}
-                                    <div class="row">
-                                    {% for elem, val in row.items %}
-
-
-                                              {% if forloop.first %}
-                                                <div class="text-center align-middle col-1 w-auto" style="min-width: 70px;">
-                                                    <label for="id_matrix-{{ elem }}-{{ instance.macro_matrix|index:forloop.parentloop.counter0  }}" class=" form-label p-2
-                                                     {% if forloop.parentloop.first %}mt-50{% endif %}">{{ instance.macro_matrix|index:forloop.parentloop.counter0 }}</label>
-                                                </div>
-                                              {% endif %}
-                                            <div class="mb-1 text-center col-1 p-1">
-                                                {% if forloop.parentloop.first %}
-                                                <label for="id_matrix-{{ elem }}-{{ instance.macro_matrix|index:forloop.parentloop.counter0  }}" class="form-label">{{ elem }}</label>
-                                                {% endif %}
-
-                                                <input type="number"
-                                                       name="matrix-{{ elem }}-{{ instance.macro_matrix|index:forloop.parentloop.counter0  }}"
-                                                       value="{{ val|floatformat:3 }}"
-                                                       step="{% if instance.macro_matrix|index:forloop.parentloop.counter0 == 'n' %}0.001{% else %}0.1{% endif %}"
-                                                       class="form-control d-inline-block precalc matrix"
-                                                       {% if forloop.parentloop.counter == forloop.counter or  elem == 's'  or instance.macro_matrix|index:forloop.parentloop.counter0 == 's' %}disabled{% endif  %}
-                                                       required="" id="id_matrix-{{ elem }}-{{ instance.macro_matrix|index:forloop.parentloop.counter0  }}">
-                                            </div>
-
-                                    {% endfor %}
-                                     </div>
-
-                                {% endfor %}
-
-                            </div>
-
-
-                        <div class="row">
-                            <h5>Соли</h5>
-                        </div>
-                        <div class="row">
-
-                            {% for comon, salt_data in instance.get_salt_dict.items %}
-                                <div class="row">
-                                        <div class="col-3  col-md-2 d-none d-sm-flex align-items-center">
-                                            <span>{{ salt_data.name }}</span>
-                                        </div>
-                                        <div class="col-4 col-md-2 col-xl-1 d-flex align-items-center">
-                                            <span class="align-middle">{{ salt_data.formula }}</span>
-                                        </div>
-
-                                          {% for salt in salt_data.salt %}
-                                              {% with form|get_field_from_form:salt as f %}
-                                                <div class="mb-1 text-center {% if f.name == 'name' %}col-12{% else %}col-4 col-md-2 col-xl-1{% endif %} p-1">
-                                                    <label for="{{ f.id_for_label }}" class="form-label">{{ f.label|second_part }}%</label>
-                                                    {{ f }}
-                                                    <div class="error">{{ f.errors }}</div>
-                                                </div>
-                                              {% endwith %}
-                                            {% endfor %}
-                                            {% if salt_data.salt|length == 2 %}
-                                                <div class="mb-1 d-none  d-sm-flex text-center col-4 col-md-2 col-xl-1 p-1"></div>
-                                            {% endif %}
-                                            <div class="mb-1 text-center col-4 col-md-2 col-xl-2 p-1">
-                                                <label for="id_{{ comon }}" class="form-label">граммы</label>
-                                                <input type="number" disabled name="{{ comon }}" value="{{ instance|getattribute:comon|divide:10|floatformat:3 }}"
-                                                       step="0.01" class="form-control d-inline-block precalc" required="" id="id_{{ comon }}">
-                                            </div>
-                                 </div>
-                            {% endfor %}
-
-
-                        </div>
-
-                                <div class="row">
-                            <h5>Микро</h5>
-                        </div>
-                        <div class="row">
-                            {% for f in form %}
-                                {% if f.name in instance.micro %}
-                                    <div class="mb-3 {% if f.name == 'name' %}col-12{% else %}col-xl-1 col-md-2 col-sm-3 col-4{% endif %} p-1">
-                                        <label for="{{ f.id_for_label }}" class="form-label">{{ f.label }}</label>
-                                        {{ f }}
-                                        <div class="error">{{ f.errors }}</div>
-                                    </div>
-                                {% endif %}
-                            {% endfor %}
-                            </div>
                     </div>
 
 
 
-                </form>
-<div class="row">
-    <div class="col-6 m-auto">
-                <button class="btn btn-primary d-block m-auto" type="submit" form="form-{{ instance.pk }}">{{ btn_name }}</button>
-        </div>
-    </div>
+                    <div class="row">
 
-    </div>
+
+                     <div class="row">
+                        <h5 class=" ">Макропрофиль в мг/л (ppm)</h5>
+                    </div>
+                        <div class="row row-cols-auto">
+                            {% for f in form %}
+
+                                {% if f.name in instance.macro %}
+                                    <div class="mb-3 col-1 p-1  macro-salt">
+                                        <label for="{{ f.id_for_label }}" class="form-label">{{ f.label }}</label>
+                                        {{ f }}
+                                        <div class="error">{{ f.errors }}</div>
+                                    </div>
+                                {% endif %}
+
+                            {% endfor %}
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <h5 class=" ">Соотношения элементов</h5>
+                    </div>
+                    <div class="row matrix">
+
+                        {% for row in  instance.get_matrix %}
+                            <div class="row ">
+                                {% for elem, val in row.items %}
+
+
+                            {% if forloop.first %}
+                                <div class="text-center align-middle col-1 w-auto" style="min-width: 70px;">
+                                    <label for="id_matrix-{{ elem }}-{{ instance.macro_matrix|index:forloop.parentloop.counter0  }}"
+                                           class=" form-label d-block p-2 {% if forloop.parentloop.first %}mt-50{% endif %}">
+                                        {{ instance.macro_matrix|index:forloop.parentloop.counter0|title }}</label>
+                                </div>
+                            {% endif %}
+                                    <div class="mb-1 text-center col-1 p-1">
+                                        {% if forloop.parentloop.first %}
+                                            <label for="id_matrix-{{ elem }}-{{ instance.macro_matrix|index:forloop.parentloop.counter0  }}"
+                                                   class="form-label d-block ">{{ elem|title }}</label>
+                                        {% endif %}
+
+                                        <input type="number"
+                                               name="matrix-{{ elem }}-{{ instance.macro_matrix|index:forloop.parentloop.counter0  }}"
+                                               value="{{ val|floatformat:2 }}"
+                                               step="{% if instance.macro_matrix|index:forloop.parentloop.counter0 == 'n' %}0.001{% else %}0.1{% endif %}"
+                                               class="form-control d-inline-block precalc matrix"
+                                               {% if forloop.parentloop.counter == forloop.counter or  elem == 's'  or instance.macro_matrix|index:forloop.parentloop.counter0 == 's' %}disabled{% endif %}
+                                               required="" id="id_matrix-{{ elem }}-
+                                                {{ instance.macro_matrix|index:forloop.parentloop.counter0  }}">
+                                    </div>
+
+                                {% endfor %}
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+
+                    <div class="row">
+                        <h5>Соли</h5>
+                    </div>
+                    <div class="row salts">
+
+                        {% for comon, salt_data in instance.get_salt_dict.items %}
+                              <div class="row salt-row">
+                                <div class="col-3  d-sm-flex pt-2 justify-content-start salt_name">
+                                    <span class="salt-name-formula">{{ salt_data.name }} {{ salt_data.formula }}</span>
+                                    <span class="  salt-formula">{{ salt_data.formula }}</span>
+                                </div>
+                                {% for salt in salt_data.salt %}
+                                    {% with form|get_field_from_form:salt as f %}
+                                        <div class="mb-1 salt-percent {% if f.name == 'name' %}col-12{% else %}col-2{% endif %}
+                                              p-1 d-flex align-items-center justify-content-between">
+
+                                            <div class="col-4">
+                                                <label for="{{ f.id_for_label }}"  class="form-label">{{ f.label|second_part }}</label>
+                                            </div>
+                                            {{ f }}
+                                            <div class="error">{{ f.errors }}</div>
+                                        </div>
+                                    {% endwith %}
+                                {% endfor %}
+                                {% if salt_data.salt|length == 2 %}
+                                    <div class="mb-1 d-none  d-sm-flex text-center col-2 p-1"></div>
+                                {% endif %}
+                                <div class="mb-1 text-center col-1 p-1 d-flex align-items-center justify-content-between">
+
+                                    <input type="number" disabled name="{{ comon }}"
+                                           value="{{ instance|getattribute:comon|divide:10|floatformat:2 }}"
+                                           step="0.01" class="form-control d-inline-block precalc" required=""
+                                           id="id_{{ comon }}">
+                                </div>
+                            </div>
+
+                        {% endfor %}
+
+
+                    </div>
+
+
+                </div>
+
+
+            </form>
+            <div class="row mt-5 mb-5">
+                <div class="col-6 m-auto">
+                    <button class="btn btn-primary d-block m-auto" type="submit"
+                            form="form-{{ instance.pk }}">{{ btn_name }}</button>
+                </div>
+            </div>
+
+        </div>
 
 
     </div>

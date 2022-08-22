@@ -190,6 +190,6 @@ LOGGING = {
     },
 }
 
-
+SHORT_DATETIME_FORMAT="%Y-%m-%d"
 
 from .default_user import *

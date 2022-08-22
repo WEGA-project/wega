@@ -20,3 +20,68 @@
 .mt-50{
 	margin-top: 65%;
 }
+
+
+input.precalc[type='number']{
+    width: 90px;
+	height: 25px;
+}
+
+.salts > .row {
+	height: 40px;
+}
+
+.salt-row:hover{
+	background-color: darkgrey;
+	opacity: 0.8;
+}
+
+
+
+@media screen and (min-width: 1024px) {
+	input.precalc[type='number']{
+	width: 73px;
+	height: 25px;
+	}
+	.macro-salt > input.precalc[type='number']{
+	width: 95px;
+	height: 25px;
+	}
+	.salt-formula{ display: none;}
+	.salt-name-formula{display: inline-block;}
+}
+
+@media screen and (min-width: 768px) and  (max-width: 1024px){
+	input.precalc[type='number']{
+	width: 70px;
+	height: 25px;
+	}
+	.macro-salt > input.precalc[type='number']{
+	width: 90px;
+	height: 25px;
+	}
+	.salt-formula{ display: inline-block;}
+	.salt-name-formula{display: none}
+	.col-1{    width: 11%;}
+}
+
+@media screen and (max-width: 768px)  {
+	input.precalc[type='number']{
+	width: 70px;
+	height: 25px;
+	}
+	.macro-salt > input.precalc[type='number']{
+	width: 90px;
+	height: 25px;
+	}
+	.salt-formula{ display: inline-block;}
+	.salt-name-formula{display: none}
+	.col-1{    width: 11%;}
+	   html{
+			  width: 768px;
+			  overflow: auto;
+		  }
+}
+
+
+
