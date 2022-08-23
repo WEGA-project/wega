@@ -7,15 +7,21 @@ IFS=$'\n'
 for db in $datasource
 do
   unset IFS
-  echo "datasources:" >$pathtoyml/$db.yaml
+  echo "apiVersion: 1" >$pathtoyml/$db.yaml
+  echo >>$pathtoyml/$db.yaml
+  echo "datasources:" >>$pathtoyml/$db.yaml
   echo "  - name: $db" >>$pathtoyml/$db.yaml
   echo "    type: mysql" >>$pathtoyml/$db.yaml
-  echo "    url: localhost:3306" >>$pathtoyml/$db.yaml
+  echo "    url: localhost" >>$pathtoyml/$db.yaml
   echo "    database: $db" >>$pathtoyml/$db.yaml
   echo "    user: root" >>$pathtoyml/$db.yaml
+  echo "    jsonData:" >>$pathtoyml/$db.yaml
+  echo "      maxOpenConns: 0" >>$pathtoyml/$db.yaml
+  echo "      maxIdleConns: 2" >>$pathtoyml/$db.yaml
+  echo "      connMaxLifetime: 14400" >>$pathtoyml/$db.yaml
   echo "    secureJsonData:" >>$pathtoyml/$db.yaml
   echo "      password: \"$dbpass\"" >>$pathtoyml/$db.yaml
-
+  echo "    editable: true" >>$pathtoyml/$db.yaml
 
 done
 unset IFS
