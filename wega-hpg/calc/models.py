@@ -91,7 +91,9 @@ class PlantProfile(models.Model):
     cacl2_cl = models.DecimalField(max_digits=9, default=0, decimal_places=2, verbose_name='CaCl2_Cl')
 
  
- 
+    def get_npk(self):
+        t = self.get_matrix()[0]
+        print(t)
     def get_matrix(self, as_dict=False):
         pp = self
         matrix = []
@@ -133,7 +135,7 @@ class PlantProfile(models.Model):
             setattr(self, i, "{:.2f}".format(a/10))
         
     def to_json(self):
-        data = {'pk':self.pk, 'ec':self.ec, 'ppm':self.ppm}
+        data = {'pk':self.pk, 'ec':self.ec, 'ppm':self.ppm, 'npk': self.get_npk()}
         for s in self.macro:
             # data[s] = "{:.2f}".format(getattr(self, s))
             data[s] = getattr(self, s)

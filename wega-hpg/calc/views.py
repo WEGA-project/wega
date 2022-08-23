@@ -157,7 +157,7 @@ def plant_profile_history(request, pk):
         changes = simplejson.loads(history.changed_data)
         
         for salt_gramm_name in PlantProfile.salt_gramms:
-            p[salt_gramm_name] = "{:.3f}".format(getattr(pp, salt_gramm_name)())
+            p[salt_gramm_name] = "{:.2f}".format(getattr(pp, salt_gramm_name)())
         
         vals = {}
         
@@ -196,7 +196,7 @@ def upload_plant_profile(request):
                 key, value = item.split('=')
                 
                 if key.lower() in PlantProfile.micro or key.lower() in PlantProfile.macro or key.lower() in PlantProfile.salt:
-                    create_kw[key.lower()] = "{:.3f}".format(float(value))
+                    create_kw[key.lower()] = "{:.2f}".format(float(value))
             
             try:
                 pp = PlantProfile(**create_kw)
@@ -240,12 +240,13 @@ def plant_profile_precalc(request, pk):
             if request.method == 'POST':
                 data = json.loads(request.body)
                 pushed_element = data.get('pushed_element')
-                
+
                 for param_list in [['ppm', 'ec', ], PlantProfile.macro, PlantProfile.micro, PlantProfile.salt]:
                     for i in param_list:
                         t = data.get(i, None)
                         if t:
                             setattr(pp, i, t)
+                            
                 if pushed_element:
                     if 'matrix' in pushed_element:
                         t, a, b, = pushed_element.split('-')
@@ -257,7 +258,6 @@ def plant_profile_precalc(request, pk):
                         if b == 'n':
                             m_delta = Decimal(new / old)
                             if pp.nh4 and pp.no3:
-                                
                                 pp.nh4 = Decimal(pp.nh4) * m_delta
                                 pp.no3 = Decimal(pp.no3) * m_delta
                             
@@ -267,7 +267,25 @@ def plant_profile_precalc(request, pk):
                             elif not pp.nh4 and pp.no3:
                                 pp.no3 = Decimal(pp.no3) * Decimal(m_delta)
                         
-                        setattr(pp, b, "{:.3f}".format(new))
+                        setattr(pp, b, "{:.2f}".format(new))
+                        
+                    else:
+                        if pushed_element == 'nh4':
+                            pp.no3 = Decimal(pp.n)  - Decimal(pp.nh4)
+                            
+                        elif pushed_element == 'no3':
+                            pp.nh4 = Decimal(pp.n) - Decimal(pp.no3)
+                            
+                        if pushed_element == 'n':
+                            pp.nh4 = Decimal(pp.n) / Decimal(100) * Decimal(9)
+                            pp.no3 = Decimal(pp.n) / Decimal(100) * Decimal(91)
+
+                            
+                        
+                        
+                        
+                       
+                        
                 
                 data = {}
                 pp.recalc()

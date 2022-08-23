@@ -40,7 +40,7 @@ input.precalc[type='number']{
 
 @media screen and (min-width: 1024px) {
 	input.precalc[type='number']{
-	width: 73px;
+	width: 80px;
 	height: 25px;
 	}
 	.macro-salt > input.precalc[type='number']{
@@ -77,10 +77,7 @@ input.precalc[type='number']{
 	.salt-formula{ display: inline-block;}
 	.salt-name-formula{display: none}
 	.col-1{    width: 11%;}
-	   html{
-			  width: 768px;
-			  overflow: auto;
-		  }
+
 }
 
 

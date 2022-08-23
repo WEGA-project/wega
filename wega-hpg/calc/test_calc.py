@@ -129,17 +129,42 @@ class TestMatrix(TestCase):
         b = Decimal(self.profile.p)
         t_old = a / b
         t_new = Decimal('6')
-        c = a/t_new
-   
+        c = a / t_new
+        
         print(
             'old a', "{:.2f}".format(a),
             'old b', "{:.2f}".format(b),
             't_old', "{:.2f}".format(t_old),
             't_new', "{:.2f}".format(t_new),
-    
-            'a/c', "{:.2f}".format(a/c),
-            'c', "{:.2f}".format(c),
             
-    
+            'a/c', "{:.2f}".format(a / c),
+            'c', "{:.2f}".format(c),
+        
         )
+
+
+class TetN(TestCase):
+    
+    def setUp(self):
+        self.user = User.objects.create_user(username='test_user', password='12345')
+        # login = self.client.login(username='testuser', password='12345')
+        fields = {"name": "for_test.hpg", "user": self.user, "ec": "0.000", "ppm": "0.000", "calc_mode": "K",
+                  "n": "220.000",
+                  "no3": "200.000", "nh4": "20.000", "p": "40.000", "k": "180.000", "ca": "200.000", "mg": "50.000",
+                  "s": "68.527", "cl": "10.000", "fe": "6000.000", "mn": "550.000", "b": "500.000", "zn": "60.000",
+                  "cu": "60.000", "mo": "60.000", "co": "50.000", "si": "0.000", "cano3_ca": "16.972",
+                  "cano3_no3": "11.863", "cano3_nh4": "0.000", "kno3_k": "38.672", "kno3_no3": "13.854",
+                  "nh4no3_nh4": "17.499", "nh4no3_no3": "17.499", "mgso4_mg": "9.861", "mgso4_s": "13.010",
+                  "kh2po4_k": "28.731", "kh2po4_p": "22.761", "k2so4_k": "44.874", "k2so4_s": "18.401",
+                  "mgno3_mg": "9.483", "mgno3_no3": "10.930", "cacl2_ca": "18.294", "cacl2_cl": "32.366"}
+        pp = PlantProfile(**fields)
+        pp.save()
+        self.profile = pp
+    
+    def tearDown(self):
+        # Очистка после каждого метода
+        pass
+    
+    def test_calc_s(self):
+       n = 100
   
