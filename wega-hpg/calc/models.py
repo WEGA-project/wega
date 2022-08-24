@@ -168,8 +168,6 @@ class PlantProfile(models.Model):
     
     def to_json(self):
         
-        
-        
         data = {'pk': self.pk, 'ec': self.ec, 'ppm': self.ppm, 'npk': self.npk,
                 'npk_formula':self.npk_formula, 'npk_magazine':self.npk_magazine }
         for s in self.macro:

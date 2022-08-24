@@ -71,13 +71,11 @@ $(document).ready(function () {
     function recalc(data) {
 
         for (i in data.pp) {
-            console.log("#id_" + i, data.pp[i])
-            if ($("#id_" + i).has('text')){
-                  $("#id_" + i).text( data.pp[i]);
-            } else {
+            // console.log("#id_" + i, data.pp[i])
+
             $("#id_" + i).attr('value', data.pp[i]);
             $("#id_" + i).val( data.pp[i]);
-            }
+             $("#id_" + i).text( data.pp[i]);
 
 
         }

@@ -234,7 +234,11 @@ def plant_profile_precalc(request, pk):
                 calc_mode = data.get('calc_mode')
                 litres = data.get('litres')
                 pp.litres = float(litres)
-                pp.calc_mode = calc_mode
+                if calc_mode=='Mg':
+                    pp.calc_mode = PlantProfile.CalcMode.Mg
+                else:
+                    pp.calc_mode = PlantProfile.CalcMode.K
+                print('calc_mode', calc_mode)
                 for param_list in [['ppm', 'ec', ], PlantProfile.macro, PlantProfile.micro, PlantProfile.salt]:
                     for i in param_list:
                         t = data.get(i, None)
