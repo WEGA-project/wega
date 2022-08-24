@@ -34,8 +34,17 @@ $(document).ready(function () {
         var i;
         var dicts = {};
         dicts['pushed_element'] = $(this).attr('name');
+        dicts['calc_mode'] = $("#id_calc_mode").val();
+        dicts['litres'] = $("#id_litres").val();
+
+        dicts['id_npk_formula'] = $("#id_npk_formula").val();
+        dicts['id_npk_magazine'] = $("#id_npk_magazine").val();
+
+
+
 
         dicts[$(this).attr('name')] = $(this).val();
+
         for (i = 0; i < out_list.length; ++i) {
             t = $('#' + 'id_' + out_list[i])
             dicts[out_list[i]] = t.val();
@@ -62,8 +71,14 @@ $(document).ready(function () {
     function recalc(data) {
 
         for (i in data.pp) {
+            console.log("#id_" + i, data.pp[i])
+            if ($("#id_" + i).has('text')){
+                  $("#id_" + i).text( data.pp[i]);
+            } else {
+            $("#id_" + i).attr('value', data.pp[i]);
             $("#id_" + i).val( data.pp[i]);
-             $("#id_" + i).attr('value', data.pp[i]);
+            }
+
 
         }
 

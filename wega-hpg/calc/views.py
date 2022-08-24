@@ -1,6 +1,5 @@
 import json
 import logging
-from decimal import Decimal
 
 import django_tables2
 from django.contrib.auth.decorators import login_required
@@ -37,8 +36,6 @@ def plant_profiles(request):
         request.session['show_micro'] = not filter_form.cleaned_data.get('hide_micro')
         request.session['show_salt'] = not filter_form.cleaned_data.get('hide_salt')
         request.session['show_gramms'] = not filter_form.cleaned_data.get('show_gramms')
-
-        
     
     if request.session.get('show_macro'):
         columns += PlantProfile.macro
@@ -60,15 +57,15 @@ def plant_profiles(request):
             extra_columns.append((item, django_tables2.Column()))
     else:
         filter_form.fields['hide_salt'].widget.attrs['checked'] = ''
-
+    
     if request.session.get('show_gramms'):
         columns += PlantProfile.salt_gramms
         for item in PlantProfile.salt_gramms:
-            extra_columns.append((item,  django_tables2.Column()))
-
+            extra_columns.append((item, django_tables2.Column()))
+    
     else:
         filter_form.fields['show_gramms'].widget.attrs['checked'] = ''
-        
+    
     extra_columns.append(('action', ModalBtn(verbose_name='', )))
     data = []
     query = PlantProfile.objects.filter(user=request.user, template=None)
@@ -77,10 +74,9 @@ def plant_profiles(request):
         cols['action'] = pp.pk
         pp.recalc()
         for col in columns:
-            
             cols[col] = getattr(pp, col)
         data.append(cols)
-        
+    
     my_table = PlatProfileTable(data, extra_columns=extra_columns)
     RequestConfig(request, paginate={'per_page': 10}).configure(my_table)
     context['table'] = my_table
@@ -100,13 +96,11 @@ def plant_profile_history(request, pk):
     history_column = HistoryColumn()
     extra_columns.append(('pk', django_tables2.Column()))
     extra_columns.append(('date', HistoryColumn()))
-
-   
+    
     extra_columns.append(('calc_mode', history_column))
     extra_columns.append(('name', history_column))
-
     
-    columns = ['pk,''name',]
+    columns = ['pk,''name', ]
     
     filter_form = context['filter']
     if request.GET.get('filter') and filter_form.is_valid():
@@ -144,11 +138,11 @@ def plant_profile_history(request, pk):
     
     else:
         filter_form.fields['show_gramms'].widget.attrs['checked'] = ''
- 
+    
     extra_columns.append(('action', ModalBtn(verbose_name='', )))
     history_data = PlantProfileHistory.objects.filter(profile_id=pk)
     data = []
-   
+    
     for history in history_data:
         p = simplejson.loads(history.profile_data)
         p['user_id'] = p['user']
@@ -170,10 +164,8 @@ def plant_profile_history(request, pk):
         
         vals['action'] = p.get('id')
         vals['pk'] = p.get('id')
-       
-        vals['date'] = history.date
-
         
+        vals['date'] = history.date
         
         data.append(vals)
     my_table = PlatProfileTable(data, extra_columns=extra_columns)
@@ -233,62 +225,66 @@ def create_plant_profile(request):
 @login_required
 @csrf_exempt
 def plant_profile_precalc(request, pk):
-    calc_mode = 'salt'
     try:
         pp = PlantProfile.objects.get(pk=pk, user=request.user)
         if is_ajax(request):
             if request.method == 'POST':
                 data = json.loads(request.body)
                 pushed_element = data.get('pushed_element')
-
+                calc_mode = data.get('calc_mode')
+                litres = data.get('litres')
+                pp.litres = float(litres)
+                pp.calc_mode = calc_mode
                 for param_list in [['ppm', 'ec', ], PlantProfile.macro, PlantProfile.micro, PlantProfile.salt]:
                     for i in param_list:
                         t = data.get(i, None)
                         if t:
                             setattr(pp, i, t)
-                            
+                
                 if pushed_element:
                     if 'matrix' in pushed_element:
                         t, a, b, = pushed_element.split('-')
                         val = data.get(pushed_element)
                         
-                        old = Decimal(getattr(pp, b))
-                        new = Decimal(getattr(pp, a)) / Decimal(val)
+                        old = float(getattr(pp, b))
+                        new = float(getattr(pp, a)) / float(val)
                         
                         if b == 'n':
-                            m_delta = Decimal(new / old)
+                            m_delta = float(new / old)
                             if pp.nh4 and pp.no3:
-                                pp.nh4 = Decimal(pp.nh4) * m_delta
-                                pp.no3 = Decimal(pp.no3) * m_delta
+                                t1 = float(pp.nh4) * m_delta
+                                t2 = float(pp.no3) * m_delta
+                                
+                                pp.nh4 = "{:.2f}".format(t1)
+                                pp.no3 = "{:.2f}".format(t2)
                             
                             elif pp.nh4 and not pp.no3:
-                                pp.nh4 = Decimal(pp.nh4) * Decimal(m_delta)
+                                t = float(pp.nh4) * float(m_delta)
+                                pp.nh4 = "{:.2f}".format(t)
                             
                             elif not pp.nh4 and pp.no3:
-                                pp.no3 = Decimal(pp.no3) * Decimal(m_delta)
+                                t = float(pp.no3) * float(m_delta)
+                                pp.no3 = "{:.2f}".format(t)
                         
                         setattr(pp, b, "{:.2f}".format(new))
-                        
+                    
                     else:
                         if pushed_element == 'nh4':
-                            pp.no3 = Decimal(pp.n)  - Decimal(pp.nh4)
-                            
+                            t = float(pp.n) - float(pp.nh4)
+                            pp.no3 = "{:.2f}".format(t)
+                        
                         elif pushed_element == 'no3':
-                            pp.nh4 = Decimal(pp.n) - Decimal(pp.no3)
-                            
+                            t = float(pp.n) - float(pp.no3)
+                            pp.nh4 = "{:.2f}".format(t)
+                        
                         if pushed_element == 'n':
-                            pp.nh4 = Decimal(pp.n) / Decimal(100) * Decimal(9)
-                            pp.no3 = Decimal(pp.n) / Decimal(100) * Decimal(91)
-
-                            
-                        
-                        
-                        
-                       
-                        
+                            t1 = float(pp.n) / float(100) * float(9)
+                            t2 = float(pp.n) / float(100) * float(91)
+                            pp.nh4 = "{:.2f}".format(t1)
+                            pp.no3 = "{:.2f}".format(t2)
                 
                 data = {}
-                pp.recalc()
+                pp.recalc(pushed_element=pushed_element)
                 data['pp'] = pp.to_json()
     
     
@@ -314,24 +310,15 @@ def edit_plant_profile(request, pk):
         if form.is_valid():
             new = form.save(commit=False)
             new.user = request.user
-            new.ec = 0
-            new.ppm = 0
-            
             changes = form.changed_data
             for item in PlantProfile.salt_gramms:
                 
                 if getattr(new, item)() != getattr(old_instance, item)():
-                    print(
-                        f'item {item} getattr(new,item)() {getattr(new, item)()} getattr(instance,item)() {getattr(old_instance, item)()}')
                     changes.append(item)
             
             new.save()
-            ph = PlantProfileHistory(profile=new,
-                                     # profile_data=simplejson.dumps(model_to_dict(new)),
-                                     # changed_data=simplejson.dumps(form.cleaned_data)
-                                     profile_data=simplejson.dumps(model_to_dict(new)),
-                                     changed_data=simplejson.dumps(changes)
-                                     )
+            ph = PlantProfileHistory(profile=new, profile_data=simplejson.dumps(model_to_dict(new)),
+                                     changed_data=simplejson.dumps(changes) )
             ph.save()
         else:
             context['form'] = form

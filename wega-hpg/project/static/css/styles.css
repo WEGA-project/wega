@@ -27,8 +27,14 @@ input.precalc[type='number']{
 	height: 25px;
 }
 
-.salts > .row {
-	height: 40px;
+
+
+.first-matrix-row {
+	height: 30px;
+}
+
+.salts > .row, .second-matrix-row {
+	height: 30px;
 }
 
 .salt-row:hover{
@@ -37,8 +43,18 @@ input.precalc[type='number']{
 }
 
 
+.w-salt-name{
+	width:333px;
+}
+
+.col-2{
+	width: 12.67% !important;
+}
+
+
 
 @media screen and (min-width: 1024px) {
+
 	input.precalc[type='number']{
 	width: 80px;
 	height: 25px;

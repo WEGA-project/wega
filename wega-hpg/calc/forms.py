@@ -27,9 +27,9 @@ class PlantProfileEditForm(forms.ModelForm):
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        if self.instance.calc_mode ==  PlantProfile.CalcMode.K:
-            del self.fields['mgno3_mg']
-            del self.fields['mgno3_no3']
+        # if self.instance.calc_mode ==  PlantProfile.CalcMode.K:
+        #     del self.fields['mgno3_mg']
+        #     del self.fields['mgno3_no3']
         
         
 
