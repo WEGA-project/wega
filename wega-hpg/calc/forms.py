@@ -45,6 +45,9 @@ class PlantProfileEditForm(forms.ModelForm):
                 visible.field.widget.attrs['class'] = 'form-control d-inline-block col'
             if visible.name == 'calc_mode':
                 visible.label= 'Метод расчета'
+            
+            if visible.name in ['p', 'cl']:
+                visible.field.widget.attrs['class']+=' hpg-green '
 
         
                 

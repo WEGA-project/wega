@@ -40,6 +40,11 @@ $(document).ready(function () {
         dicts['id_npk_formula'] = $("#id_npk_formula").val();
         dicts['id_npk_magazine'] = $("#id_npk_magazine").val();
 
+        dicts['nh4_nh3_ratio'] = $("#id_nh4_nh3_ratio").val();
+
+
+
+
 
 
 
@@ -71,13 +76,10 @@ $(document).ready(function () {
     function recalc(data) {
 
         for (i in data.pp) {
-            // console.log("#id_" + i, data.pp[i])
-
+            console.log("#id_" + i, data.pp[i])
             $("#id_" + i).attr('value', data.pp[i]);
             $("#id_" + i).val( data.pp[i]);
-             $("#id_" + i).text( data.pp[i]);
-
-
+            $("#id_" + i).text( data.pp[i]);
         }
 
 

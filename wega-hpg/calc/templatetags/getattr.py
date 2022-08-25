@@ -61,3 +61,7 @@ def git_ver():
         git_string = ''
     
     return git_string
+
+@register.filter
+def hpg_float_format(num):
+    return "{:.2f}".format( num )

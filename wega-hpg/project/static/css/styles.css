@@ -13,6 +13,15 @@
 	overflow-x: auto;
 }
 
+#id_matrix-ca-n, #id_matrix-ca-p,  #id_matrix-ca-k,  #id_matrix-ca-mg, #id_matrix-mg-k, #id_matrix-mg-ca, #id_matrix-p-k,
+#id_matrix-p-ca, #id_matrix-n-k,  #id_matrix-n-ca, #id_matrix-k-mg {
+	color: blue;
+}
+
+#id_matrix-n-mg, #id_matrix-p-mg, #id_matrix-mg-p  {
+	color: limegreen;
+}
+
 .container-fluid{padding: 0;}
 .col-1-w{
 	width: 10.0%!important;
@@ -33,8 +42,15 @@ input.precalc[type='number']{
 	height: 30px;
 }
 
+.first-macro-row {
+	height: 60px;
+}
+
 .salts > .row, .second-matrix-row {
 	height: 30px;
+}
+.height-30{
+		height: 30px;
 }
 
 .salt-row:hover{
@@ -44,13 +60,16 @@ input.precalc[type='number']{
 
 
 .w-salt-name{
-	width:333px;
+	width:355px;
 }
 
 .col-2{
 	width: 12.67% !important;
 }
 
+.hpg-green{
+	background-color: #c0dcc0;
+}
 
 
 @media screen and (min-width: 1024px) {

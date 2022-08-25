@@ -238,66 +238,25 @@ def plant_profile_precalc(request, pk):
                     pp.calc_mode = PlantProfile.CalcMode.Mg
                 else:
                     pp.calc_mode = PlantProfile.CalcMode.K
-                print('calc_mode', calc_mode)
-                for param_list in [['ppm', 'ec', ], PlantProfile.macro, PlantProfile.micro, PlantProfile.salt]:
+           
+                for param_list in [['ppm', 'ec', 'litres', 'nh4_nh3_ratio' ], PlantProfile.macro, PlantProfile.micro, PlantProfile.salt]:
                     for i in param_list:
                         t = data.get(i, None)
                         if t:
-                            setattr(pp, i, t)
-                
-                if pushed_element:
-                    if 'matrix' in pushed_element:
-                        t, a, b, = pushed_element.split('-')
-                        val = data.get(pushed_element)
-                        
-                        old = float(getattr(pp, b))
-                        new = float(getattr(pp, a)) / float(val)
-                        
-                        if b == 'n':
-                            m_delta = float(new / old)
-                            if pp.nh4 and pp.no3:
-                                t1 = float(pp.nh4) * m_delta
-                                t2 = float(pp.no3) * m_delta
-                                
-                                pp.nh4 = "{:.2f}".format(t1)
-                                pp.no3 = "{:.2f}".format(t2)
-                            
-                            elif pp.nh4 and not pp.no3:
-                                t = float(pp.nh4) * float(m_delta)
-                                pp.nh4 = "{:.2f}".format(t)
-                            
-                            elif not pp.nh4 and pp.no3:
-                                t = float(pp.no3) * float(m_delta)
-                                pp.no3 = "{:.2f}".format(t)
-                        
-                        setattr(pp, b, "{:.2f}".format(new))
-                    
-                    else:
-                        if pushed_element == 'nh4':
-                            t = float(pp.n) - float(pp.nh4)
-                            pp.no3 = "{:.2f}".format(t)
-                        
-                        elif pushed_element == 'no3':
-                            t = float(pp.n) - float(pp.no3)
-                            pp.nh4 = "{:.2f}".format(t)
-                        
-                        if pushed_element == 'n':
-                            t1 = float(pp.n) / float(100) * float(9)
-                            t2 = float(pp.n) / float(100) * float(91)
-                            pp.nh4 = "{:.2f}".format(t1)
-                            pp.no3 = "{:.2f}".format(t2)
+                            try:
+                                setattr(pp, i, float(t))
+                            except Exception as e:
+                                setattr(pp, i, t)
+                val = data.get(pushed_element)
+
                 
                 data = {}
-                pp.recalc(pushed_element=pushed_element)
+                pp.recalc(pushed_element=pushed_element, val=val)
                 data['pp'] = pp.to_json()
-    
-    
-    
     
     except PlantProfile.DoesNotExist:
         raise Http404
-    
-    # print(data)
+
     return JsonResponse(data)
 
 
