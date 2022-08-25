@@ -329,7 +329,7 @@ class PlantProfile(models.Model):
                 'npk_formula':self.npk_formula,
                 'npk_magazine':self.npk_magazine,
                 'captions': self.captions,
-                'salt_grams': "{:.2f}".self.salt_grams,
+                'salt_grams': "{:.2f}".format(self.salt_grams),
                 }
 
         for s in self.captions:
@@ -543,7 +543,9 @@ class PlantProfile(models.Model):
     def sum_salt_grams(self):
         s=0
         for i in self.salt_gramms:
-            i = getattr(self,i)()
+            i = getattr(self,i)
+            if callable(i):
+                i = i()
             s+=i
         return s/10
         
