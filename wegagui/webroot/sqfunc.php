@@ -381,9 +381,6 @@ IF @soilf is null THEN
 # Запас раствора вне бака
 set @LevelAdd:=(select value from config where parameter='LevelAdd' limit 1);
 
-# Плановое значение ЕС
-set @ECPlan:=(select value from config where parameter='ECPlan' limit 1);
-
 #Суммарный вес сухих солей в граммах в литре раствора
 set @sEC:=(select value from config where parameter='sEC' limit 1);
 

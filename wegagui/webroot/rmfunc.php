@@ -23,6 +23,7 @@ mysqli_query($link, "DROP FUNCTION IF EXISTS R3950;");
 mysqli_query($link, "DROP FUNCTION IF EXISTS R_reverse;");
 mysqli_query($link, "DROP FUNCTION IF EXISTS R_direct;");
 mysqli_query($link, "DROP FUNCTION IF EXISTS Rp;");
+mysqli_query($link, "DROP FUNCTION IF EXISTS soil;");
 
 mysqli_close($link);
 
