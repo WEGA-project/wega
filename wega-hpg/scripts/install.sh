@@ -18,7 +18,7 @@ source /var/WEGA/wega-hpg/venv/bin/activate
 pip3 install wheel
 pip3 install -r /var/WEGA/wega-hpg/requirements.txt
 chmod 744 /var/WEGA/wega-hpg/entrypoint.sh
-cp /var/WEGA/wega-hpg/scripts/wega-hpg.service /etc/systemd/system/wega-hpg.service
+cp -f /var/WEGA/wega-hpg/scripts/wega-hpg.service /etc/systemd/system/wega-hpg.service
 chmod 664 /etc/systemd/system/wega-hpg.service
 ln -s /var/WEGA/apache/wega-hpg.conf /etc/apache2/conf-enabled/
 mkdir -p /var/log/gunicron/
