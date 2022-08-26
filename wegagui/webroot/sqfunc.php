@@ -370,7 +370,36 @@ RETURN (4.579*pow(2.71828,((17.14*tt)/(235.3+tt))))*rh/100;
 END
 ");
 
+// Функция расчета соли в растворе
+mysqli_query($link, "
 
+CREATE FUNCTION `soil`(EC float, Level float) RETURNS float
+BEGIN
+
+IF @soilf is null THEN
+
+# Запас раствора вне бака
+set @LevelAdd:=(select value from config where parameter='LevelAdd' limit 1);
+
+# Плановое значение ЕС
+set @ECPlan:=(select value from config where parameter='ECPlan' limit 1);
+
+#Суммарный вес сухих солей в граммах в литре раствора
+set @sEC:=(select value from config where parameter='sEC' limit 1);
+
+#Расчетный ЕС раствора
+set @rEC:=(select value from config where parameter='rEC' limit 1);
+
+set @soilf:=1;
+END IF;
+
+# Формула x = (LevelAdd + Level) * (EC * (sEC/rEC))
+
+RETURN (@LevelAdd + Level ) * ( EC * (@sEC/@rEC) );
+
+
+END
+");
 
 
 
