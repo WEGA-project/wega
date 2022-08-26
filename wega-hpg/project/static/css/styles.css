@@ -75,7 +75,7 @@ input.precalc[type='number']{
 @media screen and (min-width: 1024px) {
 
 	input.precalc[type='number']{
-	width: 80px;
+	width: 85px;
 	height: 25px;
 	}
 	.macro-salt > input.precalc[type='number']{

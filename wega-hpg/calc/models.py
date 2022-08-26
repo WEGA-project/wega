@@ -221,10 +221,162 @@ class PlantProfile(models.Model):
             self.s = self.calc_s()
             
         if pushed_element in self.salt_gramms:
-            self.no3 = (self.cano3() * self.cano3_no3+ self.nh4_nh3_ratio * self.nh4no3_no3  +
-                        self.kno3()*self.kno3_no3 + self.mgno3()*self.mgno3_no3)/(0.1*self.litres)
-            self.nh4 = 1
+            val = float(val)
+            if pushed_element == 'cano3':
+                n_no3 = (val * self.cano3_no3+  self.nh4no3_no3 * self.nh4no3() + self.kno3() * self.kno3_no3 +
+                         self.mgno3() * self.mgno3_no3)
+                n_nh4 = (val*self.cano3_nh4 + self.nh4no3()*self.nh4no3_nh4)
+                n_n = n_no3+ n_nh4
+                n_p = (self.kh2po4()*self.kh2po4_p)
+                n_k = (self.kno3()*self.kno3_k + self.kh2po4()*self.kh2po4_k + self.k2so4()*self.k2so4_k)
+                n_ca = (val*self.cano3_ca+self.cacl2()*self.cacl2_ca)
+                n_mg = (self.mgso4()*self.mgso4_mg+self.mgno3()*self.mgno3_mg)
+                n_nhno3 = n_nh4/n_no3
+                n_cl = (self.cacl2()*self.cacl2_cl)
+                self.nh4_nh3_ratio = n_nhno3
+                self.n = n_n
+                self.p = n_p
+                self.k = n_k
+                self.ca = n_ca
+                self.mg = n_mg
+                self.cl = n_cl
 
+            if pushed_element == 'kno3':
+                n_no3 = (self.cano3() * self.cano3_no3 + self.nh4no3_no3 * self.nh4no3() +  val * self.kno3_no3 +
+                         self.mgno3() * self.mgno3_no3)
+                n_nh4 = (self.cano3() * self.cano3_nh4 + self.nh4no3() * self.nh4no3_nh4)
+                n_n = n_no3 + n_nh4
+                n_p = (self.kh2po4() * self.kh2po4_p)
+                n_k = ( val * self.kno3_k + self.kh2po4() * self.kh2po4_k + self.k2so4() * self.k2so4_k)
+                n_ca = (self.cano3() * self.cano3_ca + self.cacl2() * self.cacl2_ca)
+                n_mg = (self.mgso4() * self.mgso4_mg + self.mgno3() * self.mgno3_mg)
+                n_nhno3 = n_nh4 / n_no3
+                n_cl = (self.cacl2() * self.cacl2_cl)
+                self.nh4_nh3_ratio = n_nhno3
+                self.n = n_n
+                self.p = n_p
+                self.k = n_k
+                self.ca = n_ca
+                self.mg = n_mg
+                self.cl = n_cl
+    
+            if pushed_element == 'nh4no3':
+                n_no3 = (self.cano3() * self.cano3_no3 + self.nh4no3_no3 *  val + self.kno3() * self.kno3_no3 +
+                         self.mgno3() * self.mgno3_no3)
+                n_nh4 = (self.cano3() * self.cano3_nh4 +  val * self.nh4no3_nh4)
+                n_n = n_no3 + n_nh4
+                n_p = (self.kh2po4() * self.kh2po4_p)
+                n_k = (self.kno3() * self.kno3_k + self.kh2po4() * self.kh2po4_k + self.k2so4() * self.k2so4_k)
+                n_ca = (self.cano3() * self.cano3_ca + self.cacl2() * self.cacl2_ca)
+                n_mg = (self.mgso4() * self.mgso4_mg + self.mgno3() * self.mgno3_mg)
+                n_nhno3 = n_nh4 / n_no3
+                n_cl = (self.cacl2() * self.cacl2_cl)
+                self.nh4_nh3_ratio = n_nhno3
+                self.n = n_n
+                self.p = n_p
+                self.k = n_k
+                self.ca = n_ca
+                self.mg = n_mg
+                self.cl = n_cl
+            
+            if pushed_element == 'mgso4':
+                n_no3 = (self.cano3() * self.cano3_no3 + self.nh4no3_no3 * self.nh4no3() + self.kno3() * self.kno3_no3 +
+                         self.mgno3() * self.mgno3_no3)
+                n_nh4 = (self.cano3() * self.cano3_nh4 + self.nh4no3() * self.nh4no3_nh4)
+                n_n = n_no3 + n_nh4
+                n_p = (self.kh2po4() * self.kh2po4_p)
+                n_k = (self.kno3() * self.kno3_k + self.kh2po4() * self.kh2po4_k + self.k2so4() * self.k2so4_k)
+                n_ca = (self.cano3() * self.cano3_ca + self.cacl2() * self.cacl2_ca)
+                n_mg = ( val * self.mgso4_mg + self.mgno3() * self.mgno3_mg)
+                n_nhno3 = n_nh4 / n_no3
+                n_cl = (self.cacl2() * self.cacl2_cl)
+                self.nh4_nh3_ratio = n_nhno3
+                self.n = n_n
+                self.p = n_p
+                self.k = n_k
+                self.ca = n_ca
+                self.mg = n_mg
+                self.cl = n_cl
+            
+            if pushed_element == 'kh2po4':
+                n_no3 = (self.cano3() * self.cano3_no3 + self.nh4no3_no3 * self.nh4no3() + self.kno3() * self.kno3_no3 +
+                         self.mgno3() * self.mgno3_no3)
+                n_nh4 = (self.cano3() * self.cano3_nh4 + self.nh4no3() * self.nh4no3_nh4)
+                n_n = n_no3 + n_nh4
+                n_p = ( val * self.kh2po4_p)
+                n_k = (self.kno3() * self.kno3_k +  val * self.kh2po4_k + self.k2so4() * self.k2so4_k)
+                n_ca = (self.cano3() * self.cano3_ca + self.cacl2() * self.cacl2_ca)
+                n_mg = (self.mgso4() * self.mgso4_mg + self.mgno3() * self.mgno3_mg)
+                n_nhno3 = n_nh4 / n_no3
+                n_cl = (self.cacl2() * self.cacl2_cl)
+                self.nh4_nh3_ratio = n_nhno3
+                self.n = n_n
+                self.p = n_p
+                self.k = n_k
+                self.ca = n_ca
+                self.mg = n_mg
+                self.cl = n_cl
+
+            if pushed_element == 'k2so4':
+                n_no3 = (self.cano3() * self.cano3_no3 + self.nh4no3_no3 * self.nh4no3() + self.kno3() * self.kno3_no3 +
+                         self.mgno3() * self.mgno3_no3)
+                n_nh4 = (self.cano3() * self.cano3_nh4 + self.nh4no3() * self.nh4no3_nh4)
+                n_n = n_no3 + n_nh4
+                n_p = (self.kh2po4() * self.kh2po4_p)
+                n_k = (self.kno3() * self.kno3_k + self.kh2po4() * self.kh2po4_k +  val * self.k2so4_k)
+                n_ca = (self.cano3() * self.cano3_ca + self.cacl2() * self.cacl2_ca)
+                n_mg = (self.mgso4() * self.mgso4_mg + self.mgno3() * self.mgno3_mg)
+                n_nhno3 = n_nh4 / n_no3
+                n_cl = (self.cacl2() * self.cacl2_cl)
+                self.nh4_nh3_ratio = n_nhno3
+                self.n = n_n
+                self.p = n_p
+                self.k = n_k
+                self.ca = n_ca
+                self.mg = n_mg
+                self.cl = n_cl
+            
+            if pushed_element == 'mgno3':
+                n_no3 = (self.cano3() * self.cano3_no3 + self.nh4no3_no3 * self.nh4no3() + self.kno3() * self.kno3_no3 +
+                          val * self.mgno3_no3)
+                n_nh4 = (self.cano3() * self.cano3_nh4 + self.nh4no3() * self.nh4no3_nh4)
+                n_n = n_no3 + n_nh4
+                n_p = (self.kh2po4() * self.kh2po4_p)
+                n_k = (self.kno3() * self.kno3_k + self.kh2po4() * self.kh2po4_k + self.k2so4() * self.k2so4_k)
+                n_ca = (self.cano3() * self.cano3_ca + self.cacl2() * self.cacl2_ca)
+                n_mg = (self.mgso4() * self.mgso4_mg +  val * self.mgno3_mg)
+                n_nhno3 = n_nh4 / n_no3
+                n_cl = (self.cacl2() * self.cacl2_cl)
+                self.nh4_nh3_ratio = n_nhno3
+                self.n = n_n
+                self.p = n_p
+                self.k = n_k
+                self.ca = n_ca
+                self.mg = n_mg
+                self.cl = n_cl
+            
+            if pushed_element == 'cacl2':
+                n_no3 = (self.cano3() * self.cano3_no3 + self.nh4no3_no3 * self.nh4no3() + self.kno3() * self.kno3_no3 +
+                         self.mgno3() * self.mgno3_no3)
+                n_nh4 = (self.cano3() * self.cano3_nh4 + self.nh4no3() * self.nh4no3_nh4)
+                n_n = n_no3 + n_nh4
+                n_p = (self.kh2po4() * self.kh2po4_p)
+                n_k = (self.kno3() * self.kno3_k + self.kh2po4() * self.kh2po4_k + self.k2so4() * self.k2so4_k)
+                n_ca = (self.cano3() * self.cano3_ca +  val * self.cacl2_ca)
+                n_mg = (self.mgso4() * self.mgso4_mg + self.mgno3() * self.mgno3_mg)
+                n_nhno3 = n_nh4 / n_no3
+                n_cl = ( val * self.cacl2_cl)
+ 
+          
+                self.nh4_nh3_ratio = n_nhno3
+                self.n = n_n
+                self.p = n_p
+                self.k = n_k
+                self.ca = n_ca
+                self.mg = n_mg
+                self.cl = n_cl
+            setattr(self, pushed_element, float(val))
+            
         if pushed_element == 'nh4':
             t = self.n - self.nh4
             self.no3 = t
@@ -239,11 +391,10 @@ class PlantProfile(models.Model):
             self.no3 = self.n / (self.nh4_nh3_ratio + 1)
             self.nh4 = self.nh4_nh3_ratio* self.n/ (self.nh4_nh3_ratio+1)
             
-            
-        if pushed_element != 's':
+        if pushed_element not in  ['s', 'litres']:
             self.s = self.calc_s()
             
-        if pushed_element != 'ca':
+        if pushed_element not in  ['ca', 'litres'] :
             self.ca = self.calc_ca()
         
         if pushed_element=='cano3_ca':
@@ -305,8 +456,10 @@ class PlantProfile(models.Model):
         
         
         for i in self.salt_gramms:
-            a = getattr(self, i)()
-            setattr(self, i,  a / 10)
+            a = getattr(self, i)
+            if callable(a):
+                a = a()
+            setattr(self, i,  a   )
         
         self.ec =  self.calc_ec()
         self.ppm = self.calc_ppm()
@@ -321,6 +474,7 @@ class PlantProfile(models.Model):
         data = {'pk': self.pk,
                 'ec': "{:.2f}".format(self.ec),
                 'ppm': "{:.2f}".format(self.ppm),
+                'litres': self.litres,
                 'npk': self.npk,
                 'npk_formula':self.npk_formula,
                 'npk_magazine':self.npk_magazine,
@@ -340,12 +494,15 @@ class PlantProfile(models.Model):
         for s, d in self.salt_dict.items():
             data[s] = "{:.2f}".format(getattr(self, s) )
             for i in d.get('salt'):
-                data[i] = "{:.2f}".format(getattr(self, i) )
+                data[i] = "{:.2f}".format( getattr(self, i) )
         
         matrix = self.get_matrix(as_dict=True)
         for k, i in matrix.items():
-            data[f'matrix-{k}'] = "{:.2f}".format(i)
-        
+            if i :
+                data[f'matrix-{k}'] = "{:.2f}".format(i)
+            else:
+                data[f'matrix-{k}'] = 0
+           
         return data
     
     
@@ -361,7 +518,7 @@ class PlantProfile(models.Model):
     @float_exception
     def kh2po4(self):
         a = self.p / self.kh2po4_p
-        return a * self.litres
+        return a * self.litres / 10
     
     def calc_ec(self):
         
@@ -387,7 +544,7 @@ class PlantProfile(models.Model):
         i = m.N * m.P * m.Mg * m.K * m.S * m.Cl
         ans = (-m.Ca * (b - c + 2 * d + e - f - 2 * g - h)) / (2 * i)
         
-        return ans
+        return ans * self.litres / 10
     
     @float_exception
     def kno3(self):
@@ -398,11 +555,11 @@ class PlantProfile(models.Model):
             d = self.k2so4_k * self.kh2po4_p * self.mg * self.mgso4_s
             e = self.kno3_k * self.kh2po4_p * self.k2so4_s * self.mgso4_mg
             f = -(-a + b + c - d) / e
-            return f * self.litres
+            return f * self.litres / 10
         else:
             a = self.k * self.kh2po4_p - self.p * self.kh2po4_k
             b = self.kno3_k * self.kh2po4_p
-            return (a / b) * self.litres
+            return (a / b) * self.litres / 10
         return 0
     
     @float_exception
@@ -410,7 +567,8 @@ class PlantProfile(models.Model):
         a = self.ca * self.cacl2_cl - self.cl * self.cacl2_ca
         b = self.cano3_ca * self.cacl2_cl
         c = a / b
-        return c * self.litres
+        return c * self.litres / 10
+    
     
     @float_exception
     def mgso4(self):
@@ -418,12 +576,12 @@ class PlantProfile(models.Model):
             a = self.mg
             b = self.mgso4_mg
             c = a / b
-            return c * self.litres
+            return c * self.litres / 10
         else:
             a = self.s
             b = self.mgso4_s
             c = a / b
-            return c * self.litres
+            return c * self.litres / 10
         return 0
     
     @float_exception
@@ -432,7 +590,7 @@ class PlantProfile(models.Model):
             a = self.s * self.mgso4_mg - self.mg * self.mgso4_s
             b = self.k2so4_s * self.mgso4_mg
             c = a / b
-            return c * self.litres
+            return c * self.litres / 10
         return 0
     
     @float_exception
@@ -442,14 +600,14 @@ class PlantProfile(models.Model):
         c = self.cano3_nh4 * self.cl * self.cacl2_ca
         d = self.nh4no3_nh4 * self.cano3_ca * self.cacl2_cl
         e = -(-a + b - c) / d
-        return e * self.litres
+        return e * self.litres / 10
     
     @float_exception
     def cacl2(self):
         a = self.cl
         b = self.cacl2_cl
         c = a / b
-        return c * self.litres
+        return c * self.litres / 10
     
     @float_exception
     def mgno3(self):
@@ -457,7 +615,7 @@ class PlantProfile(models.Model):
             a = self.mg * self.mgso4_s - self.mgso4_mg * self.s
             b = self.mgno3_mg * self.mgso4_s
             c = a / b
-            return c * self.litres
+            return c * self.litres / 10
         return 0
     
     @float_exception
@@ -543,7 +701,7 @@ class PlantProfile(models.Model):
             if callable(i):
                 i = i()
             s+=i
-        return s/10
+        return s
         
  
 

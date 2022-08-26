@@ -45,7 +45,8 @@
                             <div class="error">{{ form.litres.errors }}</div>
                         </div>
                         <div class="mb-3  col-2 p-1">
-                            <label  id="id_salt_grams" class="form-label precalc">Солей в граммах: {{ instance.sum_salt_grams|hpg_float_format }}</label>
+                            <label for="">Солей в граммах:</label>
+                            <label  id="id_salt_grams" class="form-label precalc"> {{ instance.sum_salt_grams|hpg_float_format }}</label>
                         </div>
 
 
@@ -123,7 +124,7 @@
 
 
                           <div class="mb-3 col-1 p-1  macro-salt text-center">
-                                <input type="number" name="nh4_nh3_ratio"  value="{{ instance.nh4_nh3_ratio|hpg_float_format  }}"  step="0.1"
+                                <input type="number" name="nh4_nh3_ratio"  value="{{ instance.nh4_nh3_ratio|hpg_float_format  }}"  step="0.01"
                                      class="form-control d-inline-block precalc hpg-green" required="" id="id_nh4_nh3_ratio">
 
 
@@ -170,7 +171,7 @@
                                                name="matrix-{{ elem }}-{{ parent_elem }}"
                                                id="id_matrix-{{ elem }}-{{ parent_elem  }}"
                                                value="{{ val|hpg_float_format }}"
-                                               step="{% if parent_elem == 'n' %}0.01{% else %}0.01{% endif %}"
+                                               step="0.01"
                                                class="form-control d-inline-block precalc matrix {% if elem == 'k' %} {% if parent_elem == 'n' or parent_elem == 'mg' or parent_elem == 'ca' %}hpg-green{% endif %}{% endif %}"
                                                {% if forloop.parentloop.counter == forloop.counter   %}disabled{% endif %}
                                                required="" id="id_matrix-{{ elem }}-
@@ -216,8 +217,10 @@
                                 <div class="mb-1 text-center col-1 p-1 d-flex align-items-center justify-content-between">
 
                                     <input type="number"  name="{{ comon }}"
-                                           value="{{ instance|getattribute:comon|divide:10|hpg_float_format }}"
+                                           value="{{ instance|getattribute:comon|hpg_float_format }}"
                                            step="0.01" class="form-control d-inline-block precalc" required=""
+                                           {% if comon == 'kno3' and instance.calc_mode == 'Mg' %}disabled{% endif %}
+                                           {% if comon == 'mgno3' and instance.calc_mode == 'K' %}disabled{% endif %}
                                            id="id_{{ comon }}">
                                 </div>
                             </div>

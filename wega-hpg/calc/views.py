@@ -248,8 +248,6 @@ def plant_profile_precalc(request, pk):
                             except Exception as e:
                                 setattr(pp, i, t)
                 val = data.get(pushed_element)
-
-                
                 data = {}
                 pp.recalc(pushed_element=pushed_element, val=val)
                 data['pp'] = pp.to_json()
