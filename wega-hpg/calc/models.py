@@ -300,11 +300,7 @@ class PlantProfile(models.Model):
         if pushed_element == 'cano3_no3':
             self.cano3_ca = -m.Ca * (self.cano3_nh4 - self.cano3_no3) / (2 * m.N)
 
-        
-    
-            
-            
-            
+
         self.captions = self.calc_captions()
         
         
