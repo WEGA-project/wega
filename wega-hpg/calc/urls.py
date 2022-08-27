@@ -7,6 +7,10 @@ urlpatterns = [
     path('plant_profile/new/', create_plant_profile, name='plant_profile_new'),
     path('plant_profile/from-file/', upload_plant_profile, name='upload_plant_profile'),
     path('plant_profile/<int:pk>/', edit_plant_profile, name='plant_profile_edit'),
+    path('plant_profile_micro/<int:pk>/', edit_plant_profile, kwargs={'micro':True},  name='plant_profile_edit_micro'),
+    
+
+    
     
     path('plant_profile_history/<int:pk>/', plant_profile_history, name='plant_profile_history'),
     

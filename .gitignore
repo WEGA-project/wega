@@ -314,3 +314,5 @@ db.php
 wega-slim/cache/**
 /.idea/
 /venv/
+/wega-hpg/examples/
+/wega-hpg/utils/

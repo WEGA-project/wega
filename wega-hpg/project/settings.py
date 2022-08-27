@@ -191,5 +191,6 @@ LOGGING = {
 }
 
 SHORT_DATETIME_FORMAT="%Y-%m-%d"
+# CACHES={'default':{'BACKEND': 'django.core.cache.backends.dummy.DummyCache',}}
 
 from .default_user import *

@@ -4,7 +4,6 @@ import logging
 import django_tables2
 from django.contrib.auth.decorators import login_required
 
-from django.db.models import F
 from django.shortcuts import redirect, render, HttpResponse
 from django.http import JsonResponse, Http404
 from django.views.decorators.csrf import csrf_exempt
@@ -12,7 +11,7 @@ from django_tables2 import RequestConfig
 from calc.forms import DelForm, FilterForm, PlantProfileAddForm, PlantProfileEditForm, \
     PlantProfileUploadForm
 from calc.models import PlantProfile, PlantProfileHistory
-from calc.tables import HistoryColumn, ModalBtn, PlatProfileMatrixTable, PlatProfileTable
+from calc.tables import HistoryColumn, ModalBtn,  PlatProfileTable
 from project.utils import DataMixin
 import simplejson
 
@@ -183,11 +182,10 @@ def upload_plant_profile(request):
         for f in files:
             data = f.read().decode('utf-8')
             create_kw = {'name': str(f)}
-            
+            key_list =  PlantProfile.model_create_fields
             for item in data.splitlines():
                 key, value = item.split('=')
-                
-                if key.lower() in PlantProfile.micro or key.lower() in PlantProfile.macro or key.lower() in PlantProfile.salt:
+                if key.lower() in  key_list :
                     create_kw[key.lower()] = "{:.2f}".format(float(value))
             
             try:
@@ -232,14 +230,24 @@ def plant_profile_precalc(request, pk):
                 data = json.loads(request.body)
                 pushed_element = data.get('pushed_element')
                 calc_mode = data.get('calc_mode')
+                micro_calc_mode = data.get('micro_calc_mode')
                 litres = data.get('litres')
                 pp.litres = float(litres)
-                if calc_mode=='Mg':
+                
+                if calc_mode == 'Mg':
                     pp.calc_mode = PlantProfile.CalcMode.Mg
                 else:
                     pp.calc_mode = PlantProfile.CalcMode.K
-           
-                for param_list in [['ppm', 'ec', 'litres', 'nh4_nh3_ratio' ], PlantProfile.macro, PlantProfile.micro, PlantProfile.salt]:
+                    
+                
+                if micro_calc_mode in ['b', 'B']:
+                    pp.micro_calc_mode = PlantProfile.CalcMicroMode.B
+                else:
+                    pp.micro_calc_mode = PlantProfile.CalcMicroMode.U
+                
+                for param_list in [['ppm', 'ec', 'litres', 'nh4_nh3_ratio', 'v_micro' ], PlantProfile.macro,
+                                   PlantProfile.micro, PlantProfile.salt,  PlantProfile.salt_micro_gramm,
+                                   PlantProfile.salt_micro_persent]:
                     for i in param_list:
                         t = data.get(i, None)
                         if t:
@@ -258,14 +266,21 @@ def plant_profile_precalc(request, pk):
     return JsonResponse(data)
 
 
+
+ 
+    
+    
 @login_required
-def edit_plant_profile(request, pk):
-    context = DataMixin.get_user_context(title="Редактируем профиль", btn_name="Сохранить")
+def edit_plant_profile(request, pk, micro=False):
+    t = 'Микро' if micro else 'Макро'
+    context = DataMixin.get_user_context(title=f"{t} профиля", btn_name="Сохранить")
     instance = PlantProfile.objects.get(user=request.user, pk=pk)
     old_instance = PlantProfile.objects.get(user=request.user, pk=pk)
     form = PlantProfileEditForm(instance=instance)
     context['form'] = form
+    context['micro'] = micro
     context['instance'] = instance
+    instance.calc_micro()
     if request.method == 'POST':
         form = PlantProfileEditForm(instance=instance, data=request.POST)
         if form.is_valid():
@@ -281,10 +296,11 @@ def edit_plant_profile(request, pk):
             ph = PlantProfileHistory(profile=new, profile_data=simplejson.dumps(model_to_dict(new)),
                                      changed_data=simplejson.dumps(changes) )
             ph.save()
+            return redirect('profile_index')
         else:
             context['form'] = form
         
-        return redirect('profile_index')
+        
     
     return render(request, 'calc/edit.html', context=context)
 

@@ -31,12 +31,23 @@
                             {{ form.name }}
                             <div class="error">{{ form.name.errors }}</div>
                         </div>
+                        {% if micro == False %}
                         <div class="mb-3  col-3 p-1">
                             <label for="{{ form.calc_mode.label.id_for_label }}"
                                    class="form-label">{{ form.calc_mode.label }}</label>
                             {{ form.calc_mode }}
                             <div class="error">{{ form.calc_mode.errors }}</div>
                         </div>
+                        {% else %}
+                              <div class="mb-3  col-3 p-1">
+                                    <label for="{{ form.micro_calc_mode.label.id_for_label }}"
+                                           class="form-label">{{ form.micro_calc_mode.label }}</label>
+                                    {{ form.micro_calc_mode }}
+                                    <div class="error">{{ form.micro_calc_mode.errors }}</div>
+                                </div>
+                        {% endif %}
+
+
 
                           <div class="mb-3  col-1 p-1">
                             <label for="{{ form.litres.label.id_for_label }}"
@@ -59,6 +70,7 @@
 
 
                 </div>
+                {% if not micro %}
 
                     <div class="row">
 
@@ -233,14 +245,119 @@
 
                 </div>
 
+                    {% else %}
+                     <div class="row">
+
+
+                     <div class="row">
+                        <h5 class=" ">Микропрофиль в <span class="text-danger">мкг/л</span> (ppm)</h5>
+                    </div>
+                        <div class="row row-cols-auto first-macro-row">
+                        <div class="col-1"></div>
+                            {% for f in form %}
+
+                                {% if f.name in instance.micro    %}
+
+
+                                    <div class="mb-3 col-1 p-1  macro-salt text-center">
+                                        <label for="{{ f.id_for_label }}" class="form-label">{{ f.label }}</label>
+                                        {{ f }}
+                                        <div class="error">{{ f.errors }}</div>
+                                    </div>
+
+
+                                    {% endif %}
+
+
+                            {% endfor %}
+
+
+                        </div>
+
+                    <div class="row">
+                        <h5>Составы солей</h5>
+                    </div>
+
+                    <div class="row salts">
+
+
+                    <div class="row">
+                        <div class="col-2"></div>
+                        <div class="col-1">
+                            <label for="">доля (%)</label>
+                        </div>
+                        <div class="col-1 ps-0 text-left">
+                            <label for="">граммы</label>
+                        </div>
+                    </div>
+                        {% for salt, salt_data in instance.salt_micro_dict.items %}
+                              <div class="row salt-row">
+                                <div class="col-2 d-sm-flex pt-2 justify-content-start salt_name w-salt-name">
+                                    <span id="id_name-{{ salt_data.name }}"class="salt-name-formula">{{ salt_data.name }} </span>
+                                    <span class="  salt-formula">{{ salt_data.name}}</span>
+                                </div>
+                                <div class="mb-1 text-center col-6 p-1 d-flex align-items-center justify-content-start">
+
+                                    <input type="number"  name="d{{ salt }}"
+                                           value="{{ instance|getattribute:salt_data.d|hpg_float_format }}"
+                                           step="1" class="form-control d-inline-block  w-115 precalc" required=""
+                                           id="id_d{{ salt }}">
+                                     <input type="number"  name="g{{ salt }}"
+                                           value="{{ instance|getattribute:salt_data.g|floatformat:5 }}"
+                                           step="0.001" class="form-control w-115 d-inline-block precalc" required=""
+                                           id="id_g{{ salt }}">
+                                </div>
+                            </div>
+
+                        {% endfor %}
+
+
+                    </div>
+
+
+                </div>
+
+
+
+                {% endif %}
+
+
 
             </form>
+            <div class="row">
+                         <div class="row mt-3">
+                             <p>Всего необходимо добавить на
+                                 <input type="number"  name="v_micro"
+                                           value="{{  instance.v_micro|floatformat:0 }}"
+                                           step="100" class="form-control w-115 d-inline-block precalc" required=""
+                                           id="id_v_micro"> <span class="text-danger">мл</span>
+
+                                    <input type="number"  name="weight_micro"
+                                           value="{{  instance.weight_micro|floatformat:5 }}"
+                                           step="0.001" class="form-control w-115 d-inline-block precalc" required=""
+                                           id="id_weight_micro"> грамм
+
+
+                             </p>
+
+                        </div>
+
+                         <div class="row">
+                            <p id="id_micro_text">{{ instance.micro_text }} </p>
+                            <p id="id_micro_sostav">{{ instance.micro_sostav }}</p>
+                        </div>
+
+
+                    </div>
+
             <div class="row mt-5 mb-5">
                 <div class="col-6 m-auto">
                     <button class="btn btn-primary d-block m-auto" type="submit"
                             form="form-{{ instance.pk }}">{{ btn_name }}</button>
                 </div>
             </div>
+
+
 
         </div>
 
