@@ -324,6 +324,7 @@
 
 
             </form>
+        {%  if micro %}
             <div class="row">
                          <div class="row mt-3">
                              <p>Всего необходимо добавить на
@@ -349,13 +350,14 @@
 
 
                     </div>
-
+        {% endif %}
             <div class="row mt-5 mb-5">
                 <div class="col-6 m-auto">
                     <button class="btn btn-primary d-block m-auto" type="submit"
                             form="form-{{ instance.pk }}">{{ btn_name }}</button>
                 </div>
             </div>
+
 
 
 
