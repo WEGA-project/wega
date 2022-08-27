@@ -60,7 +60,9 @@ input.precalc[type='number']{
 
 
 .w-salt-name{
-	width:355px;
+	width:auto;
+	min-width: 330px;
+
 }
 
 .col-2{
@@ -92,6 +94,9 @@ input.w-115[type='number']{
 }
 
 @media screen and (min-width: 768px) and  (max-width: 1024px){
+	.w-salt-name{
+		width:150px;
+	}
 	input.precalc[type='number']{
 	width: 70px;
 	height: 25px;
@@ -102,7 +107,8 @@ input.w-115[type='number']{
 	}
 	.salt-formula{ display: inline-block;}
 	.salt-name-formula{display: none}
-	.col-1{    width: 11%;}
+	.col-2{  width: 15.67%!important;}
+		.w-salt-name{	min-width: 153px;}
 }
 
 @media screen and (max-width: 768px)  {
@@ -111,13 +117,18 @@ input.w-115[type='number']{
 	height: 25px;
 	}
 	.macro-salt > input.precalc[type='number']{
-	width: 90px;
+	width: 67px;
 	height: 25px;
 	}
 	.salt-formula{ display: inline-block;}
 	.salt-name-formula{display: none}
 	.col-1{    width: 11%;}
-
+	.col-2{  width: 21%!important;}
+	.w-salt-name{	min-width: 153px;}
+	.w-16{
+		    width: 16%;
+	}
+	.micro-w-100{width: 100px!important;}
 }
 
 

@@ -85,7 +85,7 @@
                                 {% if f.name in instance.macro  and   f.name != 'no3' and f.name != 'nh4' %}
 
 
-                                    <div class="mb-3 col-1 p-1  macro-salt text-center">
+                                    <div class="mb-3 col-1 p-1 macro-col-w macro-salt text-center">
                                         <label for="{{ f.id_for_label }}" class="form-label">{{ f.label }}</label>
                                         {{ f }}
                                         <div class="error">{{ f.errors }}</div>
@@ -111,7 +111,7 @@
                         <div class="row row-cols-auto height-30">
                             {% for f in form %}
                                 {% if   f.name == 'no3'  %}
-                                    <div class="mb-3 col-1 p-1  macro-salt text-center">
+                                    <div class="mb-3 col-1 p-1   macro-salt text-center">
                                         <label for="{{ f.id_for_label }}" class="form-label">{{ f.label }}</label>
                                     </div>
                                     <div class="mb-3 col-1 p-1  macro-salt text-center">
@@ -127,7 +127,7 @@
                                     <div class="mb-3 col-1 p-1  macro-salt text-center">
                                         <label for="{{ f.id_for_label }}" class="form-label">{{ f.label }}</label>
                                     </div>
-                                    <div class="mb-3 col-1 p-1  macro-salt text-center">
+                                    <div class="mb-3 col-1 p-1 macro-col-w macro-salt text-center">
                                         {{ f }}
                                         <div class="error">{{ f.errors }}</div>
                                     </div>
@@ -206,7 +206,7 @@
 
                         {% for comon, salt_data in instance.get_salt_dict.items %}
                               <div class="row salt-row">
-                                <div class="col-4  d-sm-flex pt-2 justify-content-start salt_name w-salt-name">
+                                <div class="col-4 d-sm-flex pt-2 justify-content-start salt_name w-salt-name">
                                     <span id="id_name-{{ comon }}"class="salt-name-formula">{{ salt_data.name }} {{ salt_data.formula }}</span>
                                     <span class="  salt-formula">{{ salt_data.formula }}</span>
                                 </div>
@@ -215,7 +215,7 @@
                                         <div class="mb-1 salt-percent {% if f.name == 'name' %}col-12{% else %}col-2{% endif %}
                                               p-1 d-flex align-items-center justify-content-between">
 
-                                            <div class="col-1 ">
+                                            <div class="col-1 col-sm-3 ">
                                                 <label for="{{ f.id_for_label }}"  class="form-label mb-0">{{ f.label|second_part }}</label>
                                             </div>
                                             {{ f }}
@@ -283,10 +283,10 @@
 
                     <div class="row">
                         <div class="col-2"></div>
-                        <div class="col-1">
+                        <div class="col-1 micro-w-100">
                             <label for="">доля (%)</label>
                         </div>
-                        <div class="col-1 ps-0 text-left">
+                        <div class="col-1 micro-w-100 ps-0 text-left">
                             <label for="">граммы</label>
                         </div>
                     </div>
@@ -300,11 +300,11 @@
 
                                     <input type="number"  name="d{{ salt }}"
                                            value="{{ instance|getattribute:salt_data.d|hpg_float_format }}"
-                                           step="1" class="form-control d-inline-block  w-115 precalc" required=""
+                                           step="1" class="form-control d-inline-block micro-w-100 w-115 precalc" required=""
                                            id="id_d{{ salt }}">
                                      <input type="number"  name="g{{ salt }}"
                                            value="{{ instance|getattribute:salt_data.g|floatformat:5 }}"
-                                           step="0.001" class="form-control w-115 d-inline-block precalc" required=""
+                                           step="0.001" class="form-control w-115 micro-w-100 d-inline-block precalc" required=""
                                            id="id_g{{ salt }}">
                                 </div>
                             </div>
