@@ -195,7 +195,7 @@ class PlantProfile(models.Model):
                     cache_str = f"pp-{self.pk}-{i}"
                     ii = cache.get(cache_str)
                     if ii:
-                        print(' i, ii',  i, ii)
+                        # print(' i, ii',  i, ii)
                         setattr(self, i, ii)
 
 
@@ -237,7 +237,7 @@ class PlantProfile(models.Model):
             
             
     def calc_micro(self, pushed_element=None, val=None):
-        print('calc_micro pushed_element', pushed_element)
+        # print('calc_micro pushed_element', pushed_element)
         self.bor_complex = None
         recalc_gmsum= True
         
@@ -777,7 +777,7 @@ class PlantProfile(models.Model):
         i = m.N * m.P * m.Mg * m.K * m.S * m.Cl
         ans = (-m.Ca * (b - c + 2 * d + e - f - 2 * g - h)) / (2 * i)
         
-        return ans * self.litres / 10
+        return ans
     
     @float_exception
     def kno3(self):
