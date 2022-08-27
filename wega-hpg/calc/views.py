@@ -280,18 +280,23 @@ def edit_plant_profile(request, pk, micro=False):
     context['form'] = form
     context['micro'] = micro
     context['instance'] = instance
-    instance.calc_micro()
+    if request.method=='GET':
+        instance.calc_micro()
+        
     if request.method == 'POST':
         form = PlantProfileEditForm(instance=instance, data=request.POST)
         if form.is_valid():
             new = form.save(commit=False)
             new.user = request.user
             changes = form.changed_data
-            for item in PlantProfile.salt_gramms:
-                
-                if getattr(new, item)() != getattr(old_instance, item)():
+            for item in PlantProfile.model_create_fields:
+                add = False
+                if callable(getattr(new, item)):
+                    add = getattr(new, item)() != getattr(old_instance, item)()
+                else:
+                    add - getattr(new, item) != getattr(old_instance, item)
+                if add:
                     changes.append(item)
-            
             new.save()
             ph = PlantProfileHistory(profile=new, profile_data=simplejson.dumps(model_to_dict(new)),
                                      changed_data=simplejson.dumps(changes) )
@@ -300,7 +305,7 @@ def edit_plant_profile(request, pk, micro=False):
         else:
             context['form'] = form
         
-        
+    
     
     return render(request, 'calc/edit.html', context=context)
 

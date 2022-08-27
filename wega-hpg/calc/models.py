@@ -54,6 +54,7 @@ class PlantProfile(models.Model):
     salt_gramms = ['cano3', 'kno3', 'nh4no3', 'mgso4', 'kh2po4', 'k2so4', 'mgno3', 'cacl2', ]
 
     model_create_fields = macro + micro + salt_micro_gramm + salt_micro_persent + salt_micro_persent_bor + salt
+    model_change_fields = macro + micro + salt_micro_gramm + salt_micro_persent + salt
 
 
     salt_dict = {
