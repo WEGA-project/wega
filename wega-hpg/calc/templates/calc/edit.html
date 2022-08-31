@@ -4,47 +4,55 @@
 {% block extra_js_up %}
     <script>
         var recalc_url = "{% url 'plant_profile_precalc' instance.pk  %}";
+
     </script>
 {% endblock %}
 {% block content %}
 
     <nav>
         <div class="nav nav-tabs" id="nav-tab" role="tablist">
-            <button class="nav-link active" id="nav-macro-tab" data-bs-toggle="tab" data-bs-target="#nav-macro"
-                    type="button" role="tab" aria-controls="nav-macro" aria-selected="true">Макро
+            <button class="nav-link active" id="macro-tab" data-bs-toggle="tab" data-bs-target="#macro"
+                    type="button" role="tab" aria-controls="macro" aria-selected="true">Макро
             </button>
-            <button class="nav-link" id="nav-micro-tab" data-bs-toggle="tab" data-bs-target="#nav-micro" type="button"
-                    role="tab" aria-controls="nav-micro" aria-selected="true">Микро
+            <button class="nav-link" id="micro-tab" data-bs-toggle="tab" data-bs-target="#micro" type="button"
+                    role="tab" aria-controls="micro" aria-selected="true">Микро
             </button>
 
-            <button class="nav-link" id="nav-concentrat-tab" data-bs-toggle="tab" data-bs-target="#nav-concentrat" type="button"
-                    role="tab" aria-controls="nav-concentrat" aria-selected="true">Концентраты
+            <button class="nav-link" id="concentrat-tab" data-bs-toggle="tab" data-bs-target="#concentrat" type="button"
+                    role="tab" aria-controls="concentrat" aria-selected="true">Концентраты
             </button>
+
+            <button class="nav-link" id="making-tab" data-bs-toggle="tab" data-bs-target="#making" type="button"
+                    role="tab" aria-controls="making" aria-selected="true">Изготовление
+            </button>
+
+            <button class="nav-link" id="price-tab" data-bs-toggle="tab" data-bs-target="#price" type="button"
+                    role="tab" aria-controls="price" aria-selected="true">Цена
+            </button>
+
         </div>
     </nav>
     <div class="tab-content" id="nav-tabContent">
-        <div class="tab-pane fade show active" id="nav-macro" role="tabpanel" aria-labelledby="nav-macro-tab">
-            {% include 'calc/profile.html' with micro=False title="Макро профиля" %}
-
+        <div class="tab-pane fade show active" id="macro" role="tabpanel" aria-labelledby="macro-tab">
+            {% include 'calc/profile.html' with  macro=True title="Макро профиля" %}
         </div>
-        <div class="tab-pane fade " id="nav-micro" role="tabpanel" aria-labelledby="nav-micro-tab">
-            {% include 'calc/profile.html' with micro=True %}
+        <div class="tab-pane fade " id="micro" role="tabpanel" aria-labelledby="micro-tab">
+            {% include 'calc/profile.html' with micro=True title="Микро профиля" %}
         </div>
 
-        <div class="tab-pane fade " id="nav-concentrat" role="tabpanel" aria-labelledby="nav-concentrat-tab">
-          <p>Концентраты</p>
+        <div class="tab-pane fade " id="concentrat" role="tabpanel" aria-labelledby="concentrat-tab">
+          {% include 'calc/profile.html' with concentrate=True title="Монорастворы и концентраты" %}
+        </div>
+
+        <div class="tab-pane fade " id="concentrat" role="tabpanel" aria-labelledby="concentrat-tab">
+          {% include 'calc/profile.html' with makeing=True title="Изготовление" %}
+        </div>
+
+        <div class="tab-pane fade " id="concentrat" role="tabpanel" aria-labelledby="concentrat-tab">
+          {% include 'calc/profile.html' with price=True title="Цена" %}
         </div>
 
     </div>
 
-    <style>
-        @media screen and (max-width: 768px) {
 
-            html {
-                width: 768px;
-                overflow: auto;
-            }
-        }
-
-    </style>
 {% endblock %}

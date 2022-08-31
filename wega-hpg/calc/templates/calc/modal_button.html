@@ -2,11 +2,12 @@
   <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">действие
   </button>
   <ul class="dropdown-menu overflow-visible">
-      <li><a class="text-black m-2 text-decoration-none" href="{% url "plant_profile_edit" pk %}"><i class="bi bi-pencil m-1"></i>Макро</a></li>
-      <li><a class="text-black m-2 text-decoration-none" href="{% url "plant_profile_edit_micro" pk %}"><i class="bi bi-pencil m-1"></i>Микро</a></li>
+      <li><a class="text-black m-2 text-decoration-none" href="{% url "plant_profile_edit" pk %}"><i class="bi bi-pencil m-1"></i>Редактор</a></li>
 
       <li><a class="text-black m-2 text-decoration-none" href="{% url "plant_profile_history" pk %}"><i class="bi bi-pencil m-1"></i>История</a></li>
+
       <li><a class="text-black m-2 text-decoration-none" href="#"><i class="bi bi-snow  m-1"></i>В миксер</a></li>
+
       <li><a class="text-black m-2 text-decoration-none" href="{% url "plant_profile_edit" pk %}"><i class="bi bi-cursor-fill  m-1"></i>Поделиться</a></li>
       <li><a class="text-black m-2 text-decoration-none" href="{% url "plant_profile_del" pk %}"><i class="bi bi-x-circle-fill  m-1"></i>Удалить</a></li>
 

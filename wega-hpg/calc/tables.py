@@ -26,10 +26,23 @@ class PlatProfileMatrixTable(tables.Table):
         fields = []
     
 import datetime
-class HistoryColumn(tables.Column):
-    
-    
+
+
+class CalcColumn(tables.Column):
+    def render(self, value, record):
+        if isinstance(value, str):
+            return mark_safe(value)
+
+        if isinstance(value, datetime.datetime):
+            return value.strftime("%d.%m.%Y %H:%M:%S")
         
+        if isinstance(value, float):
+            return "{:.1f}".format(value)
+        
+         
+        return value
+    
+class HistoryColumn(tables.Column):
     def render(self, value, record):
         if isinstance(value, str):
             return mark_safe(value)

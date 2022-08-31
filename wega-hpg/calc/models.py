@@ -48,32 +48,86 @@ class PlantProfile(models.Model):
         'si': {'name': "Кремний", 'd': 'dsi', 'g': 'gsi'},
     }
     
+    
+    
     salt = ['cano3_ca', 'cano3_no3', 'cano3_nh4', 'kno3_k', 'kno3_no3', 'nh4no3_nh4', 'nh4no3_no3', 'mgso4_mg',
             'mgso4_s', 'kh2po4_k', 'kh2po4_p', 'k2so4_k', 'k2so4_s', 'mgno3_mg', 'mgno3_no3', 'cacl2_ca', 'cacl2_cl', ]
     
     salt_gramms = ['cano3', 'kno3', 'nh4no3', 'mgso4', 'kh2po4', 'k2so4', 'mgno3', 'cacl2', ]
 
-    model_create_fields = macro + micro + salt_micro_gramm + salt_micro_persent + salt_micro_persent_bor + salt
-    model_change_fields = macro + micro + salt_micro_gramm + salt_micro_persent + salt
+    
 
+    concentrate_dict_a = {
+        'cano3':  {'name':'cano3', 'data':  ['gl_cano3', 'gml_cano3', ], 'calc_data': ['ml_cano3', 'gg_cano3']},
+        'kno3':   {'name':'kno3', 'data':   ['gl_kno3', 'gml_kno3', ], 'calc_data': ['ml_kno3', 'gg_kno3']},
+        'nh4no3': {'name':'nh4no3', 'data': ['gl_nh4no3', 'gml_nh4no3', ], 'calc_data': ['ml_nh4no3', 'gg_nh4no3']},
+        'mgno3':  {'name':'mgno3', 'data':  ['gl_mgno3', 'gml_mgno3', ], 'calc_data': ['ml_mgno3', 'gg_mgno3']},
+        'cacl2':  {'name':'cacl2', 'data':  ['gl_cacl2', 'gml_cacl2', ], 'calc_data': ['ml_cacl2', 'gg_cacl2']},
+        
+ 
+    }
 
+    concentrate_fields = ['taml', 'tbml', 'gml_fe', 'gml_mn', 'gml_b', 'gml_zn', 'gml_cu', 'gml_mo', 'gml_co',
+                          'gml_si', 'gml_cano3', 'gml_kno3', 'gml_nh4no3', 'gml_mgno3', 'gml_mgso4', 'gml_k2so4',
+                          'gml_kh2po4', 'gml_cacl2', 'gml_cmplx', 'gl_fe', 'gl_mn', 'gl_b', 'gl_zn',
+                          'gl_cu', 'gl_mo', 'gl_co', 'gl_si', 'gl_cano3', 'gl_kno3', 'gl_nh4no3', 'gl_mgno3',
+                          'gl_mgso4', 'gl_k2so4', 'gl_kh2po4', 'gl_cacl2', 'gl_cmplx', 'ml_cano3', 'gg_cano3',
+                          'ml_kno3', 'gg_kno3', 'ml_nh4no3', 'gg_nh4no3', 'ml_mgno3', 'gg_mgno3', 'ml_cacl2',
+                          'gg_cacl2', 'ml_mgso4', 'ml_kh2po4', 'ml_k2so4', 'ml_fe', 'ml_mn', 'ml_b', 'ml_zn',
+                          'ml_cu', 'ml_mo', 'ml_co', 'ml_si', 'ml_cmplx', 'gg_mgso4', 'gg_kh2po4', 'gg_k2so4',
+                          'gg_fe', 'gg_mn', 'gg_b', 'gg_zn', 'gg_cu', 'gg_mo','gg_co', 'gg_si', 'gg_cmplx',
+
+                          ]
+
+    model_create_fields = macro + micro + salt_micro_gramm + salt_micro_persent + salt_micro_persent_bor + salt + concentrate_fields
+    model_change_fields = macro + micro + salt_micro_gramm + salt_micro_persent + salt + concentrate_fields
+    
+    
+    
+    def concentrate_dict_b(self):
+        if self.micro_calc_mode=='u':
+            concentrate_dict_b = {
+                'mgso4': {'name': 'mgso4', 'data': ['gl_mgso4', 'gml_mgso4', ], 'calc_data': ['ml_mgso4', 'gg_mgso4']},
+                'kh2po4': {'name': 'kh2po4', 'data': ['gl_kh2po4', 'gml_kh2po4', ], 'calc_data': ['ml_kh2po4', 'gg_kh2po4']},
+                'k2so4': {'name': 'k2so4', 'data': ['gl_k2so4', 'gml_k2so4', ], 'calc_data': ['ml_k2so4', 'gg_k2so4']},
+                'fe': {'name': 'fe', 'data': ['gl_fe', 'gml_fe', ], 'calc_data': ['ml_fe', 'gg_fe']},
+                'mn': {'name': 'mn', 'data': ['gl_mn', 'gml_mn', ], 'calc_data': ['ml_mn', 'gg_mn']},
+                'b': {'name': 'b', 'data': ['gl_b', 'gml_b', ], 'calc_data': ['ml_b', 'gg_b']},
+                'zn': {'name': 'zn', 'data': ['gl_zn', 'gml_zn', ], 'calc_data': ['ml_zn', 'gg_zn']},
+                'cu': {'name': 'cu', 'data': ['gl_cu', 'gml_cu', ], 'calc_data': ['ml_cu', 'gg_cu']},
+                'mo': {'name': 'mo', 'data': ['gl_mo', 'gml_mo', ], 'calc_data': ['ml_mo', 'gg_mo']},
+                'co': {'name': 'co', 'data': ['gl_co', 'gml_co', ], 'calc_data': ['ml_co', 'gg_co']},
+                'si': {'name': 'si', 'data': ['gl_si', 'gml_si', ], 'calc_data': ['ml_si', 'gg_si']},
+            }
+            return concentrate_dict_b
+        else:
+            concentrate_dict_b = {
+                'mgso4': {'name': 'mgso4', 'data': ['gl_mgso4', 'gml_mgso4', ], 'calc_data': ['ml_mgso4', 'gg_mgso4']},
+                'kh2po4': {'name': 'kh2po4', 'data': ['gl_kh2po4', 'gml_kh2po4', ],
+                           'calc_data': ['ml_kh2po4', 'gg_kh2po4']},
+                'k2so4': {'name': 'k2so4', 'data': ['gl_k2so4', 'gml_k2so4', ], 'calc_data': ['ml_k2so4', 'gg_k2so4']},
+                'cmplx': {'name': 'cmplx', 'data': ['gl_cmplx', 'gml_cmplx', ], 'calc_data': ['ml_cmplx', 'gg_cmplx']},
+            }
+            return concentrate_dict_b
+            
+    
     salt_dict = {
-        'cano3': {'salt': ['cano3_ca', 'cano3_no3', 'cano3_nh4', ], 'name': 'Кальций азотнокислый',
+        'cano3':  {'salt': ['cano3_ca', 'cano3_no3', 'cano3_nh4', ], 'name': 'Кальций азотнокислый',
                   'formula': 'Са(NО3)2*4H2O'},
-        'kno3': {'salt': ['kno3_k', 'kno3_no3', ], 'name': 'Калий азотнокислый', 'formula': 'KNO3'},
+        'kno3':    {'salt': ['kno3_k', 'kno3_no3', ], 'name': 'Калий азотнокислый', 'formula': 'KNO3'},
         'nh4no3': {'salt': ['nh4no3_nh4', 'nh4no3_no3', ], 'name': 'Аммоний азотнокислый', 'formula': 'NH4NO3'},
-        'mgso4': {'salt': ['mgso4_mg', 'mgso4_s', ], 'name': 'Магний сернокислый', 'formula': 'MgSO4*7H2O'},
+        'mgso4':  {'salt': ['mgso4_mg', 'mgso4_s', ], 'name': 'Магний сернокислый', 'formula': 'MgSO4*7H2O'},
         'kh2po4': {'salt': ['kh2po4_k', 'kh2po4_p', ], 'name': 'Калий фосфорнокислый', 'formula': 'KH2PO4'},
-        'k2so4': {'salt': ['k2so4_k', 'k2so4_s', ], 'name': 'Калий сернокислый ', 'formula': 'K2SO4'},
-        'mgno3': {'salt': ['mgno3_mg', 'mgno3_no3', ], 'name': 'Магний азотнокислый', 'formula': 'Mg(NO3)2*6H2O'},
-        'cacl2': {'salt': ['cacl2_ca', 'cacl2_cl', ], 'name': 'Хлорид кальция 6-водный', 'formula': 'CaCl2*6H2O'},
+        'k2so4':  {'salt': ['k2so4_k', 'k2so4_s', ], 'name': 'Калий сернокислый ', 'formula': 'K2SO4'},
+        'mgno3':  {'salt': ['mgno3_mg', 'mgno3_no3', ], 'name': 'Магний азотнокислый', 'formula': 'Mg(NO3)2*6H2O'},
+        'cacl2':  {'salt': ['cacl2_ca', 'cacl2_cl', ], 'name': 'Хлорид кальция 6-водный', 'formula': 'CaCl2*6H2O'},
     }
     
     name = models.CharField(max_length=1024, verbose_name='Имя профиля')
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     ec = models.FloatField(default=0, verbose_name='Ec')
     ppm = models.FloatField(default=0, verbose_name='PPM')
-    litres = models.PositiveIntegerField(default=10)
+    litres = models.FloatField(default=10)
     
     template = models.ForeignKey('PlantTemplate', on_delete=models.CASCADE, null=True, blank=True)
     from_template = models.ForeignKey('PlantTemplate', on_delete=models.CASCADE, null=True, blank=True,
@@ -143,6 +197,50 @@ class PlantProfile(models.Model):
                                        verbose_name='Способ расчета')
     
     v_micro = models.FloatField(default=500, verbose_name='Объем микро')
+
+    gl_cano3 = models.FloatField(default=600 )
+    gl_kno3 = models.FloatField(default=250)
+    gl_nh4no3 = models.FloatField(default=100)
+    gl_mgno3  = models.FloatField(default=500)
+    gl_mgso4 = models.FloatField(default=600)
+    gl_k2so4 = models.FloatField(default=100)
+    gl_kh2po4 = models.FloatField(default=150)
+    gl_cacl2  = models.FloatField(default=100)
+    gl_cmplx  = models.FloatField(default=10)
+    
+    gl_fe = models.FloatField(default=10)
+    gl_mn = models.FloatField(default=10)
+    gl_b = models.FloatField(default=10)
+    gl_zn = models.FloatField(default=10)
+    gl_cu = models.FloatField(default=10)
+    gl_mo = models.FloatField(default=10)
+    gl_co = models.FloatField(default=10)
+    gl_si = models.FloatField(default=10)
+    
+    gml_cano3  = models.FloatField(default=1.2845)
+    gml_kno3  = models.FloatField(default=1)
+    gml_nh4no3  = models.FloatField(default=1)
+    gml_mgno3  = models.FloatField(default=1)
+    gml_mgso4  = models.FloatField(default=1)
+    gml_k2so4  = models.FloatField(default=1)
+    gml_kh2po4  = models.FloatField(default=1)
+    gml_cacl2  = models.FloatField(default=1)
+    gml_cmplx  = models.FloatField(default=1)
+    
+    gml_fe = models.FloatField(default=1)
+    gml_mn = models.FloatField(default=1)
+    gml_b  = models.FloatField(default=1)
+    gml_zn = models.FloatField(default=1)
+    gml_cu = models.FloatField(default=1)
+    gml_mo = models.FloatField(default=1)
+    gml_co = models.FloatField(default=1)
+    gml_si = models.FloatField(default=1)
+
+    taml = models.FloatField(default=1)
+    tbml = models.FloatField(default=1)
+    
+    
+    
     micro_text = None
     micro_sostav = None
 
@@ -155,15 +253,60 @@ class PlantProfile(models.Model):
     agmo= None
     agco= None
     agsi= None
-  
-    
 
-    def calc_micro_vars(self, gmsum=None):
-       
-        if  not gmsum:
-            self.gmsum =  self.gfe + self.gmn + self.gb + self.gzn + self.gcu + self.gmo + self.gco + self.gsi
-        
- 
+    ml_cano3 = None
+    gg_cano3 = None
+    ml_kno3 = None
+    gg_kno3 = None
+    ml_nh4no3 = None
+    gg_nh4no3 = None
+    ml_mgno3 = None
+    gg_mgno3 = None
+    ml_cacl2 = None
+    gg_cacl2 = None
+
+    gg_mgso4  = None
+    gg_kh2po4  = None
+    gg_k2so4  = None
+    gg_fe  = None
+    gg_mn  = None
+    gg_b  = None
+    gg_zn  = None
+    gg_cu  = None
+    gg_mo  = None
+    gg_co  = None
+    gg_si  = None
+    gg_cmplx   = None
+
+    ml_mgso4= None
+    ml_kh2po4= None
+    ml_k2so4= None
+    ml_fe= None
+    ml_mn= None
+    ml_b= None
+    ml_zn= None
+    ml_cu= None
+    ml_mo= None
+    ml_co= None
+    ml_si= None
+    ml_cmplx= None
+
+    suma = ''
+    lvola = ''
+    sumb = ''
+    lvolb = ''
+
+    gmlcano3_error = False
+    gmlkno3_error = False
+    gmlnh4no3_error = False
+    gmlmgno3_error = False
+    gmlmgso4_error = False
+    gmlkh2po4_error = False
+    gmlk2so4_error = False
+    gmlcacl2_error = False
+    
+    errors = {}
+    def calc_micro_vars(self):
         self.agfe =  (self.fe * self.litres) / (self.gmsum * 10000)   if self.fe > 0 else 0
         self.agmn =  (self.mn * self.litres) / (self.gmsum * 10000)   if self.mn > 0 else 0
         self.agb  =  (self.b * self.litres)  / (self.gmsum * 10000)   if self.b  > 0 else 0
@@ -188,10 +331,10 @@ class PlantProfile(models.Model):
     def micro_to_weight(self, recalc_gmsum=True):
         
         if self.micro_calc_mode == self.CalcMicroMode.U:
-            # self.calc_micro_vars(gmsum=recalc_gmsum)
             if recalc_gmsum:
                 pass
             else:
+                
                 for i in self.salt_micro_persent:
                     cache_str = f"pp-{self.pk}-{i}"
                     ii = cache.get(cache_str)
@@ -208,13 +351,20 @@ class PlantProfile(models.Model):
             self.gmo = self.mo / self.dmo * self.litres / 10000 if self.dmo > 0 else 0
             self.gco = self.co / self.dco * self.litres / 10000 if self.dco > 0 else 0
             self.gsi = self.si / self.dsi * self.litres / 10000 if self.dsi > 0 else 0
+
+            if not self.gmsum:
+                self.gmsum = self.gfe + self.gmn + self.gb + self.gzn + self.gcu + self.gmo + self.gco + self.gsi
+                self.calc_micro_vars()
             
         else:
             
-            if recalc_gmsum:
+            if recalc_gmsum    :
                 self.gmsum = self.b / self.db * self.litres / 10000
-                self.calc_micro_vars( gmsum=True)
+                self.calc_micro_vars(  )
             else:
+                if not self.gmsum:
+                    self.gmsum = self.b / self.db * self.litres / 10000
+                    self.calc_micro_vars(   )
                 for i in self.salt_micro_persent:
                     cache_str = f"pp-{self.pk}-{i}"
                     cache.set(cache_str, getattr(self, i))
@@ -236,7 +386,8 @@ class PlantProfile(models.Model):
             self.co = 10000 * self.gmsum * (self.dco / self.litres)
             self.si = 10000 * self.gmsum * (self.dsi / self.litres)
             
-            
+    
+        
     def calc_micro(self, pushed_element=None, val=None):
         # print('calc_micro pushed_element', pushed_element)
         self.bor_complex = None
@@ -249,9 +400,14 @@ class PlantProfile(models.Model):
             recalc_gmsum = False
             if  val=='b':
                 self.gmsum = self.gfe + self.gmn + self.gb + self.gzn + self.gcu + self.gmo + self.gco + self.gsi
-            
-            
-        
+            else:
+                self.gmsum = self.b / self.db * self.litres / 10000
+        else:
+            if not self.gmsum:
+                if self.micro_calc_mode==self.CalcMicroMode.U:
+                    self.gmsum = self.gfe + self.gmn + self.gb + self.gzn + self.gcu + self.gmo + self.gco + self.gsi
+                else:
+                    self.gmsum = self.b / self.db * self.litres / 10000
         
         self.calc_micro_vars()
         
@@ -311,6 +467,7 @@ class PlantProfile(models.Model):
     
     def get_npk(self):
         t = self.get_matrix()[0]
+    
     
     def get_profile(self):
         return f"N={round(self.n)} " \
@@ -678,12 +835,20 @@ class PlantProfile(models.Model):
             self.calc_micro(pushed_element=pushed_element, val=val)
         
         self.captions = self.calc_captions()
-        
+        if pushed_element in self.concentrate_fields:
+            a = getattr(self, "calc_"+pushed_element)
+            if callable(a):
+                a()
         for i in self.salt_gramms:
             a = getattr(self, i)
             if callable(a):
                 a = a()
             setattr(self, i, a)
+        
+        
+        
+            
+            
         
         self.ec = self.calc_ec()
         self.ppm = self.calc_ppm()
@@ -698,7 +863,7 @@ class PlantProfile(models.Model):
                 'ec': "{:.2f}".format(self.ec),
                 'ppm': "{:.2f}".format(self.ppm),
                 'litres': self.litres,
-                'weight_micro': "{:.5f}".format(self.weight_micro()),
+                'weight_micro': "{:.2f}".format(self.weight_micro()),
                 'npk': self.npk,
                 'npk_formula': self.npk_formula,
                 'npk_magazine': self.npk_magazine,
@@ -708,6 +873,12 @@ class PlantProfile(models.Model):
                 'salt_grams': "{:.2f}".format(self.salt_grams),
                 'micro_text': self.micro_text,
                 'micro_sostav': self.micro_sostav,
+                'errors': self.errors,
+                'suma': self.suma,
+                'lvola': self.lvola,
+                'sumb': self.sumb,
+                'lvolb': self.lvolb,
+                
                 
                 
                 }
@@ -722,10 +893,15 @@ class PlantProfile(models.Model):
             data[s] = "{:.0f}".format(getattr(self, s))
         
         for s in self.salt_micro_gramm:
-            data[s] = "{:.4f}".format(getattr(self, s))
-        
+            data[s] = "{:.3f}".format(getattr(self, s))
+
         for s in self.salt_micro_persent:
-            data[s] = "{:.4f}".format(getattr(self, s))
+            data[s] = "{:.3f}".format(getattr(self, s))
+        
+        for s in self.concentrate_fields:
+            t = getattr(self, s)
+            if t:
+                data[s] = "{:.2f}".format(t)
         
         for s, d in self.salt_dict.items():
             data[s] = "{:.2f}".format(getattr(self, s))
@@ -867,10 +1043,11 @@ class PlantProfile(models.Model):
         return total
     
     def calc_captions(self):
-        captions = {}
-        
-        captions['cano3'] = f'Селитра кальциевая CaO-{round((self.cano3_ca / 0.714691) * 10) / 10}%' \
-                            f'N-{round((self.cano3_nh4 + self.cano3_no3) * 10) / 10}'
+        captions = {'fe': 'Железо Fe', 'mn': 'Марганец Mn', 'b': "Бор B", 'zn': "Цинк Zn", 'cu': "Медь Cu",
+                    'mo': "Молибден Mo", 'co': "Кобальт Co", 'si': "Силениум Si", 'cmplx': "Комплексное удобрение",
+                    'cano3': f'Селитра кальциевая CaO-{round((self.cano3_ca / 0.714691) * 10) / 10}%' \
+                             f'N-{round((self.cano3_nh4 + self.cano3_no3) * 10) / 10}'}
+
         if self.cano3_nh4 == 0:
             if math.ceil(self.cano3_ca * 10) / 10 == 17:
                 captions['cano3'] = 'Кальций азотнокислый Са(NО3)2*4H2O'
@@ -925,7 +1102,7 @@ class PlantProfile(models.Model):
             captions['nh4_nh3_ratio'] = f'NH4:NO3 1:{math.ceil((self.no3 / self.nh4))}'
         else:
             captions['nh4_nh3_ratio'] = f'NO3=100%'
-        
+        self.captions = captions
         return captions
     
     def sum_salt_grams(self):
@@ -936,6 +1113,191 @@ class PlantProfile(models.Model):
                 i = i()
             s += i
         return s
+
+  
+    def calc_tbml(self):
+        self.calc_concentrates()
+        
+        
+    def calc_taml(self):
+        self.calc_concentrates()
+    def calc_gml_cano3(self):
+        self.calc_concentrates()
+    def calc_gml_kno3(self):
+        self.calc_concentrates()
+    def calc_gml_nh4no3(self):
+        self.calc_concentrates()
+    def calc_gml_mgno3(self):
+        self.calc_concentrates()
+    def calc_gml_mgso4(self):
+        self.calc_concentrates()
+    def calc_gml_kh2po4(self):
+        self.calc_concentrates()
+    def calc_gml_k2so4(self):
+        self.calc_concentrates()
+    def calc_gml_cacl2(self):
+        self.calc_concentrates()
+        
+    def calc_gl_cano3(self):
+        kmol = self.gl_cano3 / (24.4247 / self.cano3_ca)
+        self.gml_cano3 = 0.999 + 0.000732 * kmol - 0.000000113 * kmol**2
+        self.calc_concentrates()
+    def calc_gl_kno3(self):
+        kmol = self.gl_kno3/ (38.6717 / self.kno3_k);
+        self.gml_kno3 = 0.998 + 0.00062 * kmol - 0.000000114 * kmol**2
+        self.calc_concentrates()
+        
+    def calc_gl_nh4no3(self):
+        kmol =  self.gl_nh4no3 / ((34.9978 / 2) / self.nh4no3_no3 )
+        self.gml_nh4no3 = 0.999 + 0.000397 * kmol - 0.0000000422 * kmol**2
+        self.calc_concentrates()
+    
+    def calc_gl_mgno3(self):
+        kmol = self.gl_mgno3  / ((16.3874) / self.mgno3_mg)
+        self.gml_mgno3 = 0.998 + 0.000736 * kmol - 0.000000121 * kmol**2
+        self.calc_concentrates()
+    def calc_gl_cacl2(self):
+        kmol = self.gl_cacl2 / (36.1115 / self.cacl2_ca)
+        self.gml_cacl2 = 0.999 + 0.000794 * kmol - 0.000000151 * kmol**2
+        self.calc_concentrates()
+    
+    def calc_gl_mgso4(self):
+        kmol = self.gl_mgso4 / ((20.1923) / self.mgso4_mg)
+        self.gml_mgso4 = 0.999 + 0.00097 * kmol - 0.000000268 * kmol**2
+        self.calc_concentrates()
+    
+    def calc_gl_kh2po4(self):
+        kmol = self.gl_kh2po4 / ((28.7307) / self.kh2po4_k)
+        self.gml_kh2po4 = 0.998 + 0.000716 * kmol - 0.000000399 * kmol**2
+        self.calc_concentrates()
+        
+    def calc_gl_k2so4(self):
+        kmol = self.gl_k2so4 / ((44.8737) / self.k2so4_k)
+        self.gml_k2so4 = 0.998 + 0.000814 * kmol - 0.00000039 * kmol
+        self.calc_concentrates()
+    
+    def calc_conc_micro(self):
+        self.calc_concentrates()
+        
+    def conc_errors(self):
+        errors = {}
+        if self.gml_cano3 > 1.4212:
+            errors['gml_cano3'] = True
+        else:
+            errors['gml_cano3'] = False
+        if self.gml_kno3 > 1.1627:
+            errors['gml_kno3'] = True
+        else:
+            errors['gml_kno3'] = False
+        if self.gml_nh4no3 > 1.2528:
+            errors['gml_nh4no3'] = True
+        else:
+            errors['gml_nh4no3'] = False
+        if self.gml_mgno3 > 1.2013:
+            errors['gml_mgno3'] = True
+        else:
+            errors['gml_mgno3'] = False
+        if self.gml_mgso4 > 1.2978:
+            errors['gml_mgso4'] = True
+        else:
+            errors['gml_mgso4'] = False
+        if self.gml_kh2po4 > 1.128:
+            errors['gml_kh2po4'] = True
+        else:
+            errors['gml_kh2po4'] = False
+        if self.gml_k2so4 > 1.0825:
+            errors['gml_k2so4'] = True
+        else:
+            errors['gml_k2so4'] = False
+        if self.gml_cacl2 > 1.3963:
+            errors['gml_cacl2'] = True
+        else:
+            errors['gml_cacl2'] = False
+        self.errors = errors
+
+    def calc_concentrates(self):
+    
+        self.ml_cano3 = self.cano3() / self.gl_cano3 * 1000
+        self.ml_kno3 = self.kno3() / self.gl_kno3 * 1000
+        self.ml_nh4no3 = self.nh4no3() / self.gl_nh4no3 * 1000
+        self.ml_mgno3 = self.mgno3() / self.gl_mgno3 * 1000
+        self.ml_mgso4 = self.mgso4() / self.gl_mgso4 * 1000
+        self.ml_kh2po4 = self.kh2po4() / self.gl_kh2po4 * 1000
+        self.ml_k2so4 = self.k2so4() / self.gl_k2so4 * 1000
+        self.ml_cacl2 = self.cacl2() / self.gl_cacl2 * 1000
+    
+
+        if self.db != 0:  self.ml_cmplx=(self.b / self.db * self.litres / 10)/ self.gl_cmplx
+        if self.dfe != 0: self.ml_fe=(self.fe / self.dfe * self.litres / 10) / self.gl_fe
+        if self.dmn != 0: self.ml_mn=(self.mn / self.dmn * self.litres / 10) / self.gl_mn
+        if self.db != 0:  self.ml_b= (self.b / self.db *   self.litres / 10) / self.gl_b
+        if self.dzn != 0: self.ml_zn=(self.zn / self.dzn * self.litres / 10) / self.gl_zn
+        if self.dcu != 0: self.ml_cu=(self.cu / self.dcu * self.litres / 10) / self.gl_cu
+        if self.dmo != 0: self.ml_mo=(self.mo / self.dmo * self.litres / 10) / self.gl_mo
+        if self.dco != 0: self.ml_co=(self.co / self.dco * self.litres / 10) / self.gl_co
+        if self.dsi != 0: self.ml_si=(self.si / self.dsi * self.litres / 10) / self.gl_si
+    
+        self.gg_cano3 =  self.gml_cano3 *  self.ml_cano3
+        self.gg_kno3 =   self.gml_kno3 *   self.ml_kno3
+        self.gg_nh4no3 = self.gml_nh4no3 * self.ml_nh4no3
+        self.gg_mgno3 =  self.gml_mgno3 *  self.ml_mgno3
+        self.gg_mgso4 =  self.gml_mgso4 *  self.ml_mgso4
+        self.gg_kh2po4 = self.gml_kh2po4 * self.ml_kh2po4
+        self.gg_k2so4 =  self.gml_k2so4 *  self.ml_k2so4
+        self.gg_cacl2 =  self.gml_cacl2 *  self.ml_cacl2
+    
+        self.gg_cmplx   = self.gml_cmplx * self.ml_cmplx if self.ml_cmplx else 0
+        self.gg_fe      = self.gml_fe * self.ml_fe if self.ml_fe else 0
+        self.gg_b       = self.gml_b * self.ml_b if self.ml_b else 0
+        self.gg_mn      = self.gml_mn * self.ml_mn if self.ml_mn else 0
+        self.gg_zn      = self.gml_zn * self.ml_zn if self.ml_zn else 0
+        self.gg_cu      = self.gml_cu * self.ml_cu if self.ml_cu else 0
+        self.gg_mo      = self.gml_mo * self.ml_mo if self.ml_mo else 0
+        self.gg_co      = self.gml_co * self.ml_co if self.ml_co else 0
+        self.gg_si      = self.gml_si * self.ml_si if self.ml_si else 0
+
+    
+        av = round((self.ml_cano3 + self.ml_kno3 + self.ml_nh4no3 + self.ml_mgno3 + self.ml_cacl2) * 10000) / 10000
+        am = round((self.gg_cano3 + self.gg_kno3 + self.gg_nh4no3 + self.gg_mgno3 + self.gg_cacl2) * 10000) / 10000
+        ak = round(am / av * 100) / 100
+        if self.taml != 0:
+            ac  = round(self.litres / self.taml * 1000)
+            aw  = round(self.taml - av)
+            aml = round(self.taml / self.litres * 1000) / 1000
+        
+            self.suma = f'объем: {av} мл, вес: {am} гр, плотность: {ak} г/мл. '
+            self.lvola = f'концентрат А ({ac}:1) . долить воды: {aw} мл. по {aml} мл на 1л.'
+    
+        vmlmgso4 = self.ml_mgso4 or 0
+        vmlkh2po4 = self.ml_kh2po4 or 0
+        vmlk2so4 = self.ml_k2so4 or 0
+        vmlfe = self.ml_fe or 0
+        vmlmn = self.ml_mn or 0
+        vmlb = self.ml_b or 0
+        vmlzn = self.ml_zn or 0
+        vmlcu = self.ml_cu or 0
+        vmlmo = self.ml_mo or 0
+        vmlco = self.ml_co or 0
+        vmlsi = self.ml_si or 0
+    
+        if self.micro_calc_mode==self.CalcMicroMode.B:
+            bv = round((self.ml_mgso4 + self.ml_kh2po4 + self.ml_k2so4 + self.ml_cmplx) * 10000) / 10000
+            bm = round((self.gg_mgso4 + self.gg_kh2po4 + self.gg_k2so4 + self.gg_cmplx) * 10000) / 10000
+            bk = round(bm / bv * 1000) / 1000
+        else:
+         
+            bv = vmlmgso4 + vmlkh2po4 + vmlk2so4 + vmlfe + vmlmn + vmlb + vmlzn + vmlmo + vmlcu + vmlco + vmlsi
+            bm = round((self.gg_mgso4 + self.gg_kh2po4 + self.gg_k2so4 + self.gg_fe + self.gg_mn + self.gg_b +
+                        self.gg_zn + self.gg_mo + self.gg_co + self.gg_si) * 100) / 100
+            bk = round(bm / bv * 100) / 100
+        
+        if self.tbml != 0:
+            bc = round(self.litres / self.tbml * 1000)
+            bw = round(self.tbml - bv)
+            bml= round(self.tbml / self.litres * 1000) / 1000
+            self.sumb = f'объем: {round(bv * 10) / 10} мл, вес: {bm} гр, плотность: {bk} г/мл'
+            self.lvolb = f'концентрат Б ({bc}:1) . долить воды: {bw} мл. по {bml} мл на 1л.'
+        self.conc_errors()
 
 
 class PlantTemplate(models.Model):

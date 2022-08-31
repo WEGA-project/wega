@@ -11,7 +11,7 @@ from django_tables2 import RequestConfig
 from calc.forms import DelForm, FilterForm, PlantProfileAddForm, PlantProfileEditForm, \
     PlantProfileUploadForm
 from calc.models import PlantProfile, PlantProfileHistory
-from calc.tables import HistoryColumn, ModalBtn,  PlatProfileTable
+from calc.tables import CalcColumn, HistoryColumn, ModalBtn, PlatProfileTable
 from project.utils import DataMixin
 import simplejson
 
@@ -39,35 +39,35 @@ def plant_profiles(request):
     if request.session.get('show_macro'):
         columns += PlantProfile.macro
         for item in PlantProfile.macro:
-            extra_columns.append((item, django_tables2.Column()))
+            extra_columns.append((item, CalcColumn()))
     else:
         filter_form.fields['hide_macro'].widget.attrs['checked'] = ''
     
     if request.session.get('show_micro'):
         columns += PlantProfile.micro
         for item in PlantProfile.micro:
-            extra_columns.append((item, django_tables2.Column()))
+            extra_columns.append((item, CalcColumn()))
     else:
         filter_form.fields['hide_micro'].widget.attrs['checked'] = ''
     
     if request.session.get('show_salt'):
         columns += PlantProfile.salt
         for item in PlantProfile.salt:
-            extra_columns.append((item, django_tables2.Column()))
+            extra_columns.append((item, CalcColumn()))
     else:
         filter_form.fields['hide_salt'].widget.attrs['checked'] = ''
     
     if request.session.get('show_gramms'):
         columns += PlantProfile.salt_gramms
         for item in PlantProfile.salt_gramms:
-            extra_columns.append((item, django_tables2.Column()))
+            extra_columns.append((item, CalcColumn()))
     
     else:
         filter_form.fields['show_gramms'].widget.attrs['checked'] = ''
     
     extra_columns.append(('action', ModalBtn(verbose_name='', )))
     data = []
-    query = PlantProfile.objects.filter(user=request.user, template=None)
+    query = PlantProfile.objects.filter(user=request.user, template=None).order_by('-pk')
     for pp in query:
         cols = {}
         cols['action'] = pp.pk
@@ -132,14 +132,17 @@ def plant_profile_history(request, pk):
     
     if request.session.get('show_gramms'):
         columns += PlantProfile.salt_gramms
+        columns+= PlantProfile.salt_micro_gramm
         for item in PlantProfile.salt_gramms:
+            extra_columns.append((item, history_column))
+        for item in PlantProfile.salt_micro_gramm:
             extra_columns.append((item, history_column))
     
     else:
         filter_form.fields['show_gramms'].widget.attrs['checked'] = ''
     
     extra_columns.append(('action', ModalBtn(verbose_name='', )))
-    history_data = PlantProfileHistory.objects.filter(profile_id=pk)
+    history_data = PlantProfileHistory.objects.filter(profile_id=pk).order_by('-date')
     data = []
     
     for history in history_data:
@@ -147,14 +150,19 @@ def plant_profile_history(request, pk):
         p['user_id'] = p['user']
         del p['user']
         pp = PlantProfile(**p)
-        changes = simplejson.loads(history.changed_data)
-        
+        changes= []
+        if history.changed_data:
+            changes = simplejson.loads(history.changed_data)
+
         for salt_gramm_name in PlantProfile.salt_gramms:
             p[salt_gramm_name] = "{:.2f}".format(getattr(pp, salt_gramm_name)())
         
+        for salt_gramm_name in PlantProfile.salt_micro_gramm:
+            p[salt_gramm_name] = "{:.2f}".format(getattr(pp, salt_gramm_name))
+        
         vals = {}
         
-        for col in PlantProfile.macro + PlantProfile.micro + PlantProfile.salt + PlantProfile.salt_gramms:
+        for col in PlantProfile.macro + PlantProfile.micro + PlantProfile.salt_micro_gramm + PlantProfile.salt + PlantProfile.salt_gramms:
             mark_danger = col in changes
             vals[col] = {'mark-danger': mark_danger, 'val': p.get(col)}
         for col in extra_columns:
@@ -245,9 +253,9 @@ def plant_profile_precalc(request, pk):
                 else:
                     pp.micro_calc_mode = PlantProfile.CalcMicroMode.U
                 
-                for param_list in [['ppm', 'ec', 'litres', 'nh4_nh3_ratio', 'v_micro' ], PlantProfile.macro,
+                for param_list in [['ppm', 'ec', 'litres', 'nh4_nh3_ratio', 'v_micro' , 'taml', 'tbml'], PlantProfile.macro,
                                    PlantProfile.micro, PlantProfile.salt,  PlantProfile.salt_micro_gramm,
-                                   PlantProfile.salt_micro_persent]:
+                                   PlantProfile.salt_micro_persent, PlantProfile.concentrate_fields]:
                     for i in param_list:
                         t = data.get(i, None)
                         if t:
@@ -275,6 +283,7 @@ def edit_plant_profile(request, pk, micro=False):
     t = 'Микро' if micro else 'Макро'
     context = DataMixin.get_user_context(title=f"{t} профиля", btn_name="Сохранить")
     instance = PlantProfile.objects.get(user=request.user, pk=pk)
+    
     old_instance = PlantProfile.objects.get(user=request.user, pk=pk)
     form = PlantProfileEditForm(instance=instance)
     context['form'] = form
@@ -282,6 +291,8 @@ def edit_plant_profile(request, pk, micro=False):
     context['instance'] = instance
     if request.method=='GET':
         instance.calc_micro()
+        instance.calc_captions()
+        instance.calc_concentrates()
         
     if request.method == 'POST':
         form = PlantProfileEditForm(instance=instance, data=request.POST)
@@ -289,17 +300,35 @@ def edit_plant_profile(request, pk, micro=False):
             new = form.save(commit=False)
             new.user = request.user
             changes = form.changed_data
-            for item in PlantProfile.model_create_fields:
-                add = False
+            mode = request.POST.get('from')
+            print('mode', mode)
+            t = []
+            if mode == 'macro':
+                t =  PlantProfile.macro + PlantProfile.salt
+                for i in PlantProfile.micro + PlantProfile.salt_micro_gramm +PlantProfile.salt_micro_persent:
+                    del changes[changes.index(i)]
+              
+            else:
+                t = PlantProfile.micro + PlantProfile.salt_micro_gramm +PlantProfile.salt_micro_persent
+                for i in PlantProfile.macro + PlantProfile.salt+ ['calc_mode']:
+                    del changes[changes.index(i)]
+                
+            for item in PlantProfile.model_change_fields:
+
                 if callable(getattr(new, item)):
                     add = getattr(new, item)() != getattr(old_instance, item)()
                 else:
-                    add - getattr(new, item) != getattr(old_instance, item)
+                    add = getattr(new, item) != getattr(old_instance, item)
                 if add:
-                    changes.append(item)
+                    if item in t and mode == 'macro':
+                        changes.append(item)
+                    if item in t and mode=='micro':
+                        changes.append(item)
             new.save()
-            ph = PlantProfileHistory(profile=new, profile_data=simplejson.dumps(model_to_dict(new)),
-                                     changed_data=simplejson.dumps(changes) )
+            ph = PlantProfileHistory(profile=new,
+                                     profile_data=simplejson.dumps(model_to_dict(new)),
+                                     changed_data = simplejson.dumps(changes),
+                                   )
             ph.save()
             return redirect('profile_index')
         else:

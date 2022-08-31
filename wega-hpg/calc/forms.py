@@ -37,6 +37,10 @@ class PlantProfileEditForm(forms.ModelForm):
                 visible.field.initial = 0
                 visible.field.required = False
                 
+            # if visible.name in PlantProfile.salt_micro_gramm or visible.name in PlantProfile.salt_micro_persent :
+            #     visible.field.widget.attrs['step'] = 0.001
+                
+                
             if visible.name == 'name':
                 visible.field.widget.attrs['class'] = 'form-control d-inline-block col'
                 

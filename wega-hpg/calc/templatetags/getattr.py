@@ -1,3 +1,4 @@
+import math
 import os
 import subprocess
 
@@ -6,13 +7,20 @@ from django.conf import settings
 
 register = template.Library()
 
+
 @register.filter
-def getattribute (obj, attribute):
+def getattribute(obj, attribute):
     a = getattr(obj, attribute)
     if callable(a):
         return a()
     return a
-    
+
+
+@register.filter
+def get(obj, key):
+    a = obj.get(key)
+    return a
+
 
 @register.filter
 def get_field_from_form(obj, attribute):

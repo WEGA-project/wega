@@ -37,22 +37,46 @@ input.precalc[type='number']{
 }
 
 
+.w-matrix{
+	width: 73px;
+}
+
+.label-margin-t{
+	    margin-top: 50%;
+}
+
 
 .first-matrix-row {
-	height: 30px;
+	height: 53px;
 }
 
 .first-macro-row {
-	height: 60px;
+	height: 160px;
+}
+.mt-38{
+	margin-top: 38%;
+}
+.n-margin{
+	margin-left: 31%;
 }
 
+.ml-2{
+	margin-left: 2%;
+}
 .salts > .row, .second-matrix-row {
 	height: 30px;
 }
 .height-30{
 		height: 30px;
 }
+.w-18{
+	width:  30.666667%;
+}
 
+.w-elem{
+	    width: auto;
+    min-width: 141px;
+}
 .salt-row:hover{
 	background-color: darkgrey;
 	opacity: 0.8;
@@ -65,9 +89,6 @@ input.precalc[type='number']{
 
 }
 
-.col-2{
-	width: 12.67% !important;
-}
 
 .hpg-green{
 	background-color: #c0dcc0;
@@ -89,11 +110,14 @@ input.w-115[type='number']{
 	width: 95px;
 	height: 25px;
 	}
-	.salt-formula{ display: none;}
+
 	.salt-name-formula{display: inline-block;}
 }
 
 @media screen and (min-width: 768px) and  (max-width: 1024px){
+	.mt-38 {
+    margin-top: 56%;
+}
 	.w-salt-name{
 		width:150px;
 	}
@@ -102,16 +126,33 @@ input.w-115[type='number']{
 	height: 25px;
 	}
 	.macro-salt > input.precalc[type='number']{
-	width: 90px;
+	width: 70px;
 	height: 25px;
 	}
 	.salt-formula{ display: inline-block;}
-	.salt-name-formula{display: none}
-	.col-2{  width: 15.67%!important;}
+
 		.w-salt-name{	min-width: 153px;}
 }
 
 @media screen and (max-width: 768px)  {
+		.mt-38 {
+    margin-top: 56%;
+}
+	.first-macro-row {
+     height:auto;
+}
+	.salts > .row, .second-matrix-row {
+		  height:auto;
+	}
+
+
+
+	div.w-625{
+		width: 6.25%;
+	}
+	div.w-113{
+		width: 11.333333%;;
+	}
 	input.precalc[type='number']{
 	width: 70px;
 	height: 25px;
@@ -121,10 +162,8 @@ input.w-115[type='number']{
 	height: 25px;
 	}
 	.salt-formula{ display: inline-block;}
-	.salt-name-formula{display: none}
-	.col-1{    width: 11%;}
-	.col-2{  width: 21%!important;}
-	.w-salt-name{	min-width: 153px;}
+
+	.w-salt-name{	min-width: 153px; width: 100%;}
 	.w-16{
 		    width: 16%;
 	}
@@ -132,4 +171,11 @@ input.w-115[type='number']{
 }
 
 
-
+@media screen and (max-width: 500px) {
+	.first-matrix-row, .second-matrix-row {
+		height: auto;
+	}
+	div.w-113 {
+    width: auto;
+	}
+}
