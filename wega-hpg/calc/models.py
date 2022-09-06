@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.core.cache import cache
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from django.utils.html import format_html
 
 from calc.decorators import float_exception
 
@@ -78,6 +79,7 @@ class PlantProfile(models.Model):
     model_change_fields = macro + micro + salt_micro_gramm + salt_micro_persent + salt + concentrate_fields
     price_fields = [ 'p_cano3','p_kno3','p_nh4no3','p_mgso4','p_kh2po4','p_k2so4','p_mgno3','p_cacl2','p_fe',
                      'p_mn','p_b','p_zn','p_cu','p_mo','p_co','p_si','p_cmplx',]
+    mkorr = ''
     corrections_macro = [
         'N', 'NO3', 'NH4',  'P', 'K', 'Ca', 'Mg', 'S', 'Cl', 'EC',
     ]
@@ -403,7 +405,8 @@ class PlantProfile(models.Model):
             
             self.n_2 = self.no3_2 + self.nh4_2
             
-            self.mkorr = f'основное:\n изменение объема на: {round((self.v_2 - self.v_1) / self.v_1 * 100)}%\n' \
+            self.mkorr = f'основное:\n' \
+                         f'изменение объема на: {round((self.v_2 - self.v_1) / self.v_1 * 100)}%\n' \
                          f'доля старого расвтора: {round((self.v_1 / self.v_2) * 100)}%\n' \
                          f'изменение ec на {round((self.ec_2 - self.ec_1) / self.ec_1 * 100)}%\n' \
                          f'изменение n общий на: {round((self.n_2 - self.n_1) / self.n_1 * 100)}%\n\n' \
@@ -416,11 +419,11 @@ class PlantProfile(models.Model):
                          f'коррекция mg на: {round((self.mg_2 - self.mg_1) / self.mg_1 * 100)}%\n' \
                          f'коррекция s на: {round((self.s_2 - self.s_1))}ppm\n' \
                          f'коррекция cl на: {round((self.cl_2 - self.cl_1))}ppm\n\n' \
-                         f'соотношения:' \
-                         f'nh4:no3 до {round(self.nh4_1 / self.no3_1 * 1000) / 1000} после {round(self.nh4_2 / self.no3_2 * 1000) / 1000}' \
-                         f'k:n до {round(self.k_1 / self.n_1 * 1000) / 1000} после {round(self.k_2 / self.n_2 * 1000) / 1000}' \
-                         f'k:ca до {round(self.k_1 / self.ca_1 * 1000) / 1000} после {round(self.k_2 / self.ca_2 * 1000) / 1000}' \
-                         f'k:mg до {round(self.k_1 / self.mg_1 * 1000) / 1000} после {round(self.k_2 / self.mg_2 * 1000) / 1000}'
+                         f'соотношения:\n' \
+                         f'nh4:no3 до {round(self.nh4_1 / self.no3_1 * 1000) / 1000} после {round(self.nh4_2 / self.no3_2 * 1000) / 1000}\n' \
+                         f'k:n до {round(self.k_1 / self.n_1 * 1000) / 1000} после {round(self.k_2 / self.n_2 * 1000) / 1000}\n' \
+                         f'k:ca до {round(self.k_1 / self.ca_1 * 1000) / 1000} после {round(self.k_2 / self.ca_2 * 1000) / 1000}\n' \
+                         f'k:mg до {round(self.k_1 / self.mg_1 * 1000) / 1000} после {round(self.k_2 / self.mg_2 * 1000) / 1000}\n'
     
     def calc_uncorrection(self, pushed_element=None, val=None):
     
@@ -1166,6 +1169,7 @@ class PlantProfile(models.Model):
     
     def to_json(self):
         
+        
         data = {'pk': self.pk,
                 'ec': "{:.3f}".format(self.ec),
                 'ppm': "{:.2f}".format(self.ppm),
@@ -1189,6 +1193,7 @@ class PlantProfile(models.Model):
                 'v_1':self.v_1,
                 'v_2': self.v_2,
                 'v_k': self.v_k,
+                'mkorr': format_html(self.mkorr),
                 
                 
                 
