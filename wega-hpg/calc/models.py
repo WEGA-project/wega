@@ -524,8 +524,7 @@ class PlantProfile(models.Model):
         
         
         if pushed_element in self.micro or pushed_element in self.salt_micro_gramm \
-                or pushed_element in self.salt_micro_persent or val in ['b', 'B', 'u', 'U'] \
-                or pushed_element in [ 'weight_micro', 'v_micro']:
+                or pushed_element in self.salt_micro_persent or pushed_element in [ 'weight_micro', 'v_micro']:
             
          
             recalc_gmsum= True

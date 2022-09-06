@@ -140,6 +140,7 @@ $(document).ready(function () {
             $('#id_mo').prop("disabled", false);
             $('#id_co').prop("disabled", false);
             $('#id_si').prop("disabled", false);
+
         }
 
         if ( data.pp.micro_calc_mode == 'b' ){
