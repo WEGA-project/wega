@@ -22,7 +22,7 @@
 
                  <input type="number" name="{{ f.name }}"
                            value="{{ f.value|hpg_float_format }}"
-                           step="0.01" class="form-control d-inline-block micro-w-100 w-115 precalc"
+                            class="form-control d-inline-block micro-w-100 w-115 precalc"
                             {% if instance.micro_calc_mode == 'b' and f.name  != 'b' %}disabled{% endif %}
                            required=""
                            id="id_{{ f.name }}">
