@@ -474,15 +474,16 @@ class PlantProfile(models.Model):
                 for i in self.salt_micro_persent:
                     cache_str = f"pp-{self.pk}-{i}"
                     cache.set(cache_str, getattr(self, i))
-                    
-                self.dfe = self.agfe
-                self.dmn = self.agmn
-                self.dzn = self.agzn
-                self.db  = self.agb
-                self.dcu = self.agcu
-                self.dmo = self.agmo
-                self.dco = self.agco
-                self.dsi = self.agsi
+                
+                if self.agfe:
+                    self.dfe = self.agfe
+                    self.dmn = self.agmn
+                    self.dzn = self.agzn
+                    self.db  = self.agb
+                    self.dcu = self.agcu
+                    self.dmo = self.agmo
+                    self.dco = self.agco
+                    self.dsi = self.agsi
 
             self.fe = 10000 * self.gmsum * (self.dfe / self.litres)
             self.mn = 10000 * self.gmsum * (self.dmn / self.litres)

@@ -39,6 +39,9 @@ class PlantProfileEditForm(forms.ModelForm):
                 
             # if visible.name in PlantProfile.macro:
             #     visible.field.widget.attrs['step'] = 0.01
+            
+ 
+                
                 
                 
             if visible.name == 'name':

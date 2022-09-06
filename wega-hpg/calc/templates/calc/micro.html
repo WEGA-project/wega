@@ -17,7 +17,16 @@
 
                 <div class="mb-3 col-lg-1 p-1  macro-salt text-center">
                     <label for="{{ f.id_for_label }}" class="form-label">{{ f.label }}</label>
-                    {{ f }}
+
+
+
+                 <input type="number" name="{{ f.name }}"
+                           value="{{ f.value|hpg_float_format }}"
+                           step="0.01" class="form-control d-inline-block micro-w-100 w-115 precalc"
+                            {% if instance.micro_calc_mode == 'b' and f.name  != 'b' %}disabled{% endif %}
+                           required=""
+                           id="id_{{ f.name }}">
+
                     <div class="error">{{ f.errors }}</div>
                 </div>
 
@@ -64,6 +73,7 @@
                     <input type="number" name="g{{ salt }}"
 
                            value="{{ instance|getattribute:salt_data.g|floatformat:3 }}"
+
                            step="0.01"
                            class="{% if instance.micro_calc_mode == 'b' %}d-none{% endif %} form-control w-115 micro-w-100 d-inline-block precalc" required=""
                            id="id_g{{ salt }}">
