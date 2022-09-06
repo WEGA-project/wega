@@ -1,111 +1,136 @@
 {% load getattr %}
 <div class="row">
-                       <div class="row">
-                            <h5 class=" ">План изготовления жидкими монорастворами</h5>
+    <div class="row">
+        <h5 class=" ">План изготовления жидкими монорастворами</h5>
+    </div>
+    <div class="row  ">
+        <div class="row">
+            <div class="col-2">Помпа</div>
+            <div class="col-1  text-center">Ручное</div>
+            <div class="col-2  text-center">гр. жидк.</div>
+            <div class="col-6  text-center">наименование</div>
+        </div>
+        {% for comsalt, data in instance.mixer_dict.items %}
+            <div class="row {% if comsalt == 'fe' %}mt-5{% endif %} {% if instance.micro_calc_mode == 'b'  and  comsalt in instance.micro %}d-none{% endif %} "
+                 id="mixer-{{ comsalt }}">
+
+
+                <div class="col-2 ">
+
+                    <input type="text" name="{{ data.mixer }}"
+                           value="{% if instance|getattribute:data.mixer %}{{ instance|getattribute:data.mixer   }}{% endif %}"
+                           step="{% if forloop.counter == 2 %}0.0{% endif %}1"
+                           class="form-control w-100  d-inline-block precalc h-25px"
+                           required=""
+                           id="id_{{ data.mixer }}">
+
+
+                </div>
+                <div class="col-1 text-center">
+                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+
+                </div>
+
+
+                <div class="col-2 ">
+
+                    <input type="number" name="{{ salt }}"
+                           disabled
+                           value="{{ instance|getattribute:data.gram|floatformat:3  }}"
+                           step="{% if forloop.counter == 2 %}0.0{% endif %}1"
+                           class="form-control w-100  d-inline-block precalc" required=""
+                           id="id_{{ data.gram }}">
+                </div>
+
+
+                <div class="col-7 d-flex flex-row ">
+                    {% if comsalt in instance.salt_micro_dict %}
+                        <div class="col-6  ">
+                            {{ instance.captions|get:comsalt  }}={{ instance|getattribute:data.d   }}%
                         </div>
-                        <div class="row  ">
-                            <div class="row">
-                                <div class="col-2">Помпа</div>
-                                <div class="col-1  text-center">Ручное</div>
-                                <div class="col-2  text-center">гр. жидк.</div>
-                                <div class="col-6  text-center">наименование</div>
-                            </div>
-                                {% for comsalt, data in instance.mixer_dict.items %}
-                                    <div class="row {% if comsalt == 'fe' %}mt-5{% endif %}" id="mixer-{{ comsalt }}">
 
+                        <div class="col-2"><span
+                                id="id_{{ comsalt }}">{{ instance|getattribute:data.calc|divide:1000|floatformat:2 }}</span>
+                            г.
+                        </div>
+                        <div class="col-2"> ({{ instance|getattribute:data.gl|floatformat:2  }} г/л</div>
+                        <div class="col-2">{{ instance|getattribute:data.gml|floatformat:2  }} г/мл)</div>
 
-                                        <div class="col-2 ">
-
-                                              <input type="text" name="{{ data.mixer  }}"
-                                                       value="{% if instance|getattribute:data.mixer %}{{  instance|getattribute:data.mixer   }}{% endif %}"
-                                                       step="{% if forloop.counter == 2 %}0.0{% endif %}1"
-                                                       class="form-control w-100  d-inline-block precalc h-25px"
-                                                       required=""
-                                                        id="id_{{ data.mixer  }}">
-
-
-                                        </div>
-                                    <div class="col-1 text-center">
-                                      <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-
-                                                </div>
-
-
-                                            <div class="col-2 ">
-
-                                            <input type="number" name="{{ salt }}"
-                                                   disabled
-                                                   value="{{  instance|getattribute:data.gram|floatformat:3  }}"
-                                                   step="{% if forloop.counter == 2 %}0.0{% endif %}1"
-                                                   class="form-control w-100  d-inline-block precalc" required=""
-                                               id="id_{{ data.gram  }}">
-                                            </div>
-
-
-
-                     <div class="col-7 d-flex flex-row ">
-                         {% if comsalt in instance.salt_micro_dict %}
-                         <div class="col-6  ">
-                             {{ instance.captions|get:comsalt  }}={{ instance|getattribute:data.d   }}%
-                             </div>
-
-                          <div class="col-2"><span id="id_{{ comsalt }}" >{{ instance|getattribute:data.calc|divide:1000|floatformat:2 }}</span> г.</div>
-                         <div class="col-2"> ({{ instance|getattribute:data.gl|floatformat:2  }} г/л</div>
-                          <div class="col-2">{{ instance|getattribute:data.gml|floatformat:2  }} г/мл)</div>
-
-                         {% else %}
-                         <div class="col-6">{{ instance.captions|get:comsalt  }} </div>
-                         <div class="col-2"><span id="id_{{ comsalt }}">{{ instance|getattribute:data.calc|floatformat:3 }}</span> г.</div>
+                    {% else %}
+                        <div class="col-6">{{ instance.captions|get:comsalt  }} </div>
+                        <div class="col-2"><span
+                                id="id_{{ comsalt }}">{{ instance|getattribute:data.calc|floatformat:3 }}</span> г.
+                        </div>
                         <div class="col-2"> ({{ instance|getattribute:data.gl|floatformat:2  }} г/л</div>
                         <div class="col-2"> {{ instance|getattribute:data.gml|floatformat:2  }} г/мл)</div>
 
-                         {% endif %}
-                     </div>
-                                    </div>
-                                {% endfor %}
-                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="row mt-3">
+        <div class="col-12">
+               <label for="mixer_ip" class="form-label mb-0">Адрес
+                       <a href="https://github.com/WEGA-project/wega-mixer">миксера</a></label>
+               <input type="text" name="mixer_ip" style="max-width: 150px"
+                           value="{{ instance.mixer_ip }}"
+                           class="form-control d-inline-block precalc h-25px"
+                           required=""
+                           id="id_mixer_ip">
+                <label for="mixer_ip" class="form-label mb-0">Номер системы(для учета на  <a href="https://github.com/WEGA-project/wega">вега-сервере</a>)</label>
+
+                <input type="number" name="mixer_system_number"
+                           value="{{ instance.mixer_system_number }}"
+                           class="form-control    d-inline-block precalc h-25px"
+                           required=""
+                           id="id_mixer_system_number">
+
+                <a id='id_mixer_btn_link' href="{{ instance.get_mixer_link }}" class="btn btn-secondary">Изготовить</a>
 
 
-                        <div class="row  mt-3">
-                                <div class="col-1">
-                                    <p>Тара А</p>
-                                </div>
-                              <div class="col-1 ">
-                                 <input type="number" name="taml"
-                                       value="{{ instance|getattribute:"taml"|floatformat:2 }}"
-                                       step="1"
-                                       class="form-control w-100  d-inline-block precalc" required=""
-                                   id="id_taml">
-                              </div>
-
-                                   <div class="col-10">
-                                       <p class="d-inline-block" id="id_suma"> {{ instance.suma }} </p>
-                                       <p class="d-inline-block" id="id_lvola"> {{ instance.lvola }} </p>
-                                   </div>
-
-                    </div>
-
-                       <div class="row mt-1">
-
-                                  <div class="col-1">
-                                    <p>Тара Б</p>
-                                </div>
-                              <div class="col-1 ">
+        </div>
+    </div>
 
 
-                                 <input type="number" name="tbml"
-                                       value="{{ instance|getattribute:"tbml"|floatformat:2 }}"
-                                       step="1"
-                                       class="form-control w-100  d-inline-block precalc" required=""
-                                   id="id_tbml">
-                              </div>
+    <div class="row  mt-3">
+        <div class="col-1">
+            <p>Тара А</p>
+        </div>
+        <div class="col-1 ">
+            <input type="number" name="taml"
+                   value="{{ instance|getattribute:"taml"|floatformat:2 }}"
+                   step="1"
+                   class="form-control w-100  d-inline-block precalc" required=""
+                   id="id_taml">
+        </div>
+        <div class="col-10">
+            <p class="d-inline-block" id="id_suma"> {{ instance.suma }} </p>
+            <p class="d-inline-block" id="id_lvola"> {{ instance.lvola }} </p>
+        </div>
 
-                             <div class="col-10">
-                                        <p class="d-inline-block" id="id_sumb"> {{ instance.suma }} </p>
-                                        <p class="d-inline-block" id="id_lvolb"> {{ instance.lvola }} </p>
-                             </div>
-                    </div>
+    </div>
+
+    <div class="row mt-1">
+
+        <div class="col-1">
+            <p>Тара Б</p>
+        </div>
+        <div class="col-1 ">
 
 
+            <input type="number" name="tbml"
+                   value="{{ instance|getattribute:"tbml"|floatformat:2 }}"
+                   step="1"
+                   class="form-control w-100  d-inline-block precalc" required=""
+                   id="id_tbml">
+        </div>
 
-                    </div>
+        <div class="col-10">
+            <p class="d-inline-block" id="id_sumb"> {{ instance.suma }} </p>
+            <p class="d-inline-block" id="id_lvolb"> {{ instance.lvola }} </p>
+        </div>
+    </div>
+
+
+</div>

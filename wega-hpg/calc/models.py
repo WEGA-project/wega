@@ -34,9 +34,6 @@ class PlantProfile(models.Model):
     salt_micro_gramm = ['gfe', 'gmn', 'gb', 'gzn', 'gcu', 'gmo', 'gco', 'gsi', ]
     salt_micro_persent = ['dfe', 'dmn', 'db', 'dzn', 'dcu', 'dmo', 'dco', 'dsi', ]
     salt_micro_persent_bor = ['agfe', 'agmn', 'agdb', 'agdzn', 'agdcu', 'agdmo', 'agdco', 'agdsi', ]
-    
-    
-    
     salt_micro_dict = {
         'fe': {'name': "Железо", 'd': 'dfe', 'g': 'gfe'},
         'mn': {'name': "Марганец", 'd': 'dmn', 'g': 'gmn'},
@@ -47,12 +44,8 @@ class PlantProfile(models.Model):
         'co': {'name': "Кобальт", 'd': 'dco', 'g': 'gco'},
         'si': {'name': "Кремний", 'd': 'dsi', 'g': 'gsi'},
     }
-    
-    
-    
     salt = ['cano3_ca', 'cano3_no3', 'cano3_nh4', 'kno3_k', 'kno3_no3', 'nh4no3_nh4', 'nh4no3_no3', 'mgso4_mg',
             'mgso4_s', 'kh2po4_k', 'kh2po4_p', 'k2so4_k', 'k2so4_s', 'mgno3_mg', 'mgno3_no3', 'cacl2_ca', 'cacl2_cl', ]
-    
     salt_gramms = {'cano3':'calc_cano3',
                    'kno3':'calc_kno3',
                    'nh4no3':'calc_nh4no3',
@@ -61,10 +54,6 @@ class PlantProfile(models.Model):
                    'k2so4':'calc_k2so4',
                    'mgno3':'calc_mgno3',
                    'cacl2':'calc_cacl2', }
-
-
-    
-    
     concentrate_dict_a = {
         'cano3':  {'name':'cano3', 'data':  ['gl_cano3', 'gml_cano3', ], 'calc_data': ['ml_cano3', 'gg_cano3']},
         'kno3':   {'name':'kno3', 'data':   ['gl_kno3', 'gml_kno3', ], 'calc_data': ['ml_kno3', 'gg_kno3']},
@@ -74,7 +63,6 @@ class PlantProfile(models.Model):
         
  
     }
-
     concentrate_fields = ['taml', 'tbml', 'gml_fe', 'gml_mn', 'gml_b', 'gml_zn', 'gml_cu', 'gml_mo', 'gml_co',
                           'gml_si', 'gml_cano3', 'gml_kno3', 'gml_nh4no3', 'gml_mgno3', 'gml_mgso4', 'gml_k2so4',
                           'gml_kh2po4', 'gml_cacl2', 'gml_cmplx', 'gl_fe', 'gl_mn', 'gl_b', 'gl_zn',
@@ -86,10 +74,8 @@ class PlantProfile(models.Model):
                           'gg_fe', 'gg_mn', 'gg_b', 'gg_zn', 'gg_cu', 'gg_mo','gg_co', 'gg_si', 'gg_cmplx',
 
                           ]
-
     model_create_fields = macro + micro + salt_micro_gramm + salt_micro_persent + salt_micro_persent_bor + salt + concentrate_fields
     model_change_fields = macro + micro + salt_micro_gramm + salt_micro_persent + salt + concentrate_fields
-    
     price_fields = [ 'p_cano3','p_kno3','p_nh4no3','p_mgso4','p_kh2po4','p_k2so4','p_mgno3','p_cacl2','p_fe',
                      'p_mn','p_b','p_zn','p_cu','p_mo','p_co','p_si','p_cmplx',]
     
@@ -153,7 +139,8 @@ class PlantProfile(models.Model):
     ec = models.FloatField(default=0, verbose_name='Ec')
     ppm = models.FloatField(default=0, verbose_name='PPM')
     litres = models.FloatField(default=10, verbose_name='Литры')
-    
+    mixer_ip =   models.CharField(max_length=1024, default='mixer.local', verbose_name='Адрес/порт миксера')
+    mixer_system_number = models.FloatField(default=1, verbose_name='Номер системы куда нальется раствор')
     template = models.ForeignKey('PlantTemplate', on_delete=models.CASCADE, null=True, blank=True)
     from_template = models.ForeignKey('PlantTemplate', on_delete=models.CASCADE, null=True, blank=True,
                                       related_name='profile_from_template')
@@ -229,7 +216,7 @@ class PlantProfile(models.Model):
     nh4_nh3_ratio = models.FloatField(default=0.1, verbose_name='NH4:NH3')
     
     micro_calc_mode = models.CharField(max_length=2, choices=CalcMicroMode.choices, default=CalcMicroMode.U,
-                                       verbose_name='Способ расчета')
+                                       verbose_name='Микро метод расчета')
     
     v_micro = models.FloatField(default=500, verbose_name='Объем микро')
 
@@ -415,6 +402,39 @@ class PlantProfile(models.Model):
     gmlcacl2_error = False
     
     errors = {}
+    
+    def get_mixer_link(self):
+        params = {}
+        adr = f'http://{str(self.mixer_ip)}'
+        
+        params['s'] =  int(self.mixer_system_number)
+        if self.m_cano3:  params[self.m_cano3] = round(self.gg_cano3,2)
+        if self.m_kno3:   params[self.m_kno3] = round(self.gg_kno3,2)
+        if self.m_nh4no3:  params[self.m_nh4no3] = round(self.gg_nh4no3,2)
+        if self.m_mgno3:  params[self.m_mgno3] = round(self.gg_mgno3,2)
+        if self.m_cacl2:  params[self.m_cacl2] = round(self.gg_cacl2,2)
+        if self.m_mgso4:  params[self.m_mgso4] = round(self.gg_mgso4,2)
+        if self.m_kh2po4:  params[self.m_kh2po4] = round(self.gg_kh2po4,2)
+        if self.m_k2so4:  params[self.m_k2so4] = round(self.gg_k2so4,2)
+        
+
+        if self.micro_calc_mode==self.CalcMicroMode.B:
+        
+            params[self.m_cmplx] = round(self.gg_cmplx,2)
+    
+        else:
+        
+            if self.m_fe:  params[self.m_fe]  = round(self.gg_fe,2)
+            if self.m_mn:  params[self.m_mn]  = round(self.gg_mn,2)
+            if self.m_b:  params[self.m_b]  = round(self.gg_b,2)
+            if self.m_zn:  params[self.m_zn]  = round(self.gg_zn,2)
+            if self.m_cu:  params[self.m_cu]  = round(self.gg_cu,2)
+            if self.m_mo:  params[self.m_mo]  = round(self.gg_mo,2)
+            if self.m_co:  params[self.m_co]  = round(self.gg_co,2)
+            if self.m_si:  params[self.m_si]  = round(self.gg_si,2)
+        from urllib.parse import urlencode
+        return f"{adr}?{urlencode(params)}"
+
     def calc_micro_vars(self):
         self.agfe =  (self.fe * self.litres) / (self.gmsum * 10000)   if self.fe > 0 else 0
         self.agmn =  (self.mn * self.litres) / (self.gmsum * 10000)   if self.mn > 0 else 0
@@ -1004,6 +1024,7 @@ class PlantProfile(models.Model):
                 'ec': "{:.3f}".format(self.ec),
                 'ppm': "{:.2f}".format(self.ppm),
                 'litres': self.litres,
+                'mixer_btn_link': self.get_mixer_link(),
                 'weight_micro': "{:.2f}".format(self.weight_micro()),
                 'npk': self.npk,
                 'npk_formula': self.npk_formula,

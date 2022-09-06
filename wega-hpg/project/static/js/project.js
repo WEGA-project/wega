@@ -126,6 +126,16 @@ $(document).ready(function () {
                 $('#conc-si').removeClass('d-none');
                 $('#conc-b').removeClass('d-none');
 
+                $('#p_fe').removeClass('d-none');
+                $('#p_mn').removeClass('d-none');
+                $('#p_zn').removeClass('d-none');
+                $('#p_cu').removeClass('d-none');
+                $('#p_mo').removeClass('d-none');
+                $('#p_co').removeClass('d-none');
+                $('#p_si').removeClass('d-none');
+                $('#p_b').removeClass('d-none');
+                $('#p_cmplx').addClass('d-none');
+
                     $('#mixer-cmplx').addClass('d-none');
                     $('#conc-cmplx').addClass('d-none');
                 $('#grams_micro_up').removeClass('d-none');
@@ -165,6 +175,18 @@ $(document).ready(function () {
             $('#mixer-b').addClass('d-none');
 
 
+
+            $('#p_fe').addClass('d-none');
+                $('#p_mn').addClass('d-none');
+                $('#p_zn').addClass('d-none');
+                $('#p_cu').addClass('d-none');
+                $('#p_mo').addClass('d-none');
+                $('#p_co').addClass('d-none');
+                $('#p_si').addClass('d-none');
+                $('#p_b').addClass('d-none');
+                $('#p_cmplx').removeClass('d-none');
+
+
               $('#conc-fe').addClass('d-none');
                 $('#conc-mn').addClass('d-none');
                 $('#conc-zn').addClass('d-none');
@@ -194,7 +216,14 @@ $(document).ready(function () {
         for (i in data.pp) {
 
             if (i == 'calc_mode' || i=='micro_calc_mode'){
-                  $("#id_" + i+ "option[value="+data.pp[i]+"]").prop('selected', true); }  else
+                  $("#id_" + i+ "option[value="+data.pp[i]+"]").prop('selected', true); }
+
+            else
+                if (i=='mixer_btn_link'){
+
+                      $("#id_" + i).attr("href",data.pp[i]);
+                }
+                else
                   {
 
                       $('[id=id_' + i).each(function () {
