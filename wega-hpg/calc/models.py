@@ -78,7 +78,21 @@ class PlantProfile(models.Model):
     model_change_fields = macro + micro + salt_micro_gramm + salt_micro_persent + salt + concentrate_fields
     price_fields = [ 'p_cano3','p_kno3','p_nh4no3','p_mgso4','p_kh2po4','p_k2so4','p_mgno3','p_cacl2','p_fe',
                      'p_mn','p_b','p_zn','p_cu','p_mo','p_co','p_si','p_cmplx',]
-    
+    corrections_macro = [
+        'N', 'NO3', 'NH4',  'P', 'K', 'Ca', 'Mg', 'S', 'Cl', 'EC',
+    ]
+    correction_fields = {
+        '0':['n_0','no3_0', 'nh4_0', 'p_0', 'k_0', 'ca_0','mg_0', 's_0','cl_0', 'ec_0',],
+        '1':['n_1','no3_1', 'nh4_1', 'p_1', 'k_1', 'ca_1','mg_1', 's_1','cl_1', 'ec_1',],
+        '2':['n_2','no3_2', 'nh4_2', 'p_2', 'k_2', 'ca_2','mg_2', 's_2','cl_2', 'ec_2',],
+        'k':['n_k','no3_k', 'nh4_k', 'p_k', 'k_k', 'ca_k','mg_k', 's_k','cl_k', 'ec_k',],
+    }
+    correction_fields_all = [
+        'ca_0', 'cl_0', 'ec_0', 'k_0', 'mg_0', 'n_0', 'nh4_0', 'no3_0', 'p_0', 's_0', 'v_0',
+        'ca_1', 'cl_1', 'ec_1', 'k_1', 'mg_1', 'n_1', 'nh4_1', 'no3_1', 'p_1', 's_1', 'v_1',
+        'ca_2', 'cl_2', 'ec_2', 'k_2', 'mg_2', 'n_2', 'nh4_2', 'no3_2', 'p_2', 's_2', 'v_2',
+        'ca_k', 'cl_k', 'ec_k', 'k_k', 'mg_k', 'n_k', 'nh4_k', 'no3_k', 'p_k', 's_k', 'v_k'
+    ]
     def concentrate_dict_b(self):
         concentrate_dict_b = {
             'mgso4': {'name': 'mgso4', 'data': ['gl_mgso4', 'gml_mgso4', ], 'calc_data': ['ml_mgso4', 'gg_mgso4']},
@@ -131,7 +145,20 @@ class PlantProfile(models.Model):
         super(PlantProfile, self).__init__(*args, **kwargs)
         if self.pk:
             self.saved_ec = self.calc_ec()
+            if not self.ec:
+                self.ec = self.calc_ec()
+        
             self.recalc()
+            for k, ii in self.correction_fields.items():
+                for i in ii:
+                    setattr(self, i , getattr(self, i.replace('_'+k, '')) )
+            self.v_2 = self.litres + 20
+            self.v_1 = self.litres
+            self.v_k = self.litres + 10
+            
+            self.ec_2 = self.saved_ec
+            self.ec_1 = self.saved_ec
+            self.ec_k = self.saved_ec
     
     
     name = models.CharField(max_length=1024, verbose_name='Имя профиля')
@@ -299,7 +326,123 @@ class PlantProfile(models.Model):
     p_co = models.FloatField(default=3.0000)
     p_si = models.FloatField(default=2.3000)
     p_cmplx = models.FloatField(default=0.2700)
+    
+    
+    def calcs(self, no3, nh4, p, k, ca, mg, cl):
 
+      m = MM
+      a = nh4 * m.Ca * m.Mg * m.K * m.P * m.Cl
+      b = 2 * ca * m.N * m.Mg * m.K * m.P * m.Cl
+      c = 2 * mg * m.N * m.Ca * m.K * m.P * m.Cl
+      d = k * m.N * m.Ca * m.Mg * m.P * m.Cl
+      e = no3 * m.Ca * m.Mg * m.K * m.P * m.Cl
+      f = p * m.N * m.Ca * m.Mg * m.K * m.Cl
+      g = cl * m.N * m.Ca * m.Mg * m.K * m.P
+      h = 2 * m.N * m.Ca * m.Mg * m.K * m.P * m.Cl
+      total = -m.S * (-a - b - c - d + e + f + g) / (h)
+      return total
+    
+    def calcec(self, nh4, k, ca, mg):
+        m = MM()
+        a = nh4 * m.Ca * m.Mg * m.K
+        b = ca * m.N * m.Mg * m.K
+        c = mg * m.N * m.Ca * m.K
+        d = k * m.N * m.Ca * m.Mg
+        e = m.N * m.Ca * m.Mg * m.K
+        f = m.N * m.Ca * m.Mg * m.K
+        ec = 0.095 * (a + 2 * b + 2 * c + d + 2 * e) / f
+        return ec
+
+    
+    def calc_correction(self, pushed_element=None, val=None):
+        if pushed_element in self.correction_fields['0'] or pushed_element in self.correction_fields['2'] or pushed_element in ['v_1','v_2']:
+            kec = None
+            # // исходный
+            if self.v_1 >= self.v_2:
+                self.v_2 = self.v_1+self.v_k
+    
+            self.s_0 = self.calcs(self.no3_0,self.nh4_0,self.p_0,self.k_0,self.ca_0,self.mg_0,self.cl_0)
+            self.ec_0 = self.calcec(self.nh4_0, self.k_0, self.ca_0, self.mg_0)
+            self.n_0 = self.no3_0 + self.nh4_0;
+    
+            # // текущий
+            
+            if self.ec_0 != 0: kec = self.ec_1 / self.ec_0
+            
+            self.no3_1 = self.no3_0 * kec
+            self.nh4_1 = self.nh4_0 * kec
+            self.p_1 = self.p_0 * kec
+            self.k_1 = self.k_0 * kec
+            self.ca_1 = self.ca_0 * kec
+            self.mg_1 = self.mg_0 * kec
+            self.s_1 = self.s_0 * kec
+            self.cl_1 = self.cl_0 * kec
+            self.n_1 = self.no3_1 + self.nh4_1
+            
+            # // корректирующий
+            self.v_k = self.v_2 - self.v_1
+            self.no3_k = (self.no3_2 * self.v_2 - self.no3_1 * self.v_1) / self.v_k
+            self.nh4_k = (self.nh4_2 * self.v_2 - self.nh4_1 * self.v_1) / self.v_k
+            self.p_k = (self.p_2 * self.v_2 - self.p_1 * self.v_1) / self.v_k
+            self.k_k = (self.k_2 * self.v_2 - self.k_1 * self.v_1) / self.v_k
+            self.ca_k = (self.ca_2 * self.v_2 - self.ca_1 * self.v_1) / self.v_k
+            self.mg_k = (self.mg_2 * self.v_2 - self.mg_1 * self.v_1) / self.v_k
+            self.cl_k = (self.cl_2 * self.v_2 - self.cl_1 * self.v_1) / self.v_k
+            
+            self.s_k = self.calcs(self.no3_k,self.nh4_k,self.p_k,self.k_k,self.ca_k,self.mg_k,self.cl_k)
+            
+            # // self.ec_k = (self.ec_2 * self.v_2 - self.ec_1 * self.v_1) / self.v_k;
+            
+            self.ec_k = self.calcec(self.nh4_k,self.k_k,self.ca_k,self.mg_k)
+            self.n_k = self.no3_k + self.nh4_k;
+            # // итоговый
+            
+            self.s_2 = self.calcs(self.no3_2,self.nh4_2,self.p_2,self.k_2,self.ca_2,self.mg_2,self.cl_2)
+            
+            self.ec_2 = self.calcec(self.nh4_2,self.k_2,self.ca_2,self.mg_2)
+            
+            self.n_2 = self.no3_2 + self.nh4_2
+            
+            self.mkorr = f'основное:\n изменение объема на: {round((self.v_2 - self.v_1) / self.v_1 * 100)}%\n' \
+                         f'доля старого расвтора: {round((self.v_1 / self.v_2) * 100)}%\n' \
+                         f'изменение ec на {round((self.ec_2 - self.ec_1) / self.ec_1 * 100)}%\n' \
+                         f'изменение n общий на: {round((self.n_2 - self.n_1) / self.n_1 * 100)}%\n\n' \
+                         f'профиль:' \
+                         f'коррекция no3 на: {round((self.no3_2 - self.no3_1) / self.no3_1 * 100)}%\n' \
+                         f'коррекция nh4 на: {round((self.nh4_2 - self.nh4_1) / self.nh4_1 * 100)}%\n' \
+                         f'коррекция p на: {round((self.p_2 - self.p_1) / self.p_1 * 100)}%\n' \
+                         f'коррекция k на: {round((self.k_2 - self.k_1) / self.k_1 * 100)}%\n' \
+                         f'коррекция ca на: {round((self.ca_2 - self.ca_1) / self.ca_1 * 100)}%\n' \
+                         f'коррекция mg на: {round((self.mg_2 - self.mg_1) / self.mg_1 * 100)}%\n' \
+                         f'коррекция s на: {round((self.s_2 - self.s_1))}ppm\n' \
+                         f'коррекция cl на: {round((self.cl_2 - self.cl_1))}ppm\n\n' \
+                         f'соотношения:' \
+                         f'nh4:no3 до {round(self.nh4_1 / self.no3_1 * 1000) / 1000} после {round(self.nh4_2 / self.no3_2 * 1000) / 1000}' \
+                         f'k:n до {round(self.k_1 / self.n_1 * 1000) / 1000} после {round(self.k_2 / self.n_2 * 1000) / 1000}' \
+                         f'k:ca до {round(self.k_1 / self.ca_1 * 1000) / 1000} после {round(self.k_2 / self.ca_2 * 1000) / 1000}' \
+                         f'k:mg до {round(self.k_1 / self.mg_1 * 1000) / 1000} после {round(self.k_2 / self.mg_2 * 1000) / 1000}'
+    
+    def calc_uncorrection(self, pushed_element=None, val=None):
+    
+        if pushed_element in self.correction_fields['2'] or  pushed_element in self.correction_fields['k']  or pushed_element in ['v_1','v_2']:
+            if self.v_2 != 0: self.no3_2=  (self.no3_k * self.v_k + self.no3_1 * self.v_1) / self.v_2
+            if self.v_2 != 0: self.nh4_2=  (self.nh4_k * self.v_k + self.nh4_1 * self.v_1) / self.v_2
+    
+            self.n_k = self.no3_k + self.nh4_k
+            self.n_2 = self.no3_2 + self.nh4_2
+    
+            if self.v_2 != 0: self.p_2=  (self.p_k * self.v_k + self.p_1 * self.v_1) / self.v_2
+            if self.v_2 != 0: self.k_2=  (self.k_k * self.v_k + self.k_1 * self.v_1) / self.v_2
+            if self.v_2 != 0: self.ca_2=  (self.ca_k * self.v_k + self.ca_1 * self.v_1) / self.v_2
+            if self.v_2 != 0: self.mg_2=  (self.mg_k * self.v_k + self.mg_1 * self.v_1) / self.v_2
+            if self.v_2 != 0: self.cl_2=  (self.cl_k * self.v_k + self.cl_1 * self.v_1) / self.v_2
+            self.s_k = self.calcs(self.no3_k,self.nh4_k,self.p_k,self.k_k,self.ca_k,self.mg_k,self.cl_k)
+            self.ec_k = self.calcec(self.nh4_k,self.k_k,self.ca_k,self.mg_k)
+            self.s_2 = self.calcs(self.no3_2,self.nh4_2,self.p_2,self.k_2,self.ca_2,self.mg_2,self.cl_2)
+            self.ec_2 = self.calcec(self.nh4_2,self.k_2,self.ca_2,self.mg_2)
+      
+  
+   
     def calc_p_cano3(self):
         return self.p_cano3 * self.calc_cano3()
     def calc_p_kno3(self):
@@ -1008,10 +1151,13 @@ class PlantProfile(models.Model):
         self.calc_micro(pushed_element=pushed_element, val=val)
         self.calc_concentrates(pushed_element=pushed_element, val=val)
         self.calc_prices(pushed_element=pushed_element, val=val)
+        self.calc_correction(pushed_element=pushed_element, val=val)
+        self.calc_uncorrection(pushed_element=pushed_element, val=val)
       
         self.captions = self.calc_captions()
         if pushed_element  and not 'matrix' in pushed_element:
             self.ec = self.calc_ec()
+        
         self.ppm = self.calc_ppm()
         self.npk = self.get_npk()
         self.npk_formula = self.calc_npk_formula()
@@ -1040,6 +1186,9 @@ class PlantProfile(models.Model):
                 'lvola': self.lvola,
                 'sumb': self.sumb,
                 'lvolb': self.lvolb,
+                'v_1':self.v_1,
+                'v_2': self.v_2,
+                'v_k': self.v_k,
                 
                 
                 
@@ -1074,13 +1223,18 @@ class PlantProfile(models.Model):
             data[s] = "{:.2f}".format(getattr(self, s))
             for i in d.get('salt'):
                 data[i] = "{:.2f}".format(getattr(self, i))
-        
+
         for i in self.price_fields:
-            print('price_fields set i ', i,  a )
-            t = 'calc_'+i
+            t = 'calc_' + i
             a = getattr(self, t)()
             setattr(self, i, a)
             data[t] = "{:.3f}".format(a)
+        
+        for k, ii in self.correction_fields.items():
+            for i in ii:
+                data[i] = "{:.2f}".format(getattr(self, i))
+
+        
         
         
         matrix = self.get_matrix(as_dict=True)
@@ -1490,6 +1644,44 @@ class PlantProfile(models.Model):
             self.sumb = f'объем: {round(bv * 10) / 10} мл, вес: {bm} гр, плотность: {bk} г/мл'
             self.lvolb = f'концентрат Б ({bc}:1) . долить воды: {bw} мл. по {bml} мл на 1л.'
         self.conc_errors()
+
+    ca_0 = None
+    ca_1 = None
+    ca_2 = None
+    ca_k = None
+    cl_0 = None
+    cl_1 = None
+    cl_2 = None
+    cl_k = None
+    ec_0 = None
+    ec_1 = None
+    k_0 = None
+    k_1 = None
+    k_2 = None
+    k_k = None
+    mg_0 = None
+    mg_1 = None
+    mg_2 = None
+    mg_k = None
+    n_0 = None
+    n_1 = None
+    nh4_0 = None
+    nh4_1 = None
+    nh4_2 = None
+    nh4_k = None
+    no3_0 = None
+    no3_1 = None
+    no3_2 = None
+    no3_k = None
+    p_0 = None
+    p_1 = None
+    p_2 = None
+    p_k = None
+    s_0 = None
+    s_1 = None
+    v_k = None
+    v_2 = None
+    v_1 = None
 
 
 class PlantTemplate(models.Model):

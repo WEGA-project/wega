@@ -19,135 +19,148 @@
         </div>
 
 
-    <div class="row">
-        <form action="{% url "plant_profile_edit" instance.pk %}" novalidate method="post"
-              class="m-auto d-flex flex-column"
-              id="form-{{ instance.pk }}--{% if micro %}micro{% endif %}{% if macro %}macro{% endif %}">
+        <div class="row">
+            <form action="{% url "plant_profile_edit" instance.pk %}" novalidate method="post"
+                  class="m-auto d-flex flex-column"
+                  id="form-{{ instance.pk }}--{% if micro %}micro{% endif %}{% if macro %}macro{% endif %}">
 
 
                 <div class="row flex-row">
-        <div class="row">
-            <div class="mb-3  col-lg-2 p-1">
-                <label for="{{ form.name.label.id_for_label }}"
-                       class="form-label">{{ form.name.label }}</label>
-                {{ form.name }}
-                <div class="error">{{ form.name.errors }}</div>
+                    <div class="row">
+                        <div class="mb-3  col-lg-2 p-1">
+                            <label for="{{ form.name.label.id_for_label }}"
+                                   class="form-label">{{ form.name.label }}</label>
+                            {{ form.name }}
+                            <div class="error">{{ form.name.errors }}</div>
+                        </div>
+                        <div class="mb-3  col-lg-3 p-1">
+                            <label for="{{ form.calc_mode.label.id_for_label }}"
+                                   class="form-label">{{ form.calc_mode.label }}</label>
+                            {{ form.calc_mode }}
+                            <div class="error">{{ form.calc_mode.errors }}</div>
+                        </div>
+
+                        <div class="mb-3  col-lg-1 p-1">
+                            <label for="{{ form.litres.label.id_for_label }}"
+                                   class="form-label">{{ form.litres.label }}</label>
+                            {{ form.litres }}
+                            <div class="error">{{ form.litres.errors }}</div>
+                        </div>
+
+                        <div class="mb-3  col-lg-3 p-1">
+                            <label for="{{ form.micro_calc_mode.label.id_for_label }}"
+                                   class="form-label">{{ form.micro_calc_mode.label }}</label>
+                            {{ form.micro_calc_mode }}
+                            <div class="error">{{ form.micro_calc_mode.errors }}</div>
+                        </div>
+
+
+                        <div class="mb-3  col-lg-2 p-1">
+                            <label class="form-label" for="">Солей в граммах:</label>
+                            <input id="id_salt_grams"
+                                   value="{{ instance.sum_salt_grams|hpg_float_format }}"
+                                   class="form-control precalc h-auto" disabled>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <p class="npk-bold precalc" id="id_npk_formula">{{ instance.calc_npk_formula }}</p>
+                        <p class="npk-bold precalc" id="id_npk_magazine">{{ instance.get_npk_magazine }}</p>
+
+
+                    </div>
+                    <div class="row">
+
+
+                    </div>
+
+
+                </div>
+
+
+                <div class="row">
+                    <nav>
+                        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                            <a class="nav-link active" id="tabmacro-tab" data-bs-toggle="tab" data-bs-target="#tabmacro"
+                               data-hash-target="#macro"
+                               role="tab" aria-controls="tabmacro" aria-selected="true">Макро
+                            </a>
+                            <a class="nav-link" id="tabmicro-tab" data-bs-toggle="tab" data-bs-target="#tabmicro"
+                               data-hash-target="#micro"
+                               role="tab" aria-controls="tabmicro" aria-selected="true">Микро
+                            </a>
+
+                            <a class="nav-link" id="tabconcentrat-tab" data-bs-toggle="tab"
+                               data-bs-target="#tabconcentrat"
+                               data-hash-target="#concentrat"
+
+
+                               role="tab" aria-controls="tabconcentrat" aria-selected="true">Концентраты
+                            </a>
+
+                            <a class="nav-link" id="tabmixer-tab" data-bs-toggle="tab" data-bs-target="#tabmixer"
+                               data-hash-target="#mixer"
+                               role="tab" aria-controls="tabmixer" aria-selected="true">Изготовление
+                            </a>
+
+                             <a class="nav-link" id="tabcorrector-tab" data-bs-toggle="tab" data-bs-target="#tabcorrector"
+                               data-hash-target="#corrector"
+                               role="tab" aria-controls="tabcorrector" aria-selected="true">Корректор
+                            </a>
+
+
+
+                            <a class="nav-link" id="tabprice-tab" data-bs-toggle="tab" data-bs-target="#tabprice"
+                               data-hash-target="#price"  role="tab" aria-controls="tabprice" aria-selected="true">Цена
+                            </a>
+
+                        </div>
+                    </nav>
+                    <div class="tab-content" id="nav-tabContent">
+                        <div class="tab-pane fade show active" id="tabmacro" role="tabpanel"
+                             aria-labelledby="tabmacro-tab">
+                            {% include 'calc/profile.html' with macro=True title="Макро профиля" %}
+                        </div>
+                        <div class="tab-pane fade " id="tabmicro" role="tabpanel" aria-labelledby="tabmicro-tab">
+                            {% include 'calc/profile.html' with micro=True title="Микро профиля" %}
+                        </div>
+
+                        <div class="tab-pane fade " id="tabconcentrat" role="tabpanel"
+                             aria-labelledby="tabconcentrat-tab">
+                            {% include 'calc/profile.html' with concentrate=True title="Монорастворы и концентраты" %}
+                        </div>
+
+                        <div class="tab-pane fade " id="tabmixer" role="tabpanel" aria-labelledby="tabmixer-tab">
+                            {% include 'calc/profile.html' with mixer=True title="Изготовление" %}
+                        </div>
+
+                        <div class="tab-pane fade " id="tabcorrector" role="tabpanel" aria-labelledby="tabcorrector-tab">
+                            {% include 'calc/profile.html' with corrector=True title="Корерктор" %}
+                        </div>
+
+                        <div class="tab-pane fade " id="tabprice" role="tabpanel" aria-labelledby="tabprice-tab">
+                            {% include 'calc/profile.html' with price=True title="Цена" %}
+                        </div>
+
+
+                    </div>
+                </div>
+
+
+            </form>
+
+            <div class="row mt-5 mb-5">
+                <div class="col-lg-6 m-auto">
+                    <button class="btn btn-primary d-block m-auto" id="from-btn" type="submit" name="from" value=""
+                            form="form-{{ instance.pk }}--{% if micro %}micro{% endif %}{% if macro %}macro{% endif %}">{{ btn_name }}</button>
+                </div>
             </div>
-            <div class="mb-3  col-lg-3 p-1">
-                <label for="{{ form.calc_mode.label.id_for_label }}"
-                       class="form-label">{{ form.calc_mode.label }}</label>
-                {{ form.calc_mode }}
-                <div class="error">{{ form.calc_mode.errors }}</div>
-            </div>
-
-            <div class="mb-3  col-lg-1 p-1">
-                <label for="{{ form.litres.label.id_for_label }}"
-                       class="form-label">{{ form.litres.label }}</label>
-                {{ form.litres }}
-                <div class="error">{{ form.litres.errors }}</div>
-            </div>
-
-            <div class="mb-3  col-lg-3 p-1">
-                <label for="{{ form.micro_calc_mode.label.id_for_label }}"
-                       class="form-label">{{ form.micro_calc_mode.label }}</label>
-                {{ form.micro_calc_mode }}
-                <div class="error">{{ form.micro_calc_mode.errors }}</div>
-            </div>
-
-
-            <div class="mb-3  col-lg-2 p-1">
-                <label  class="form-label" for="">Солей в граммах:</label>
-                <input id="id_salt_grams"
-                       value="{{ instance.sum_salt_grams|hpg_float_format }}"
-                       class="form-control precalc h-auto" disabled>
-            </div>
-
-        </div>
-        <div class="row">
-            <p class="npk-bold precalc" id="id_npk_formula">{{ instance.calc_npk_formula }}</p>
-            <p class="npk-bold precalc" id="id_npk_magazine">{{ instance.get_npk_magazine }}</p>
-
-
-        </div>
-        <div class="row">
 
 
         </div>
 
 
     </div>
-
-
-            <div class="row">
-                <nav>
-        <div class="nav nav-tabs" id="nav-tab" role="tablist">
-            <a class="nav-link active" id="tabmacro-tab" data-bs-toggle="tab" data-bs-target="#tabmacro"
-               data-hash-target="#macro"
-               role="tab" aria-controls="tabmacro" aria-selected="true">Макро
-            </a>
-            <a class="nav-link" id="tabmicro-tab" data-bs-toggle="tab" data-bs-target="#tabmicro"
-               data-hash-target="#micro"
-               role="tab" aria-controls="tabmicro" aria-selected="true">Микро
-            </a>
-
-            <a class="nav-link" id="tabconcentrat-tab" data-bs-toggle="tab" data-bs-target="#tabconcentrat"
-               data-hash-target="#concentrat"
-
-
-               role="tab" aria-controls="tabconcentrat" aria-selected="true">Концентраты
-            </a>
-
-            <a class="nav-link" id="tabmixer-tab" data-bs-toggle="tab" data-bs-target="#tabmixer"
-               data-hash-target="#mixer"
-               role="tab" aria-controls="tabmixer" aria-selected="true">Изготовление
-            </a>
-
-            <a class="nav-link" id="tabprice-tab" data-bs-toggle="tab" data-bs-target="#tabprice"
-               data-hash-target="#price"
-               role="tab" aria-controls="tabprice" aria-selected="true">Цена
-            </a>
-
-        </div>
-            </nav>
-                <div class="tab-content" id="nav-tabContent">
-        <div class="tab-pane fade show active" id="tabmacro" role="tabpanel" aria-labelledby="tabmacro-tab">
-            {% include 'calc/profile.html' with macro=True title="Макро профиля" %}
-        </div>
-        <div class="tab-pane fade " id="tabmicro" role="tabpanel" aria-labelledby="tabmicro-tab">
-            {% include 'calc/profile.html' with micro=True title="Микро профиля" %}
-        </div>
-
-        <div class="tab-pane fade " id="tabconcentrat" role="tabpanel" aria-labelledby="tabconcentrat-tab">
-            {% include 'calc/profile.html' with concentrate=True title="Монорастворы и концентраты" %}
-        </div>
-
-        <div class="tab-pane fade " id="tabmixer" role="tabpanel" aria-labelledby="tabmixer-tab">
-            {% include 'calc/profile.html' with mixer=True title="Изготовление" %}
-        </div>
-
-        <div class="tab-pane fade " id="tabprice" role="tabpanel" aria-labelledby="tabprice-tab">
-            {% include 'calc/profile.html' with price=True title="Цена" %}
-        </div>
-
-
-    </div>
-            </div>
-
-
-        </form>
-
-        <div class="row mt-5 mb-5">
-            <div class="col-lg-6 m-auto">
-                <button class="btn btn-primary d-block m-auto" id="from-btn" type="submit" name="from" value=""
-                        form="form-{{ instance.pk }}--{% if micro %}micro{% endif %}{% if macro %}macro{% endif %}">{{ btn_name }}</button>
-            </div>
-        </div>
-
-
-    </div>
-
-
-</div>
 
 
 

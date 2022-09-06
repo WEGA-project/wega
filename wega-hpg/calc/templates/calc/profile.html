@@ -15,9 +15,17 @@
                     {% if mixer %}
                                          {% include 'calc/mixer.html' with  title="Изготовление" %}
                     {% endif %}
+
                     {% if price %}
+                        <p>'price', {{ price }}</p>
                         {% include 'calc/price.html' with  title="Цена" %}
                     {% endif %}
+
+                    {% if corrector %}
+                        {% include 'calc/corrector.html' with  title="Корректор" %}
+                    {% endif %}
+
+
             </div>
 
 

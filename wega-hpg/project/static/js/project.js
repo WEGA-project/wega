@@ -6,6 +6,33 @@ $(document).ready(function () {
     }
 
 
+    $('a.corr').click(function (e) {
+              e.preventDefault()
+        let n = $(this).data('n');
+        let c_fields = ['n','no3', 'nh4', 'p', 'k', 'ca','mg', 's','cl', 'ec',];
+        for (const f in c_fields) {
+            let t = c_fields[f];
+            $("#id_"+t+"_"+n).val($("#id_"+t ).val());
+
+        }
+
+    });
+    $('a.raschet').click(function (e) {
+        e.preventDefault();
+        let n = $(this).data('n');
+        let c_fields = ['n','no3', 'nh4', 'p', 'k', 'ca','mg', 's','cl', 'ec',];
+        for (const f in c_fields) {
+            let t = c_fields[f];
+            console.log($("#id_"+t) , $("#id_"+t+"_"+n).val() );
+            $("#id_"+t ).val($("#id_"+t+"_"+n).val());
+            precalc(e);
+
+        }
+
+    });
+
+
+
     $('.nav-tabs a').on('shown.bs.tab', function (e) {
         window.location.hash = e.target.dataset.hashTarget;
 
@@ -48,7 +75,12 @@ $(document).ready(function () {
                     'ml_kno3', 'gg_kno3', 'ml_nh4no3', 'gg_nh4no3', 'ml_mgno3', 'gg_mgno3', 'ml_cacl2',
                     'gg_cacl2', 'ml_mgso4', 'ml_kh2po4', 'ml_k2so4', 'ml_fe', 'ml_mn', 'ml_b', 'ml_zn',
                     'ml_cu', 'ml_mo', 'ml_co', 'ml_si', 'ml_cmplx', 'gg_mgso4', 'gg_kh2po4', 'gg_k2so4',
-                    'gg_fe', 'gg_mn', 'gg_b', 'gg_zn', 'gg_cu', 'gg_mo','gg_co', 'gg_si', 'gg_cmplx', 'ec'];
+                    'gg_fe', 'gg_mn', 'gg_b', 'gg_zn', 'gg_cu', 'gg_mo','gg_co', 'gg_si', 'gg_cmplx', 'ec',
+                    'ca_0', 'cl_0', 'ec_0', 'k_0', 'mg_0', 'n_0', 'nh4_0', 'no3_0', 'p_0', 's_0', 'v_0',
+                    'ca_1', 'cl_1', 'ec_1', 'k_1', 'mg_1', 'n_1', 'nh4_1', 'no3_1', 'p_1', 's_1', 'v_1',
+                    'ca_2', 'cl_2', 'ec_2', 'k_2', 'mg_2', 'n_2', 'nh4_2', 'no3_2', 'p_2', 's_2', 'v_2',
+                    'ca_k', 'cl_k', 'ec_k', 'k_k', 'mg_k', 'n_k', 'nh4_k', 'no3_k', 'p_k', 's_k', 'v_k'
+                    ];
 
         var i;
         var dicts = {};

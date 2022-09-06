@@ -1,0 +1,171 @@
+{% load getattr %}
+<div class="d-flex justify-content-start">
+    <div class="d-flex flex-column m-3 mw-150px">
+        <div class="col-10  d-flex flex-row ">
+            <div class="col-6"></div>
+            <div class="col-6"><label>Исходный</label></div>
+        </div>
+        <div class="col-10  d-flex flex-row ">
+            <div class="col-6"></div>
+            <div class="col-6 mb-2"><a href="#" data-n="0" class="corr" >Заполнить</a></div>
+        </div>
+        {% for i in instance.correction_fields.0 %}
+            <div class="col-10  d-flex flex-row ">
+                <div class="col-6"><label>   {{ instance.corrections_macro|index:forloop.counter0  }}   </label></div>
+                <div class="col-6">
+                    <input type="number" name="{{ i }}"
+                           value="{{ instance|getattribute:i|floatformat:2 }}"
+                           class="form-control d-inline-block precalc" required=""
+                           {% if i == "n_0" %}disabled{% endif %}
+                           id="id_{{ i }}">
+                </div>
+            </div>
+        {% endfor %}
+
+
+        <div class="col-10  d-flex flex-row ">
+                <div class="col-6"><label>Объем</label></div>
+                <div class="col-6">
+
+                </div>
+            </div>
+        <div class="col-12  d-flex flex-row ">
+                <div class="col-5"><label>    </label></div>
+                <div class="col-6">
+                    <a href="#" data-n="0" class="raschet" class="btn-secondary">в расчет</a>
+                </div>
+            </div>
+
+    </div>
+    <div class="d-flex flex-column m-3 mw-150px">
+            <div class="col-10  d-flex flex-row ">
+                <div class="col-6"></div>
+                <div class="col-6"><label>Текущий</label></div>
+            </div>
+            <div class="col-10  d-flex flex-row ">
+                <div class="col-6"></div>
+                <div class="col-6 mb-2"><a href="#" >Заполнить</a></div>
+            </div>
+            {% for i in  instance.correction_fields.1  %}
+                <div class="col-10  d-flex flex-row ">
+                    <div class="col-6"></div>
+                    <div class="col-6">
+                        <input disabled type="number" name="{{ i }}"
+                               value="{{ instance|getattribute:i|floatformat:2 }}"
+                               step="{% if forloop.counter == 2 %}0.0{% endif %}1"
+                               class="form-control d-inline-block precalc" required=""
+                               id="id_{{ i }}">
+                    </div>
+                </div>
+            {% endfor %}
+
+
+            <div class="col-10  d-flex flex-row ">
+                    <div class="col-6"></div>
+                    <div class="col-6">
+                        <input type="number" name="v_1"
+                               value="{{ instance|getattribute:"v_1"|floatformat:0 }}"
+                               class="form-control d-inline-block precalc" required=""
+                               id="id_v_1">
+                    </div>
+                </div>
+            <div class="col-12  d-flex flex-row ">
+                    <div class="col-5"><label>    </label></div>
+                    <div class="col-6">
+                        <a href="#" data-n="1" class="raschet" class="btn-secondary">в расчет</a>
+                    </div>
+                </div>
+
+        </div>
+    <div class="d-flex flex-column m-3 mw-150px">
+            <div class="col-10  d-flex flex-row ">
+                <div class="col-6"></div>
+                <div class="col-6"><label>Корректирующий</label></div>
+            </div>
+            <div class="col-10  d-flex flex-row ">
+                <div class="col-6"></div>
+                <div class="col-6 mb-2"><a href="#" data-n="k" class="corr" >Заполнить</a></div>
+            </div>
+            {% for i in  instance.correction_fields.k %}
+                <div class="col-10  d-flex flex-row ">
+                    <div class="col-6"></div>
+                    <div class="col-6">
+                        <input type="number" name="{{ i }}"
+                               value="{{ instance|getattribute:i|floatformat:2 }}"
+                               step="{% if forloop.counter == 2 %}0.0{% endif %}1"
+                               class="form-control d-inline-block precalc" required=""
+                               id="id_{{ i }}">
+                    </div>
+                </div>
+            {% endfor %}
+
+
+            <div class="col-10  d-flex flex-row ">
+                    <div class="col-6"></div>
+                    <div class="col-6">
+                        <input  disabled type="number" name="v_k"
+                               value="{{ instance|getattribute:"v_k"|floatformat:0 }}"
+                               class="form-control d-inline-block precalc" required=""
+                               id="id_v_k">
+                    </div>
+                </div>
+            <div class="col-12  d-flex flex-row ">
+                    <div class="col-5"><label>    </label></div>
+                    <div class="col-6">
+                        <a href="#" data-n="k"  class="raschet btn-secondary">в расчет</a>
+                    </div>
+                </div>
+
+        </div>
+    <div class="d-flex flex-column m-3 mw-150px">
+        <div class="col-10  d-flex flex-row ">
+            <div class="col-6"></div>
+            <div class="col-6"><label>Итоговый</label></div>
+        </div>
+        <div class="col-10  d-flex flex-row ">
+            <div class="col-6"></div>
+            <div class="col-6 mb-2"><a href="#" data-n="2" class="corr" >Заполнить</a></div>
+        </div>
+        {% for i in   instance.correction_fields.2 %}
+            <div class="col-10  d-flex flex-row ">
+                <div class="col-6"></div>
+                <div class="col-6">
+                    <input type="number" name="{{ i }}"
+                           value="{{ instance|getattribute:i|floatformat:2 }}"
+                           step="{% if forloop.counter == 2 %}0.0{% endif %}1"
+                           class="form-control d-inline-block precalc" required=""
+                           id="id_{{ i }}">
+                </div>
+            </div>
+        {% endfor %}
+
+
+        <div class="col-10  d-flex flex-row ">
+                <div class="col-6"></div>
+                <div class="col-6">
+                    <input type="number" name="v_2"
+                           value="{{ instance|getattribute:"v_2"|floatformat:0 }}"
+
+                           class="form-control d-inline-block precalc" required=""
+                           id="id_v_2">
+                </div>
+            </div>
+         <div class="col-12  d-flex flex-row ">
+                <div class="col-5"><label>    </label></div>
+                <div class="col-6">
+                    <a href="#" data-n="2"  class="raschet btn-secondary">в расчет</a>
+                </div>
+            </div>
+
+
+
+
+
+
+</div>
+
+    <div class="d-flex flex-column m-3 mw-150px">
+        <label id="correction_protocol"></label>
+    </div>
+
+</div>

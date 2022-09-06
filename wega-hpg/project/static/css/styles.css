@@ -36,7 +36,9 @@ input.precalc[type='number']{
     width: 90px;
 	height: 25px;
 }
-
+.mw-150px{
+	min-width: 150px;
+}
 
 .w-matrix{
 	width: 76px;
