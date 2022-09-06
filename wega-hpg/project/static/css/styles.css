@@ -13,6 +13,7 @@
 	overflow-x: auto;
 }
 
+
 #id_matrix-ca-n, #id_matrix-ca-p,  #id_matrix-ca-k,  #id_matrix-ca-mg, #id_matrix-mg-k, #id_matrix-mg-ca, #id_matrix-p-k,
 #id_matrix-p-ca, #id_matrix-n-k,  #id_matrix-n-ca, #id_matrix-k-mg {
 	color: blue;
@@ -38,7 +39,7 @@ input.precalc[type='number']{
 
 
 .w-matrix{
-	width: 73px;
+	width: 76px;
 }
 
 .label-margin-t{
@@ -57,7 +58,13 @@ input.precalc[type='number']{
 	margin-top: 38%;
 }
 .n-margin{
-	margin-left: 31%;
+	margin-left: 29%;
+}
+#id_litres{
+	height: auto;
+}
+.h-25px{
+	height: 25px;
 }
 
 .ml-2{
@@ -99,8 +106,9 @@ input.w-115[type='number']{
 }
 @media screen and (min-width: 1024px) {
 
+
 	input.precalc[type='number']{
-	width: 85px;
+	width: 92px;
 	height: 25px;
 	}
 	input.w-115[type='number']{
@@ -112,9 +120,13 @@ input.w-115[type='number']{
 	}
 
 	.salt-name-formula{display: inline-block;}
+	input.matrix[type='number'] {
+	width: 75px;
+	}
 }
 
 @media screen and (min-width: 768px) and  (max-width: 1024px){
+
 	.mt-38 {
     margin-top: 56%;
 }
@@ -135,6 +147,9 @@ input.w-115[type='number']{
 }
 
 @media screen and (max-width: 768px)  {
+	.n-margin{
+	margin-left: 35%;
+}
 		.mt-38 {
     margin-top: 56%;
 }
@@ -154,6 +169,7 @@ input.w-115[type='number']{
 		width: 11.333333%;;
 	}
 	input.precalc[type='number']{
+
 	width: 70px;
 	height: 25px;
 	}
@@ -175,7 +191,24 @@ input.w-115[type='number']{
 	.first-matrix-row, .second-matrix-row {
 		height: auto;
 	}
-	div.w-113 {
-    width: auto;
+	.n-margin{
+	margin-left: 35%;
+	}
+
+	.mt-38{
+		margin-top: 48%;
+	}
+	.left-matrix-element{
+		display: none;
+	}
+	.matrix{
+		padding: unset;
+		padding-left: 8px;
+	}
+	.matrix-elements{
+		display: none;
+	}
+	div.w-113{
+		width: 66px;
 	}
 }

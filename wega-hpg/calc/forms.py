@@ -31,14 +31,14 @@ class PlantProfileEditForm(forms.ModelForm):
         for visible in self.visible_fields():
             
             if visible.name != 'name':
-                visible.field.widget.attrs['step'] = 1
+                # visible.field.widget.attrs['step'] = 1
                 visible.field.widget.attrs['class'] = 'form-control d-inline-block precalc'
                 visible.field.widget.attrs['inputmode'] = "decimal"
                 visible.field.initial = 0
                 visible.field.required = False
                 
-            # if visible.name in PlantProfile.salt_micro_gramm or visible.name in PlantProfile.salt_micro_persent :
-            #     visible.field.widget.attrs['step'] = 0.001
+            # if visible.name in PlantProfile.macro:
+            #     visible.field.widget.attrs['step'] = 0.01
                 
                 
             if visible.name == 'name':

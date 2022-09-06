@@ -72,4 +72,4 @@ def git_ver():
 
 @register.filter
 def hpg_float_format(num):
-    return "{:.2f}".format( num )
+    return f"{num:.2f}"

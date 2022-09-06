@@ -1,3 +1,5 @@
+import decimal
+
 from django.template.loader import render_to_string
 from django.utils.html import format_html
 import django_tables2 as tables

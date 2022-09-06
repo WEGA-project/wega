@@ -1,0 +1,222 @@
+{% load getattr %}
+
+<div class="row">
+
+
+    <div class="row">
+        <h5 class=" ">Макропрофиль в мг/л (ppm)</h5>
+    </div>
+    <div class="row  d-flex flex-row">
+
+        {% for f in form %}
+
+            {% if f.name in instance.macro  and   f.name != 'no3' and f.name != 'nh4' %}
+
+                {% if f.name == 'n' %}
+                    <div class="mb-3 w-auto w-113 col-6 col-sm-2 d-flex flex-column  col-lg-2 p-1 macro-col-lg-w macro-salt text-center">
+                        <div class="col-12">
+                            <div class="col-6 n-margin">
+                                <label for="{{ f.id_for_label }}" class="form-label">{{ f.label }}</label>
+                                {{ f }}
+                            </div>
+                        </div>
+                        <div class="col-12 d-flex flex-column  ">
+
+
+                            {% for f in form %}
+                                {% if   f.name == 'no3' %}
+                                    <div class="w-113 w-auto col-12 p-0 pt-1   text-center">
+                                        <label for="{{ f.id_for_label }}" class="form-label">{{ f.label }}</label>
+                                        {{ f }}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        <div class="col-12">
+                            {% for f in form %}
+                                {% if   f.name == 'nh4' %}
+                                    <div class="w-113 w-auto col-6 p-0 pt-1  text-center">
+                                        <label for="{{ f.id_for_label }}" class="form-label">{{ f.label }}</label>
+                                        {{ f }}
+                                    </div>
+
+
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% elif f.name == 'p' %}
+                    <div class="mb-3 w-113 col-3 col-sm-1 col-lg-1 p-1
+                                              d-flex flex-column macro-col-lg-w macro-salt text-center">
+                        <div class="col-12 d-flex flex-column ">
+
+                            <label for="{{ f.id_for_label }}" class="form-label">{{ f.label }}</label>
+                            {{ f }}
+                            <div class="error">{{ f.errors }}</div>
+
+                        </div>
+
+                        <div class=" mt-38 col-lg-1 p-1  macro-salt text-center">
+                            <input type="number" name="nh4_nh3_ratio"
+                                   value="{{ instance.nh4_nh3_ratio|hpg_float_format }}" step="0.01"
+                                   class="form-control d-inline-block precalc hpg-green" required=""
+                                   id="id_nh4_nh3_ratio">
+
+
+                            <div class="error">{{ form.nh4_nh3_ratio.errors }}</div>
+                        </div>
+
+                    </div>
+
+
+
+
+                {% elif f.name == 'k' %}
+                    <div class="mb-3 w-113 col-3 col-sm-1 col-lg-1 p-1 macro-col-lg-w d-flex flex-column  macro-salt text-center">
+                        <label for="{{ f.id_for_label }}" class="form-label">{{ f.label }}</label>
+                        {{ f }}
+                        <div class="error">{{ f.errors }}</div>
+                        <label for="{{ form.nh4_nh3_ratio.label.id_for_label }}"
+                               id="id_name-nh4_nh3_ratio"
+                               class="form-label mt-38">{{ instance.captions|get:"nh4_nh3_ratio" }}</label>
+                    </div>
+                {% else %}
+
+                    <div class="mb-3 w-113 col-3  col-sm-1 col-lg-1 p-1 d-flex flex-column  macro-col-lg-w macro-salt text-center">
+                        <label for="{{ f.id_for_label }}" class="form-label">{{ f.label }}</label>
+                        {{ f }}
+                        <div class="error">{{ f.errors }}</div>
+                    </div>
+                {% endif %}
+
+
+            {% endif %}
+
+
+        {% endfor %}
+
+        <div class="mb-3 col-2 col-sm-1 d-flex flex-row d-flex flex-column  flex-sm-column p-1 text-center">
+            <label class="form-label">ЕС</label>
+                <input type="number" name="ec" value="{{ instance.calc_ec|floatformat:3 }}"
+                       step="0.01"
+                       class="form-control d-inline-block precalc hpg-green" required=""
+                       id="id_ec">
+
+        </div>
+
+
+    </div>
+
+
+    <div class="row matrix-elements">
+        <h5 class=" ">Соотношения элементов</h5>
+    </div>
+    <div class="row matrix matrix-elements">
+
+        {% for row in  instance.get_matrix %}
+
+            <div class="row salt-row {% if forloop.first %}first-matrix-row{% else %}second-matrix-row{% endif %}">
+                {% for elem, val in row.items %}
+
+                    {% if forloop.first %}
+                        <div class="text-center col-1 w-matrix left-matrix-element col-lg-1">
+                            <label for="id_matrix-{{ elem }}-
+                                    {{ instance.macro_matrix|index:forloop.parentloop.counter0  }}"
+                                   class=" form-label d-block p-1    {% if forloop.parentloop.first %}label-margin-t{% endif %} ">
+                                {{ instance.macro_matrix|index:forloop.parentloop.counter0|title }}
+                            </label>
+                        </div>
+                    {% endif %}
+
+                    {% if forloop.parentloop.first %}
+                        <div class="mb-1 text-center col-1 d-flex flex-column w-matrix  col-lg-1 p-1">
+                            <div class="col-12">{{ instance.macro_matrix|index:forloop.counter0|title }}</div>
+                            <div class="col-12">
+                                {% with instance.macro_matrix|index:forloop.parentloop.counter0 as parent_elem %}
+                                    <input type="number"
+                                           name="matrix-{{ elem }}-{{ parent_elem }}"
+                                           id="id_matrix-{{ elem }}-{{ parent_elem }}"
+                                           value="{{ val|hpg_float_format }}"
+                                           step="0.01"
+                                           class="form-control d-inline-block precalc matrix {% if elem == 'k' %} {% if parent_elem == 'n' or parent_elem == 'mg' or parent_elem == 'ca' %}hpg-green{% endif %}{% endif %}"
+                                           {% if forloop.parentloop.counter == forloop.counter %}disabled{% endif %}
+                                           required="" id="id_matrix-{{ elem }}-
+                                                    {{ parent_elem }}">
+                                {% endwith %}
+                            </div>
+                        </div>
+                    {% else %}
+
+                        <div class="mb-1 text-center col-1  w-matrix  col-lg-1 p-1">
+
+                            {% with instance.macro_matrix|index:forloop.parentloop.counter0 as parent_elem %}
+                                <input type="number"
+                                       name="matrix-{{ elem }}-{{ parent_elem }}"
+                                       id="id_matrix-{{ elem }}-{{ parent_elem }}"
+                                       value="{{ val|hpg_float_format }}"
+                                       step="0.01"
+                                       class="form-control d-inline-block precalc matrix {% if elem == 'k' %} {% if parent_elem == 'n' or parent_elem == 'mg' or parent_elem == 'ca' %}hpg-green{% endif %}{% endif %}"
+                                       {% if forloop.parentloop.counter == forloop.counter %}disabled{% endif %}
+                                       required="" id="id_matrix-{{ elem }}-
+                                                    {{ parent_elem }}">
+                            {% endwith %}
+                        </div>
+
+
+                    {% endif %}
+
+
+                {% endfor %}
+            </div>
+
+        {% endfor %}
+
+    </div>
+
+
+    <div class="row">
+        <h5>Соли</h5>
+    </div>
+    <div class="row salts">
+
+        {% for comon, salt_data in instance.get_salt_dict.items %}
+            <div class="row salt-row">
+                <div class="col-12 col-lg-4 d-sm-flex pt-2 justify-content-start salt_name w-salt-name">
+                    <span id="id_name-{{ comon }}"
+                                              class="salt-name-formula">{{ salt_data.name }} {{ salt_data.formula }}</span>
+                </div>
+                {% for salt in salt_data.salt %}
+                    {% with form|get_field_from_form:salt as f %}
+                        <div class="mb-1 salt-percent {% if f.name == 'name' %}col-lg-12{% else %}col-lg-2 col-xs-{% endif %}
+                                             p-1 d-flex align-items-center w-elem">
+                            <div class="col-1 col-lg-2 w-18  ">
+                                <label for="{{ f.id_for_label }}"
+                                       class="form-label mb-0">{{ f.label|second_part }}</label>
+                            </div>
+                            <div class="col-1 col-lg-2 ">
+                                {{ f }}
+                            </div>
+                        </div>
+                    {% endwith %}
+                {% endfor %}
+                {% if salt_data.salt|length == 2 %}
+                    <div class="mb-1 d-none  d-sm-flex text-center col-lg-3 p-1 w-elem"></div>
+                {% endif %}
+                <div class="mb-1 text-center col-1 p-1 d-flex align-items-center justify-content-between">
+
+                    <input type="number" name="{{ comon }}"
+                           value="{{ instance|getattribute:salt_data.calc|hpg_float_format }}"
+                           step="0.01" class="form-control d-inline-block precalc" required=""
+                           {% if comon == 'kno3' and instance.calc_mode == 'Mg' %}disabled{% endif %}
+                           {% if comon == 'mgno3' and instance.calc_mode == 'K' %}disabled{% endif %}
+                           id="id_{{ comon }}">
+                </div>
+            </div>
+
+        {% endfor %}
+
+
+    </div>
+
+
+</div>

@@ -1,0 +1,143 @@
+{% load getattr %}
+<div class="row">
+    <div class="row">
+        <h5 class=" ">Раствор А</h5>
+    </div>
+    <form action="{% url "plant_profile_edit" instance.pk %}" novalidate method="post"
+          class="  m-auto d-flex justify-content-between"
+          id="form-{{ instance.pk }}--{% if micro %}micro{% endif %}{% if macro %}macro{% endif %}">
+        <div class="row">
+            <div class="row">
+                <div class="col-4"></div>
+                <div class="col-2  text-center">г/л</div>
+                <div class="col-2  text-center">г/мл</div>
+                <div class="col-2  text-center">мл</div>
+                <div class="col-2  text-center">гр. жидк.</div>
+            </div>
+            {% for comsalt, data in instance.concentrate_dict_a.items %}
+                <div class="row" id="conc-{{ comsalt }}">
+                    <div class="col-4">
+                        <p>{{ instance.captions|get:data.name  }}</p>
+                    </div>
+
+                    {% for salt in data.data %}
+                        <div class="col-2 ">
+                            <input type="number" name="{{ salt }}"
+                                   value="{{ instance|getattribute:salt|floatformat:2 }}"
+                                   step="{% if forloop.counter == 2 %}0.0{% endif %}1"
+                                   class="form-control w-100  d-inline-block precalc" required=""
+                                   id="id_{{ salt }}">
+                        </div>
+                    {% endfor %}
+
+                    {% for salt in data.calc_data %}
+                        <div class="col-2 ">
+                            <input type="number" name="{{ salt }}"
+                                   value="{{ instance|getattribute:salt|floatformat:2 }}"
+                                   step="1"
+                                   class="form-control w-100  d-inline-block precalc" disabled
+                                   id="id_{{ salt }}">
+                        </div>
+                    {% endfor %}
+
+
+                </div>
+            {% endfor %}
+        </div>
+        <div class="row">
+            <h5 class=" ">Раствор Б</h5>
+        </div>
+        <div class="row">
+            <div class="row">
+                <div class="col-4"></div>
+                <div class="col-2  text-center">г/л</div>
+                <div class="col-2  text-center">г/мл</div>
+                <div class="col-2  text-center">мл</div>
+                <div class="col-2  text-center">гр. жидк.</div>
+            </div>
+            {% for comsalt, data in instance.concentrate_dict_b.items %}
+                <div class="row" id="conc-{{ comsalt }}">
+                    <div class="col-4"  >
+                        <p>{{ instance.captions|get:data.name  }}</p>
+                    </div>
+
+                    {% for salt in data.data %}
+                        <div class="col-2 ">
+                            <input type="number" name="{{ salt }}"
+                                   value="{{ instance|getattribute:salt|floatformat:2 }}"
+                                   step="{% if forloop.counter == 2 %}0.0{% endif %}1"
+                                   class="form-control w-100  d-inline-block precalc" required=""
+                                   id="id_{{ salt }}">
+                        </div>
+                    {% endfor %}
+
+                    {% for salt in data.calc_data %}
+                        <div class="col-2 ">
+                            <input type="number" name="{{ salt }}"
+                                   value="{{ instance|getattribute:salt|floatformat:2 }}"
+                                   step="1"
+                                   class="form-control w-100  d-inline-block precalc" disabled
+                                   id="id_{{ salt }}">
+                        </div>
+                    {% endfor %}
+
+
+                </div>
+            {% endfor %}
+        </div>
+        <div class="row">
+            <div class="col-1">
+                <p>Тара А</p>
+            </div>
+            <div class="col-1 ">
+
+
+                <input type="number" name="taml"
+                       value="{{ instance|getattribute:"taml"|floatformat:2 }}"
+                       step="1"
+                       class="form-control w-100  d-inline-block precalc" required=""
+                       id="id_taml">
+            </div>
+
+
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <p id="id_suma">
+                    {{ instance.suma }}
+
+
+                </p>
+                <p id="id_lvola">
+                    {{ instance.lvola }}
+                </p>
+
+            </div>
+
+        </div>
+        <div class="row">
+
+            <div class="col-1">
+                <p>Тара Б</p>
+            </div>
+            <div class="col-1 ">
+
+
+                <input type="number" name="tbml"
+                       value="{{ instance|getattribute:"tbml"|floatformat:2 }}"
+                       step="1"
+                       class="form-control w-100  d-inline-block precalc" required=""
+                       id="id_tbml">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <p id="id_sumb"> {{ instance.sumb }} </p>
+                <p id="id_lvolb"> {{ instance.lvolb }}  </p>
+
+            </div>
+        </div>
+    </form>
+
+
+</div>

@@ -154,15 +154,16 @@ def plant_profile_history(request, pk):
         if history.changed_data:
             changes = simplejson.loads(history.changed_data)
 
-        for salt_gramm_name in PlantProfile.salt_gramms:
-            p[salt_gramm_name] = "{:.2f}".format(getattr(pp, salt_gramm_name)())
+        for salt_gramm_name, calc in PlantProfile.salt_gramms.items():
+            p[salt_gramm_name] = "{:.2f}".format(getattr(pp, calc)())
         
         for salt_gramm_name in PlantProfile.salt_micro_gramm:
             p[salt_gramm_name] = "{:.2f}".format(getattr(pp, salt_gramm_name))
         
         vals = {}
         
-        for col in PlantProfile.macro + PlantProfile.micro + PlantProfile.salt_micro_gramm + PlantProfile.salt + PlantProfile.salt_gramms:
+        for col in PlantProfile.macro + PlantProfile.micro + PlantProfile.salt_micro_gramm + PlantProfile.salt + \
+                   list(PlantProfile.salt_gramms.keys()):
             mark_danger = col in changes
             vals[col] = {'mark-danger': mark_danger, 'val': p.get(col)}
         for col in extra_columns:
@@ -233,6 +234,7 @@ def create_plant_profile(request):
 def plant_profile_precalc(request, pk):
     try:
         pp = PlantProfile.objects.get(pk=pk, user=request.user)
+        pp_previous = PlantProfile.objects.get(pk=pk, user=request.user)
         if is_ajax(request):
             if request.method == 'POST':
                 data = json.loads(request.body)
@@ -255,18 +257,31 @@ def plant_profile_precalc(request, pk):
                 
                 for param_list in [['ppm', 'ec', 'litres', 'nh4_nh3_ratio', 'v_micro' , 'taml', 'tbml'], PlantProfile.macro,
                                    PlantProfile.micro, PlantProfile.salt,  PlantProfile.salt_micro_gramm,
-                                   PlantProfile.salt_micro_persent, PlantProfile.concentrate_fields]:
+                                   PlantProfile.salt_micro_persent, PlantProfile.concentrate_fields,
+                                   PlantProfile.price_fields]:
                     for i in param_list:
                         t = data.get(i, None)
                         if t:
                             try:
                                 setattr(pp, i, float(t))
+                                if i!=pushed_element:
+                                    setattr(pp_previous, i, float(t))
+
+                                
                             except Exception as e:
                                 setattr(pp, i, t)
+                                if i!=pushed_element:
+                                    setattr(pp_previous, i, t)
+                                    
                 val = data.get(pushed_element)
-                data = {}
+                data = {'error_text':''}
                 pp.recalc(pushed_element=pushed_element, val=val)
-                data['pp'] = pp.to_json()
+                if pp.s<0:
+                    data['pp'] = pp_previous.to_json()
+                    print('Ошибка расчета S<0, возврат к исходным значениям')
+                    data['error_text'] = 'Ошибка расчета S<0, возврат к исходным значениям'
+                else:
+                    data['pp'] = pp.to_json()
     
     except PlantProfile.DoesNotExist:
         raise Http404
@@ -280,8 +295,8 @@ def plant_profile_precalc(request, pk):
     
 @login_required
 def edit_plant_profile(request, pk, micro=False):
-    t = 'Микро' if micro else 'Макро'
-    context = DataMixin.get_user_context(title=f"{t} профиля", btn_name="Сохранить")
+ 
+    context = DataMixin.get_user_context(title=f"Редактор профиля {pk}", btn_name="Сохранить")
     instance = PlantProfile.objects.get(user=request.user, pk=pk)
     
     old_instance = PlantProfile.objects.get(user=request.user, pk=pk)
@@ -289,10 +304,8 @@ def edit_plant_profile(request, pk, micro=False):
     context['form'] = form
     context['micro'] = micro
     context['instance'] = instance
-    if request.method=='GET':
-        instance.calc_micro()
-        instance.calc_captions()
-        instance.calc_concentrates()
+   
+    
         
     if request.method == 'POST':
         form = PlantProfileEditForm(instance=instance, data=request.POST)
@@ -300,19 +313,7 @@ def edit_plant_profile(request, pk, micro=False):
             new = form.save(commit=False)
             new.user = request.user
             changes = form.changed_data
-            mode = request.POST.get('from')
-            print('mode', mode)
-            t = []
-            if mode == 'macro':
-                t =  PlantProfile.macro + PlantProfile.salt
-                for i in PlantProfile.micro + PlantProfile.salt_micro_gramm +PlantProfile.salt_micro_persent:
-                    del changes[changes.index(i)]
-              
-            else:
-                t = PlantProfile.micro + PlantProfile.salt_micro_gramm +PlantProfile.salt_micro_persent
-                for i in PlantProfile.macro + PlantProfile.salt+ ['calc_mode']:
-                    del changes[changes.index(i)]
-                
+     
             for item in PlantProfile.model_change_fields:
 
                 if callable(getattr(new, item)):
@@ -320,10 +321,9 @@ def edit_plant_profile(request, pk, micro=False):
                 else:
                     add = getattr(new, item) != getattr(old_instance, item)
                 if add:
-                    if item in t and mode == 'macro':
-                        changes.append(item)
-                    if item in t and mode=='micro':
-                        changes.append(item)
+                    changes.append(item)
+        
+                    
             new.save()
             ph = PlantProfileHistory(profile=new,
                                      profile_data=simplejson.dumps(model_to_dict(new)),
@@ -332,6 +332,9 @@ def edit_plant_profile(request, pk, micro=False):
             ph.save()
             return redirect('profile_index')
         else:
+            instance.calc_micro()
+            instance.calc_captions()
+            instance.calc_concentrates()
             context['form'] = form
         
     
