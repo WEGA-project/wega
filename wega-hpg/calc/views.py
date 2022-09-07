@@ -193,7 +193,7 @@ def upload_plant_profile(request):
             create_kw = {'name': str(f)}
             key_list =  PlantProfile.model_create_fields
             for item in data.splitlines():
-                key, value = item.split('=')
+                key, value = item.split('=', 1)
                 if key.lower() in  key_list :
                     create_kw[key.lower()] = "{:.2f}".format(float(value))
             
