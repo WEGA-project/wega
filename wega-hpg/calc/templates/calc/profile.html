@@ -4,24 +4,24 @@
             <div class="row">
                 {% csrf_token %}
                     {% if macro %}
-                        {% include 'calc/macro.html' %}
+                        {% include 'calc/calc/macro.html' %}
                     {% endif %}
                     {% if micro %}
-                           {% include 'calc/micro.html' %}
+                           {% include 'calc/calc/micro.html' %}
                     {% endif %}
                     {% if concentrate %}
-                            {% include 'calc/concentrate.html' %}
+                            {% include 'calc/calc/concentrate.html' %}
                     {% endif %}
                     {% if mixer %}
-                                         {% include 'calc/mixer.html' with  title="Изготовление" %}
+                                         {% include 'calc/calc/mixer.html' with  title="Изготовление" %}
                     {% endif %}
 
                     {% if price %}
-                        {% include 'calc/price.html' with  title="Цена" %}
+                        {% include 'calc/calc/price.html' with  title="Цена" %}
                     {% endif %}
 
                     {% if corrector %}
-                        {% include 'calc/corrector.html' with  title="Корректор" %}
+                        {% include 'calc/calc/corrector.html' with  title="Корректор" %}
                     {% endif %}
 
 
