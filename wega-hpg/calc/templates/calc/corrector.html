@@ -14,7 +14,7 @@
                 <div class="col-6"><label>   {{ instance.corrections_macro|index:forloop.counter0  }}   </label></div>
                 <div class="col-6">
                     <input type="number" name="{{ i }}"
-                           value="{{ instance|getattribute:i|floatformat:2 }}"
+                           value="{{ instance|getattribute:i|hpg_float_format:2 }}"
                            class="form-control d-inline-block precalc" required=""
                            {% if i == "n_0" %}disabled{% endif %}
                            id="id_{{ i }}">
@@ -51,7 +51,7 @@
                     <div class="col-6"></div>
                     <div class="col-6">
                         <input disabled type="number" name="{{ i }}"
-                               value="{{ instance|getattribute:i|floatformat:2 }}"
+                               value="{{ instance|getattribute:i|hpg_float_format:2 }}"
                                step="{% if forloop.counter == 2 %}0.0{% endif %}1"
                                class="form-control d-inline-block precalc" required=""
                                id="id_{{ i }}">
@@ -64,7 +64,7 @@
                     <div class="col-6"></div>
                     <div class="col-6">
                         <input type="number" name="v_1"
-                               value="{{ instance|getattribute:"v_1"|floatformat:0 }}"
+                               value="{{ instance|getattribute:"v_1"|hpg_float_format:0 }}"
                                class="form-control d-inline-block precalc" required=""
                                id="id_v_1">
                     </div>
@@ -91,7 +91,7 @@
                     <div class="col-6"></div>
                     <div class="col-6">
                         <input type="number" name="{{ i }}"
-                               value="{{ instance|getattribute:i|floatformat:2 }}"
+                               value="{{ instance|getattribute:i|hpg_float_format:2 }}"
                                step="{% if forloop.counter == 2 %}0.0{% endif %}1"
                                class="form-control d-inline-block precalc" required=""
                                id="id_{{ i }}">
@@ -104,7 +104,7 @@
                     <div class="col-6"></div>
                     <div class="col-6">
                         <input  disabled type="number" name="v_k"
-                               value="{{ instance|getattribute:"v_k"|floatformat:0 }}"
+                               value="{{ instance|getattribute:"v_k"|hpg_float_format:0 }}"
                                class="form-control d-inline-block precalc" required=""
                                id="id_v_k">
                     </div>
@@ -131,7 +131,7 @@
                 <div class="col-6"></div>
                 <div class="col-6">
                     <input type="number" name="{{ i }}"
-                           value="{{ instance|getattribute:i|floatformat:2 }}"
+                           value="{{ instance|getattribute:i|hpg_float_format:2 }}"
                            step="{% if forloop.counter == 2 %}0.0{% endif %}1"
                            class="form-control d-inline-block precalc" required=""
                            id="id_{{ i }}">
@@ -144,7 +144,7 @@
                 <div class="col-6"></div>
                 <div class="col-6">
                     <input type="number" name="v_2"
-                           value="{{ instance|getattribute:"v_2"|floatformat:0 }}"
+                           value="{{ instance|getattribute:"v_2"|hpg_float_format:0 }}"
 
                            class="form-control d-inline-block precalc" required=""
                            id="id_v_2">

@@ -36,7 +36,7 @@
 
                     <input type="number" name="{{ salt }}"
                            disabled
-                           value="{{ instance|getattribute:data.gram|floatformat:3  }}"
+                           value="{{ instance|getattribute:data.gram|hpg_float_format:3  }}"
                            step="{% if forloop.counter == 2 %}0.0{% endif %}1"
                            class="form-control w-100  d-inline-block precalc" required=""
                            id="id_{{ data.gram }}">
@@ -50,19 +50,19 @@
                         </div>
 
                         <div class="col-2"><span
-                                id="id_{{ comsalt }}">{{ instance|getattribute:data.calc|divide:1000|floatformat:2 }}</span>
+                                id="id_{{ comsalt }}">{{ instance|getattribute:data.calc|divide:1000|hpg_float_format:2 }}</span>
                             г.
                         </div>
-                        <div class="col-2"> ({{ instance|getattribute:data.gl|floatformat:2  }} г/л</div>
-                        <div class="col-2">{{ instance|getattribute:data.gml|floatformat:2  }} г/мл)</div>
+                        <div class="col-2"> ({{ instance|getattribute:data.gl|hpg_float_format:2  }} г/л</div>
+                        <div class="col-2">{{ instance|getattribute:data.gml|hpg_float_format:2  }} г/мл)</div>
 
                     {% else %}
                         <div class="col-6">{{ instance.captions|get:comsalt  }} </div>
                         <div class="col-2"><span
-                                id="id_{{ comsalt }}">{{ instance|getattribute:data.calc|floatformat:3 }}</span> г.
+                                id="id_{{ comsalt }}">{{ instance|getattribute:data.calc|hpg_float_format:3 }}</span> г.
                         </div>
-                        <div class="col-2"> ({{ instance|getattribute:data.gl|floatformat:2  }} г/л</div>
-                        <div class="col-2"> {{ instance|getattribute:data.gml|floatformat:2  }} г/мл)</div>
+                        <div class="col-2"> ({{ instance|getattribute:data.gl|hpg_float_format:2  }} г/л</div>
+                        <div class="col-2"> {{ instance|getattribute:data.gml|hpg_float_format:2  }} г/мл)</div>
 
                     {% endif %}
                 </div>
@@ -99,7 +99,7 @@
         </div>
         <div class="col-1 ">
             <input type="number" name="taml"
-                   value="{{ instance|getattribute:"taml"|floatformat:2 }}"
+                   value="{{ instance|getattribute:"taml"|hpg_float_format:2 }}"
                    step="1"
                    class="form-control w-100  d-inline-block precalc" required=""
                    id="id_taml">
@@ -120,7 +120,7 @@
 
 
             <input type="number" name="tbml"
-                   value="{{ instance|getattribute:"tbml"|floatformat:2 }}"
+                   value="{{ instance|getattribute:"tbml"|hpg_float_format:2 }}"
                    step="1"
                    class="form-control w-100  d-inline-block precalc" required=""
                    id="id_tbml">

@@ -71,5 +71,8 @@ def git_ver():
     return git_string
 
 @register.filter
-def hpg_float_format(num):
-    return f"{num:.2f}"
+def hpg_float_format(num, n=2):
+    if num:
+        return f"{num:.{n}f}"
+    else:
+        return "0"

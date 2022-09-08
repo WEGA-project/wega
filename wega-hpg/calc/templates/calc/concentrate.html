@@ -23,7 +23,7 @@
                     {% for salt in data.data %}
                         <div class="col-2 ">
                             <input type="number" name="{{ salt }}"
-                                   value="{{ instance|getattribute:salt|floatformat:2 }}"
+                                   value="{{ instance|getattribute:salt|hpg_float_format:2 }}"
                                    step="{% if forloop.counter == 2 %}0.0{% endif %}1"
                                    class="form-control w-100  d-inline-block precalc" required=""
                                    id="id_{{ salt }}">
@@ -33,7 +33,7 @@
                     {% for salt in data.calc_data %}
                         <div class="col-2 ">
                             <input type="number" name="{{ salt }}"
-                                   value="{{ instance|getattribute:salt|floatformat:2 }}"
+                                   value="{{ instance|getattribute:salt|hpg_float_format:2 }}"
                                    step="1"
                                    class="form-control w-100  d-inline-block precalc" disabled
                                    id="id_{{ salt }}">
@@ -64,7 +64,7 @@
                     {% for salt in data.data %}
                         <div class="col-2 ">
                             <input type="number" name="{{ salt }}"
-                                   value="{{ instance|getattribute:salt|floatformat:2 }}"
+                                   value="{{ instance|getattribute:salt|hpg_float_format:2 }}"
                                    step="{% if forloop.counter == 2 %}0.0{% endif %}1"
                                    class="form-control w-100  d-inline-block precalc" required=""
                                    id="id_{{ salt }}">
@@ -74,7 +74,7 @@
                     {% for salt in data.calc_data %}
                         <div class="col-2 ">
                             <input type="number" name="{{ salt }}"
-                                   value="{{ instance|getattribute:salt|floatformat:2 }}"
+                                   value="{{ instance|getattribute:salt|hpg_float_format:2 }}"
                                    step="1"
                                    class="form-control w-100  d-inline-block precalc" disabled
                                    id="id_{{ salt }}">
@@ -91,7 +91,7 @@
                     </div>
                   <div class="col-1 ">
                      <input type="number" name="taml"
-                           value="{{ instance|getattribute:"taml"|floatformat:2 }}"
+                           value="{{ instance|getattribute:"taml"|hpg_float_format:2 }}"
                            step="1"
                            class="form-control w-100  d-inline-block precalc" required=""
                        id="id_taml">
@@ -112,7 +112,7 @@
 
 
                      <input type="number" name="tbml"
-                           value="{{ instance|getattribute:"tbml"|floatformat:2 }}"
+                           value="{{ instance|getattribute:"tbml"|hpg_float_format:2 }}"
                            step="1"
                            class="form-control w-100  d-inline-block precalc" required=""
                        id="id_tbml">

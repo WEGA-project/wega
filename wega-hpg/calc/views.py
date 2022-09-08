@@ -14,7 +14,7 @@ from calc.models import PlantProfile, PlantProfileHistory
 from calc.tables import CalcColumn, HistoryColumn, ModalBtn, PlatProfileTable
 from project.utils import DataMixin
 import simplejson
-
+from django.shortcuts import Http404
 
 def is_ajax(request):
     return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
@@ -300,9 +300,16 @@ def plant_profile_precalc(request, pk):
 def edit_plant_profile(request, pk, micro=False):
  
     context = DataMixin.get_user_context(title=f"Редактор профиля {pk}", btn_name="Сохранить")
-    instance = PlantProfile.objects.get(user=request.user, pk=pk)
-    
-    old_instance = PlantProfile.objects.get(user=request.user, pk=pk)
+    if request.user.is_staff:
+        instance = PlantProfile.objects.get(  pk=pk)
+        old_instance = PlantProfile.objects.get(  pk=pk)
+    else:
+        try:
+            instance = PlantProfile.objects.get(user=request.user, pk=pk)
+            old_instance = PlantProfile.objects.get(user=request.user, pk=pk)
+        except PlantProfile.DoesNotExist:
+            Http404
+            
     form = PlantProfileEditForm(instance=instance)
     context['form'] = form
     context['micro'] = micro

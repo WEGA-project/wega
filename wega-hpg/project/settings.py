@@ -189,6 +189,8 @@ LOGGING = {
         
     },
 }
+LANGUAGE_CODE = 'ru'
+LANGUAGES = ( ( 'en', "English", ), ( 'ru', "Russian", ), )
 
 SHORT_DATETIME_FORMAT="%Y-%m-%d"
 # CACHES={'default':{'BACKEND': 'django.core.cache.backends.dummy.DummyCache',}}

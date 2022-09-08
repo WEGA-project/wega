@@ -49,11 +49,15 @@ class PlantProfileEditForm(forms.ModelForm):
                 
             if visible.name == 'calc_mode':
                 visible.label= 'Макро метод расчета'
-            
-            if visible.name in ['p', 'cl']:
-                visible.field.widget.attrs['class']+=' hpg-green '
 
-        
+            if visible.name in ['p', 'cl']:
+                visible.field.widget.attrs['class'] += ' hpg-green '
+                
+            if visible.name in ['litres']:
+                visible.field.widget.attrs['min']='0.5'
+                visible.field.widget.attrs['step'] = '0.5'
+
+    
                 
                 
 class DelForm(forms.Form):

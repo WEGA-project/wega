@@ -12,12 +12,14 @@
                                 {% for comsalt, data in instance.mixer_dict.items %}
                                     <div id={{ data.p  }} class="row {% if instance.micro_calc_mode == 'b'  and  comsalt in instance.micro %}d-none{% endif %}">
                                                 <div class="col-1 ">
-                                                      <input type="number" name="{{ data.p }}"
-                                                        value="{{  instance|getattribute:data.p   }}"
+                                                      <input type="number"
+                                                             name="{{ data.p }}"
+                                                        value="{{  instance|getattribute:data.p|hpg_float_format:2 }}"
                                                         step="0.1"
                                                         class="form-control w-100  d-inline-block precalc"
-                                                        required=""
-                                                        id="id_{{ data.p }}">
+                                                        required
+                                                        id="id_{{ data.p }}"
+                                                      >
 
 
                                                 </div>
@@ -34,17 +36,17 @@
                              {{ instance.captions|get:comsalt  }}={{ instance|getattribute:data.d   }}%
                              </div>
 
-                          <div class="col-2">{{ instance|getattribute:data.calc|divide:1000|floatformat:3  }} г.</div>
+                          <div class="col-2">{{ instance|getattribute:data.calc|divide:1000|hpg_float_format:3  }} г.</div>
                          <div class="col-2"> <span class="">
-                                     {{    instance|getattribute:data.calc_p|floatformat:3 }} р.
+                                     {{    instance|getattribute:data.calc_p|hpg_float_format:3 }} р.
                          </span></div>
 
 
                          {% else %}
                          <div class="col-6">{{ instance.captions|get:comsalt  }} </div>
-                         <div class="col-2">{{ instance|getattribute:data.calc|floatformat:2 }} г.</div>
+                         <div class="col-2">{{ instance|getattribute:data.calc|hpg_float_format:2 }} г.</div>
                             <div class="col-2">
-                                <span id = "id_{{ data.calc_p }}" class="">{{ instance|getattribute:data.calc_p|floatformat:3 }}</span> р.</div>
+                                <span id = "id_{{ data.calc_p }}" class="">{{ instance|getattribute:data.calc_p|hpg_float_format:3 }}</span> р.</div>
 
                          {% endif %}
                      </div>

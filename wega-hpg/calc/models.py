@@ -47,6 +47,23 @@ class PlantProfile(models.Model):
     }
     salt = ['cano3_ca', 'cano3_no3', 'cano3_nh4', 'kno3_k', 'kno3_no3', 'nh4no3_nh4', 'nh4no3_no3', 'mgso4_mg',
             'mgso4_s', 'kh2po4_k', 'kh2po4_p', 'k2so4_k', 'k2so4_s', 'mgno3_mg', 'mgno3_no3', 'cacl2_ca', 'cacl2_cl', ]
+    salt_default = {'cano3_ca':16.972,
+                    'cano3_no3':11.863,
+                    'cano3_nh4':0.000,
+                    'kno3_k':38.672,
+                    'kno3_no3':13.853,
+                    'nh4no3_nh4':17.5,
+                    'nh4no3_no3':17.5,
+                    'mgso4_mg':9.861,
+                    'mgso4_s':13.011,
+                    'kh2po4_k':28.731,
+                    'kh2po4_p':22.761,
+                    'k2so4_k':44.874,
+                    'k2so4_s':18.401,
+                    'mgno3_mg':9.483,
+                    'mgno3_no3':10.930,
+                    'cacl2_ca':18.294,
+                    'cacl2_cl':32.366, }
     salt_gramms = {'cano3':'calc_cano3',
                    'kno3':'calc_kno3',
                    'nh4no3':'calc_nh4no3',
@@ -162,6 +179,12 @@ class PlantProfile(models.Model):
             self.ec_1 = self.saved_ec
             self.ec_k = self.saved_ec
     
+    def save(self, *args, **kwargs):
+        for i in self.salt:
+            if not getattr(self,i) or (getattr(self,i) and getattr(self,i)<=0):
+                setattr(self, i, self.salt_default.get(i))
+        super(PlantProfile, self).save(args,kwargs)
+    
     
     name = models.CharField(max_length=1024, verbose_name='Имя профиля')
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -169,9 +192,10 @@ class PlantProfile(models.Model):
     ppm = models.FloatField(default=0, verbose_name='PPM')
     litres = models.FloatField(default=10, verbose_name='Литры')
     mixer_ip =   models.CharField(max_length=1024, default='mixer.local', verbose_name='Адрес/порт миксера')
-    mixer_system_number = models.FloatField(default=1, verbose_name='Номер системы куда нальется раствор')
-    template = models.ForeignKey('PlantTemplate', on_delete=models.CASCADE, null=True, blank=True)
-    from_template = models.ForeignKey('PlantTemplate', on_delete=models.CASCADE, null=True, blank=True,
+    mixer_system_number = models.FloatField(default=1, null=True, blank=True, verbose_name='Номер системы куда нальется раствор')
+    
+    template = models.ForeignKey('PlantTemplate', on_delete=models.SET_NULL, null=True, blank=True)
+    from_template = models.ForeignKey('PlantTemplate', on_delete=models.SET_NULL, null=True, blank=True,
                                       related_name='profile_from_template')
     calc_mode = models.CharField(max_length=2, choices=CalcMode.choices, default=CalcMode.K, )
     
@@ -311,25 +335,25 @@ class PlantProfile(models.Model):
     m_cmplx = models.CharField(max_length=10, blank=True, null=True, default='p7')
 
 
-    p_cano3 = models.FloatField(default=0.4000)
-    p_kno3 = models.FloatField(default=0.3500)
-    p_nh4no3 = models.FloatField(default=0.2500)
-    p_mgso4 = models.FloatField(default=0.3500)
-    p_kh2po4 = models.FloatField(default=0.1200)
-    p_k2so4 = models.FloatField(default=0.4000)
-    p_mgno3 = models.FloatField(default=0.3200)
-    p_cacl2 = models.FloatField(default=0.7700)
-    p_fe = models.FloatField(default=0.0500)
-    p_mn = models.FloatField(default=3.000)
-    p_b = models.FloatField(default=0.3000)
-    p_zn = models.FloatField(default=0.4000)
-    p_cu = models.FloatField(default=0.1500)
-    p_mo = models.FloatField(default=0.4000)
-    p_co = models.FloatField(default=3.0000)
-    p_si = models.FloatField(default=2.3000)
-    p_cmplx = models.FloatField(default=0.2700)
-    
-    
+    p_cano3 = models.FloatField(default=0.4000, blank=True, null=True)
+    p_kno3 = models.FloatField(default=0.3500, blank=True, null=True)
+    p_nh4no3 = models.FloatField(default=0.2500, blank=True, null=True)
+    p_mgso4 = models.FloatField(default=0.3500, blank=True, null=True)
+    p_kh2po4 = models.FloatField(default=0.1200, blank=True, null=True)
+    p_k2so4 = models.FloatField(default=0.4000, blank=True, null=True)
+    p_mgno3 = models.FloatField(default=0.3200, blank=True, null=True)
+    p_cacl2 = models.FloatField(default=0.7700, blank=True, null=True)
+    p_fe = models.FloatField(default=0.0500, blank=True, null=True)
+    p_mn = models.FloatField(default=3.000, blank=True, null=True)
+    p_b = models.FloatField(default=0.3000, blank=True, null=True)
+    p_zn = models.FloatField(default=0.4000, blank=True, null=True)
+    p_cu = models.FloatField(default=0.1500, blank=True, null=True)
+    p_mo = models.FloatField(default=0.4000, blank=True, null=True)
+    p_co = models.FloatField(default=3.0000, blank=True, null=True)
+    p_si = models.FloatField(default=2.3000, blank=True, null=True)
+    p_cmplx = models.FloatField(default=0.2700, blank=True, null=True)
+
+    @float_exception
     def calcs(self, no3, nh4, p, k, ca, mg, cl):
 
       m = MM
@@ -343,7 +367,8 @@ class PlantProfile(models.Model):
       h = 2 * m.N * m.Ca * m.Mg * m.K * m.P * m.Cl
       total = -m.S * (-a - b - c - d + e + f + g) / (h)
       return total
-    
+
+    @float_exception
     def calcec(self, nh4, k, ca, mg):
         m = MM()
         a = nh4 * m.Ca * m.Mg * m.K
@@ -355,7 +380,7 @@ class PlantProfile(models.Model):
         ec = 0.095 * (a + 2 * b + 2 * c + d + 2 * e) / f
         return ec
 
-    
+    @float_exception
     def calc_correction(self, pushed_element=None, val=None):
         if pushed_element in self.correction_fields['0'] or pushed_element in self.correction_fields['2'] or pushed_element in ['v_1','v_2']:
             kec = None
@@ -424,7 +449,8 @@ class PlantProfile(models.Model):
                          f'k:n до {round(self.k_1 / self.n_1 * 1000) / 1000} после {round(self.k_2 / self.n_2 * 1000) / 1000}\n' \
                          f'k:ca до {round(self.k_1 / self.ca_1 * 1000) / 1000} после {round(self.k_2 / self.ca_2 * 1000) / 1000}\n' \
                          f'k:mg до {round(self.k_1 / self.mg_1 * 1000) / 1000} после {round(self.k_2 / self.mg_2 * 1000) / 1000}\n'
-    
+
+    @float_exception
     def calc_uncorrection(self, pushed_element=None, val=None):
     
         if pushed_element in self.correction_fields['2'] or  pushed_element in self.correction_fields['k']  or pushed_element in ['v_1','v_2']:
@@ -443,41 +469,72 @@ class PlantProfile(models.Model):
             self.ec_k = self.calcec(self.nh4_k,self.k_k,self.ca_k,self.mg_k)
             self.s_2 = self.calcs(self.no3_2,self.nh4_2,self.p_2,self.k_2,self.ca_2,self.mg_2,self.cl_2)
             self.ec_2 = self.calcec(self.nh4_2,self.k_2,self.ca_2,self.mg_2)
-      
-  
-   
+
+    @float_exception
     def calc_p_cano3(self):
         return self.p_cano3 * self.calc_cano3()
+
+    @float_exception
     def calc_p_kno3(self):
         return self.p_kno3 * self.calc_kno3()
+
+    @float_exception
     def calc_p_nh4no3(self):
         return self.p_nh4no3 * self.calc_nh4no3()
+
+    @float_exception
     def calc_p_mgso4(self):
         return self.p_mgso4 * self.calc_mgso4()
+
+    @float_exception
     def calc_p_kh2po4(self):
         return self.p_kh2po4 * self.calc_kh2po4()
+
+    @float_exception
     def calc_p_k2so4(self):
         return self.p_k2so4 * self.calc_k2so4()
+
+    @float_exception
     def calc_p_mgno3(self):
         return self.p_mgno3 * self.calc_mgno3()
+
+    @float_exception
     def calc_p_cacl2(self):
         return self.p_cacl2 * self.calc_cacl2()
+
+    @float_exception
     def calc_p_fe(self):
         return self.p_fe * self.gfe
+
+    @float_exception
     def calc_p_mn(self):
         return self.p_mn * self.gmn
+
+    @float_exception
     def calc_p_b(self):
         return self.p_b * self.gb
+
+    @float_exception
     def calc_p_zn(self):
         return self.p_zn * self.gzn
+
+    @float_exception
     def calc_p_cu(self):
         return self.p_cu * self.gcu
+
+    @float_exception
     def calc_p_mo(self):
         return self.p_mo * self.gmo
+
+    @float_exception
     def calc_p_co(self):
         return self.p_co * self.gco
+
+    @float_exception
     def calc_p_si(self):
         return self.p_si * self.gsi
+
+    @float_exception
     def calc_p_cmplx(self):
         return self.p_cmplx * self.cmplx()
     
@@ -548,7 +605,8 @@ class PlantProfile(models.Model):
     gmlcacl2_error = False
     
     errors = {}
-    
+
+    @float_exception
     def get_mixer_link(self):
         params = {}
         adr = f'http://{str(self.mixer_ip)}'
@@ -581,6 +639,7 @@ class PlantProfile(models.Model):
         from urllib.parse import urlencode
         return f"{adr}?{urlencode(params)}"
 
+    @float_exception
     def calc_micro_vars(self):
         self.agfe =  (self.fe * self.litres) / (self.gmsum * 10000)   if self.fe > 0 else 0
         self.agmn =  (self.mn * self.litres) / (self.gmsum * 10000)   if self.mn > 0 else 0
@@ -590,7 +649,8 @@ class PlantProfile(models.Model):
         self.agmo =  (self.mo * self.litres) / (self.gmsum * 10000)   if self.mo > 0 else 0
         self.agco =  (self.co * self.litres) / (self.gmsum * 10000)   if self.co > 0 else 0
         self.agsi =  (self.si * self.litres) / (self.gmsum * 10000)   if self.si > 0 else 0
-        
+
+    @float_exception
     def weight_to_micro(self):
         self.fe = 10000 * self.gfe * (self.dfe / self.litres)
         self.mn = 10000 * self.gmn * (self.dmn / self.litres)
@@ -601,6 +661,7 @@ class PlantProfile(models.Model):
         self.co = 10000 * self.gco * (self.dco / self.litres)
         self.si = 10000 * self.gsi * (self.dsi / self.litres)
 
+    @float_exception
     def micro_to_weight(self, recalc_gmsum=True):
         
         if self.micro_calc_mode == self.CalcMicroMode.U:
@@ -658,9 +719,8 @@ class PlantProfile(models.Model):
             self.mo = 10000 * self.gmsum * (self.dmo / self.litres)
             self.co = 10000 * self.gmsum * (self.dco / self.litres)
             self.si = 10000 * self.gmsum * (self.dsi / self.litres)
-            
-   
-     
+
+    @float_exception
     def switch_micro_to_bor(self):
         if not any([self.gfe + self.gmn + self.gb + self.gzn + self.gcu + self.gmo + self.gco + self.gsi]):
             self.micro_to_weight(recalc_gmsum=False)
@@ -668,6 +728,7 @@ class PlantProfile(models.Model):
         self.calc_micro_vars()
         self.micro_to_weight(recalc_gmsum=False)
 
+    @float_exception
     def switch_micro_to_all(self):
         self.gmsum = self.gfe + self.gmn + self.gb + self.gzn + self.gcu + self.gmo + self.gco + self.gsi
         if not any([self.gfe + self.gmn + self.gb + self.gzn + self.gcu + self.gmo + self.gco + self.gsi]):
@@ -675,7 +736,13 @@ class PlantProfile(models.Model):
         self.calc_micro_vars()
         self.micro_to_weight(recalc_gmsum=False)
         
-        
+    def get_profile_str(self):
+         return f"N={int(self.n)} NO3={int(self.no3)} NH4={int(self.nh4)} P={int(self.p)} K={int(self.k)} " \
+                f"Ca={int(self.ca)} Mg={int(self.mg)} " \
+                f"S={int(self.s)} Cl={int(self.cl)} Fe={int(self.fe)/1000} Mn={int(self.mn)/1000} " \
+                f"B={int(self.b)/1000} Zn={int(self.zn)/1000} " \
+                f"Cu={int(self.cu)/1000} Mo={int(self.mo)} Co={int(self.co)} Si={int(self.si)} "
+    @float_exception
     def calc_micro(self, pushed_element=None, val=None):
         
         if pushed_element and pushed_element == 'micro_calc_mode' and val=='b':
@@ -690,7 +757,7 @@ class PlantProfile(models.Model):
         
         
         if pushed_element in self.micro or pushed_element in self.salt_micro_gramm \
-                or pushed_element in self.salt_micro_persent or pushed_element in [ 'weight_micro', 'v_micro']:
+                or pushed_element in self.salt_micro_persent or pushed_element in [ 'weight_micro', 'v_micro', 'litres']:
             
          
             recalc_gmsum= True
@@ -745,15 +812,18 @@ class PlantProfile(models.Model):
                               f'Кратность: {round(self.litres / self.v_micro * 1000)}:1,' \
                               f'Расход: {round(self.v_micro / self.litres * 10) / 10} мл/л раствора'
                         
-      
+    @float_exception
     def cmplx(self):
         return self.calc_bor_complex()
+
+    @float_exception
     def weight_micro(self):
         if self.micro_calc_mode == self.CalcMicroMode.B:
             return self.calc_bor_complex()
         else:
             return self.gfe + self.gmn + self.gzn + self.gcu + self.gmo + self.gco + self.gsi
-    
+
+    @float_exception
     def calc_bor_complex(self):
         
         if self.b > 0:
@@ -761,20 +831,24 @@ class PlantProfile(models.Model):
         else:
             bor_complex = 0
         return bor_complex
-    
+
+    @float_exception
     def k_mg(self):
         return  self.k / self.mg
-    
+
+    @float_exception
     def k_ca(self):
         return  self.k / self.ca
-    
+
+    @float_exception
     def k_n(self):
         return  self.k / self.n
-    
+
+    @float_exception
     def get_npk(self):
         t = self.get_matrix()[0]
-    
-    
+
+    @float_exception
     def get_profile(self):
         return f"N={round(self.n)} " \
                f"NO3={round(self.no3 * 100) / 100} " \
@@ -804,13 +878,15 @@ class PlantProfile(models.Model):
             f"{math.ceil(self.s / self.n * 100) / 100} : " \
             f"{math.ceil(self.cl / self.n * 100) / 100} sPPM={self.calc_ppm()}"
         return a
-    
+
+    @float_exception
     def get_npk_magazine(self):
         a = f"NPK: {math.ceil(self.n / 10)}-{math.ceil(self.p / 0.436421 / 10)}-{math.ceil(self.k / 0.830148 / 10)} " \
             f"CaO={(math.ceil(self.ca / 0.714691 / 10) * 10 / 10)}% MgO={math.ceil(self.mg / 0.603036 / 10 * 10) / 10}%" \
             f"SO3={math.ceil(self.s / 0.400496 / 10 * 10) / 10}"
         return a
-    
+
+    @float_exception
     def get_matrix(self, as_dict=False):
         pp = self
         matrix = []
@@ -844,7 +920,8 @@ class PlantProfile(models.Model):
         if as_dict:
             return matrix_dict
         return matrix
-    
+
+    @float_exception
     def calc_ec_to_val(self, k_n=None, k_ca=None, k_mg=None):
         
         m = MM()
@@ -876,10 +953,13 @@ class PlantProfile(models.Model):
         self.no3 = self.n - self.nh4
         
         self.s = self.calc_s()
-        
+
+    @float_exception
     def calc_ratio(self):
         self.nh4 = self.n * (self.nh4_nh3_ratio / (self.nh4_nh3_ratio + 1))
         self.no3 = self.n / (self.nh4_nh3_ratio + 1)
+
+    @float_exception
     def calc_macro(self, pushed_element=None, val=None):
         m = MM()
     
@@ -1144,7 +1224,8 @@ class PlantProfile(models.Model):
         if pushed_element == 'litres':
             for k, i in self.salt_gramms.items():
                 setattr(self, k , getattr(self, i))
-        
+
+    @float_exception
     def recalc(self, pushed_element=None, val=None):
         try:
             val = float(val)
@@ -1174,6 +1255,7 @@ class PlantProfile(models.Model):
                 'ec': "{:.3f}".format(self.ec),
                 'ppm': "{:.2f}".format(self.ppm),
                 'litres': self.litres,
+                'get_profile_str': self.get_profile_str(),
                 'mixer_btn_link': self.get_mixer_link(),
                 'weight_micro': "{:.2f}".format(self.weight_micro()),
                 'npk': self.npk,
@@ -1250,7 +1332,8 @@ class PlantProfile(models.Model):
                 data[f'matrix-{k}'] = 0
         
         return data
-    
+
+    @float_exception
     def calc_ppm(self):
         ppm = round((self.n + self.p + self.k + self.ca + self.mg + self.s + self.cl) * 100) / 100
         return ppm
@@ -1263,7 +1346,8 @@ class PlantProfile(models.Model):
     def calc_kh2po4(self):
         a = self.p / self.kh2po4_p
         return a * self.litres / 10
-    
+
+    @float_exception
     def calc_ec(self):
         
         if self.pk:
@@ -1276,7 +1360,8 @@ class PlantProfile(models.Model):
             f = m.N * m.Ca * m.Mg * m.K
             ec = 0.095 * (a + 2 * b + 2 * c + d + 2 * e) / f
             return ec
-    
+
+    @float_exception
     def calc_ca(self):
         m = MM()
         b = self.nh4 * m.P * m.Mg * m.K * m.S * m.Cl
@@ -1450,71 +1535,99 @@ class PlantProfile(models.Model):
             s += i
         return s
 
-  
+    @float_exception
     def calc_tbml(self):
         self.calc_concentrates()
-        
-        
+
+    @float_exception
     def calc_taml(self):
         self.calc_concentrates()
+
+    @float_exception
     def calc_gml_cano3(self):
         self.calc_concentrates()
+
+    @float_exception
     def calc_gml_kno3(self):
         self.calc_concentrates()
+
+    @float_exception
     def calc_gml_nh4no3(self):
         self.calc_concentrates()
+
+    @float_exception
     def calc_gml_mgno3(self):
         self.calc_concentrates()
+
+    @float_exception
     def calc_gml_mgso4(self):
         self.calc_concentrates()
+
+    @float_exception
     def calc_gml_kh2po4(self):
         self.calc_concentrates()
+
+    @float_exception
     def calc_gml_k2so4(self):
         self.calc_concentrates()
+
+    @float_exception
     def calc_gml_cacl2(self):
         self.calc_concentrates()
-        
+
+    @float_exception
     def calc_gl_cano3(self):
         kmol = self.gl_cano3 / (24.4247 / self.cano3_ca)
         self.gml_cano3 = 0.999 + 0.000732 * kmol - 0.000000113 * kmol**2
         self.calc_concentrates()
+
+    @float_exception
     def calc_gl_kno3(self):
         kmol = self.gl_kno3/ (38.6717 / self.kno3_k);
         self.gml_kno3 = 0.998 + 0.00062 * kmol - 0.000000114 * kmol**2
         self.calc_concentrates()
-        
+
+    @float_exception
     def calc_gl_nh4no3(self):
         kmol =  self.gl_nh4no3 / ((34.9978 / 2) / self.nh4no3_no3 )
         self.gml_nh4no3 = 0.999 + 0.000397 * kmol - 0.0000000422 * kmol**2
         self.calc_concentrates()
-    
+
+    @float_exception
     def calc_gl_mgno3(self):
         kmol = self.gl_mgno3  / ((16.3874) / self.mgno3_mg)
         self.gml_mgno3 = 0.998 + 0.000736 * kmol - 0.000000121 * kmol**2
         self.calc_concentrates()
+
+    @float_exception
     def calc_gl_cacl2(self):
         kmol = self.gl_cacl2 / (36.1115 / self.cacl2_ca)
         self.gml_cacl2 = 0.999 + 0.000794 * kmol - 0.000000151 * kmol**2
         self.calc_concentrates()
-    
+
+    @float_exception
     def calc_gl_mgso4(self):
         kmol = self.gl_mgso4 / ((20.1923) / self.mgso4_mg)
         self.gml_mgso4 = 0.999 + 0.00097 * kmol - 0.000000268 * kmol**2
         self.calc_concentrates()
-    
+
+    @float_exception
     def calc_gl_kh2po4(self):
         kmol = self.gl_kh2po4 / ((28.7307) / self.kh2po4_k)
         self.gml_kh2po4 = 0.998 + 0.000716 * kmol - 0.000000399 * kmol**2
         self.calc_concentrates()
-        
+
+    @float_exception
     def calc_gl_k2so4(self):
         kmol = self.gl_k2so4 / ((44.8737) / self.k2so4_k)
         self.gml_k2so4 = 0.998 + 0.000814 * kmol - 0.00000039 * kmol
         self.calc_concentrates()
-    
+
+    @float_exception
     def calc_conc_micro(self):
         self.calc_concentrates()
-        
+
+    @float_exception
     def conc_errors(self):
         errors = {}
         if self.gml_cano3 > 1.4212:
@@ -1551,15 +1664,14 @@ class PlantProfile(models.Model):
             errors['gml_cacl2'] = False
         self.errors = errors
 
-    
-
+    @float_exception
     def calc_prices(self, pushed_element=None, val=None):
         if pushed_element in PlantProfile.price_fields:
             pass
             # t = getattr(self, pushed_element)
             # setattr(self, t, 'calc')
-            
 
+    @float_exception
     def calc_concentrates(self, pushed_element=None, val=None):
         
         

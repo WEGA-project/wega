@@ -72,7 +72,7 @@
 
                     <input type="number" name="g{{ salt }}"
 
-                           value="{{ instance|getattribute:salt_data.g|floatformat:3 }}"
+                           value="{{ instance|getattribute:salt_data.g|hpg_float_format:3 }}"
 
                            step="0.01"
                            class="{% if instance.micro_calc_mode == 'b' %}d-none{% endif %} form-control w-115 micro-w-100 d-inline-block precalc" required=""
@@ -91,13 +91,13 @@
                 <div class="row mt-3">
                     <p>Всего необходимо добавить на
                         <input type="number" name="v_micro"
-                               value="{{ instance.v_micro|floatformat:0 }}"
+                               value="{{ instance.v_micro|hpg_float_format:0 }}"
                                step="500" class="form-control w-115 d-inline-block precalc" required=""
                                id="id_v_micro"> <span class="text-danger">мл</span>
 
                         <input type="number" name="weight_micro"
                                {% if instance.micro_calc_mode == 'u' %}disabled{% endif %}
-                               value="{{ instance.weight_micro|floatformat:2 }}"
+                               value="{{ instance.weight_micro|hpg_float_format:2 }}"
                                step="0.01" class="form-control w-115 d-inline-block precalc" required=""
                                id="id_weight_micro"> грамм
 

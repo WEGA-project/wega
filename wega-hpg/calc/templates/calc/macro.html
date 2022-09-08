@@ -46,8 +46,7 @@
                         </div>
                     </div>
                 {% elif f.name == 'p' %}
-                    <div class="mb-3 w-113 col-3 col-sm-1 col-lg-1 p-1
-                                              d-flex flex-column macro-col-lg-w macro-salt text-center">
+                    <div class="mb-3 w-113 col-3 col-sm-1 col-lg-1 p-1 d-flex flex-column macro-col-lg-w macro-salt text-center">
                         <div class="col-12 d-flex flex-column ">
 
                             <label for="{{ f.id_for_label }}" class="form-label">{{ f.label }}</label>
@@ -56,7 +55,7 @@
 
                         </div>
 
-                        <div class=" mt-38 col-lg-1 p-1  macro-salt text-center">
+                        <div class=" mt-38 col-lg-1 pt-1 macro-salt text-center">
                             <input type="number" name="nh4_nh3_ratio"
                                    value="{{ instance.nh4_nh3_ratio|hpg_float_format }}" step="0.01"
                                    class="form-control d-inline-block precalc hpg-green" required=""
@@ -82,7 +81,7 @@
                     </div>
                 {% else %}
 
-                    <div class="mb-3 w-113 col-3  col-sm-1 col-lg-1 p-1 d-flex flex-column  macro-col-lg-w macro-salt text-center">
+                    <div class="mb-3 w-113 col-3  col-sm-1 col-lg-1 pt-1 d-flex flex-column  macro-col-lg-w macro-salt text-center">
                         <label for="{{ f.id_for_label }}" class="form-label">{{ f.label }}</label>
                         {{ f }}
                         <div class="error">{{ f.errors }}</div>
@@ -97,7 +96,7 @@
 
         <div class="mb-3 col-2 col-sm-1 d-flex flex-row d-flex flex-column  flex-sm-column p-1 text-center">
             <label class="form-label">ЕС</label>
-                <input type="number" name="ec" value="{{ instance.calc_ec|floatformat:3 }}"
+                <input type="number" name="ec" value="{{ instance.calc_ec|hpg_float_format:3 }}"
                        step="0.01"
                        class="form-control d-inline-block precalc hpg-green" required=""
                        id="id_ec">
