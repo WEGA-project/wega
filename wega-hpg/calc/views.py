@@ -255,7 +255,8 @@ def plant_profile_precalc(request, pk):
                 else:
                     pp.micro_calc_mode = PlantProfile.CalcMicroMode.U
                 
-                for param_list in [['ppm', 'ec', 'litres', 'nh4_nh3_ratio', 'v_micro' , 'taml', 'tbml', 'mixer_ip'], PlantProfile.macro,
+                for param_list in [['ppm', 'ec', 'litres', 'nh4_nh3_ratio', 'v_micro' , 'taml', 'tbml',
+                                    'mixer_ip', 'mixer_system_number'], PlantProfile.macro,
                                    PlantProfile.micro, PlantProfile.salt,  PlantProfile.salt_micro_gramm,
                                    PlantProfile.salt_micro_persent, PlantProfile.concentrate_fields,
                                    PlantProfile.price_fields, PlantProfile.correction_fields_all]:
@@ -263,7 +264,7 @@ def plant_profile_precalc(request, pk):
                         t = data.get(i, None)
                         if t:
                             try:
-                                if i in ['mixer_ip']:
+                                if i in ['mixer_ip', 'mixer_system_number']:
                                     setattr(pp, i, t)
                                 else:
                                     setattr(pp, i, float(t))

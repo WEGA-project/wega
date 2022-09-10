@@ -11,29 +11,31 @@
             <div class="col-6  text-center">наименование</div>
         </div>
         {% for comsalt, data in instance.mixer_dict.items %}
-            <div class="row {% if comsalt == 'fe' %}mt-5{% endif %} {% if instance.micro_calc_mode == 'b'  and  comsalt in instance.micro %}d-none{% endif %} "
+            <div class="row {% if comsalt == 'fe' %}mt-5{% endif %} {% if instance.micro_calc_mode == 'b'  and  comsalt in instance.micro %}d-none{% endif %}
+{% if instance.micro_calc_mode == 'u'  and  comsalt == 'cmplx'  %}d-none{% endif %}"
                  id="mixer-{{ comsalt }}">
 
 
                 <div class="col-2 ">
-
+                {#помпа#}
                     <input type="text" name="{{ data.mixer }}"
                            value="{% if instance|getattribute:data.mixer %}{{ instance|getattribute:data.mixer   }}{% endif %}"
                            step="{% if forloop.counter == 2 %}0.0{% endif %}1"
                            class="form-control w-100  d-inline-block precalc h-25px"
-                           required=""
+                           required
                            id="id_{{ data.mixer }}">
 
 
                 </div>
                 <div class="col-1 text-center">
+                    {#ручной чекбокс#}
                     <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
 
                 </div>
 
 
                 <div class="col-2 ">
-
+                           {#граммы жидкого#}
                     <input type="number" name="{{ salt }}"
                            disabled
                            value="{{ instance|getattribute:data.gram|hpg_float_format:3  }}"
@@ -49,20 +51,28 @@
                             {{ instance.captions|get:comsalt  }}={{ instance|getattribute:data.d   }}%
                         </div>
 
-                        <div class="col-2"><span
-                                id="id_{{ comsalt }}">{{ instance|getattribute:data.calc|divide:1000|hpg_float_format:2 }}</span>
-                            г.
+                        <div class="col-2">
+                            <span id="id_{{ comsalt }}" class="micro-mixer">{{ instance|getattribute:data.calc|divide:1000|hpg_float_format:2 }}</span> г.
                         </div>
-                        <div class="col-2"> ({{ instance|getattribute:data.gl|hpg_float_format:2  }} г/л</div>
-                        <div class="col-2">{{ instance|getattribute:data.gml|hpg_float_format:2  }} г/мл)</div>
+                        <div class="col-2">
+                            <span id="id_{{ data.gl }}">({{ instance|getattribute:data.gl|hpg_float_format:2  }}</span> г/л
+                        </div>
+                        <div class="col-2">
+                            <span id="id_{{ data.gml }}">{{ instance|getattribute:data.gml|hpg_float_format:2  }}</span> г/мл)
+                        </div>
 
                     {% else %}
-                        <div class="col-6">{{ instance.captions|get:comsalt  }} </div>
-                        <div class="col-2"><span
-                                id="id_{{ comsalt }}">{{ instance|getattribute:data.calc|hpg_float_format:3 }}</span> г.
-                        </div>
-                        <div class="col-2"> ({{ instance|getattribute:data.gl|hpg_float_format:2  }} г/л</div>
-                        <div class="col-2"> {{ instance|getattribute:data.gml|hpg_float_format:2  }} г/мл)</div>
+
+
+                                <div class="col-6">{{ instance.captions|get:comsalt  }} </div>
+                                <div class="col-2">
+                                <span id="id_{{ comsalt }}">{{ instance|getattribute:data.calc|hpg_float_format:3 }}</span> г.
+                                </div>
+                                <div class="col-2"> (
+                                <span id="id_{{ data.gl }}">{{ instance|getattribute:data.gl|hpg_float_format:2  }}</span> г/л</div>
+                                <div class="col-2">
+                                <span id="id_{{ data.gml }}">{{ instance|getattribute:data.gml|hpg_float_format:2  }}</span> г/мл)</div>
+
 
                     {% endif %}
                 </div>
@@ -81,8 +91,8 @@
                 <label for="mixer_ip" class="form-label mb-0">Номер системы(для учета на  <a href="https://github.com/WEGA-project/wega">вега-сервере</a>)</label>
 
                 <input type="number" name="mixer_system_number"
-                           value="{{ instance.mixer_system_number }}"
-                           class="form-control    d-inline-block precalc h-25px"
+                           value="{{ instance.mixer_system_number|hpg_float_format:0 }}"
+                           class="form-control d-inline-block precalc h-25px"
                            required=""
                            id="id_mixer_system_number">
 
@@ -127,8 +137,8 @@
         </div>
 
         <div class="col-10">
-            <p class="d-inline-block" id="id_sumb"> {{ instance.suma }} </p>
-            <p class="d-inline-block" id="id_lvolb"> {{ instance.lvola }} </p>
+            <p class="d-inline-block" id="id_sumb"> {{ instance.sumb }} </p>
+            <p class="d-inline-block" id="id_lvolb"> {{ instance.lvolb }} </p>
         </div>
     </div>
 

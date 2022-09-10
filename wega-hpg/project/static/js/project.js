@@ -79,7 +79,8 @@ $(document).ready(function () {
                     'ca_0', 'cl_0', 'ec_0', 'k_0', 'mg_0', 'n_0', 'nh4_0', 'no3_0', 'p_0', 's_0', 'v_0',
                     'ca_1', 'cl_1', 'ec_1', 'k_1', 'mg_1', 'n_1', 'nh4_1', 'no3_1', 'p_1', 's_1', 'v_1',
                     'ca_2', 'cl_2', 'ec_2', 'k_2', 'mg_2', 'n_2', 'nh4_2', 'no3_2', 'p_2', 's_2', 'v_2',
-                    'ca_k', 'cl_k', 'ec_k', 'k_k', 'mg_k', 'n_k', 'nh4_k', 'no3_k', 'p_k', 's_k', 'v_k'
+                    'ca_k', 'cl_k', 'ec_k', 'k_k', 'mg_k', 'n_k', 'nh4_k', 'no3_k', 'p_k', 's_k', 'v_k', 'mixer_ip',
+            'mixer_system_number',
                     ];
 
         var i;
@@ -261,8 +262,14 @@ $(document).ready(function () {
                       $('[id=id_' + i).each(function () {
 
                         let t = $(this);
-                        t.val( data.pp[i]);
-                        t.text( data.pp[i]);
+                        if (t.hasClass('micro-mixer')){
+                            t.val( data.pp[i]/1000);
+                            t.text( data.pp[i]/1000);
+                        } else
+                        {
+                            t.val( data.pp[i]);
+                            t.text( data.pp[i]);
+                        }
                       });
 
 

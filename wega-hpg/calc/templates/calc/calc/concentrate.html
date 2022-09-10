@@ -56,7 +56,8 @@
                 <div class="col-2  text-center">гр. жидк.</div>
             </div>
             {% for comsalt, data in instance.concentrate_dict_b.items %}
-                <div class="row {% if instance.micro_calc_mode == 'b'  and  comsalt in instance.micro %}d-none{% endif %} " id="conc-{{ comsalt }}">
+                <div class="row {% if instance.micro_calc_mode == 'b'  and  comsalt in instance.micro %}d-none{% endif %}
+{% if instance.micro_calc_mode == 'u'  and  comsalt == 'cmplx'  %}d-none{% endif %}" id="conc-{{ comsalt }}">
                     <div class="col-4"  >
                         <p>{{ instance.captions|get:data.name  }}</p>
                     </div>
@@ -119,8 +120,8 @@
                   </div>
 
                  <div class="col-10">
-                            <p class="d-inline-block" id="id_sumb"> {{ instance.suma }} </p>
-                            <p class="d-inline-block" id="id_lvolb"> {{ instance.lvola }} </p>
+                            <p class="d-inline-block" id="id_sumb"> {{ instance.sumab }} </p>
+                            <p class="d-inline-block" id="id_lvolb"> {{ instance.lvolb }} </p>
                  </div>
             </div>
 
