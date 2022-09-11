@@ -33,6 +33,8 @@ INSTALLED_APPS = [
     'django_tables2',
     'compressor',
     'import_export',
+    'fancybox',
+    'django_cleanup.apps.CleanupConfig',
     
     'wega_auth',
     'calc',

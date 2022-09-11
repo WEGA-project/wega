@@ -14,3 +14,6 @@ mysqlclient
 netifaces
 django-import-export
 simplejson
+django-fancybox
+Pillow
+django-cleanup

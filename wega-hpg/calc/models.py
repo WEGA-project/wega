@@ -1,5 +1,6 @@
 import math
 
+import simplejson
 from django.contrib.auth.models import User
 from django.core.cache import cache
 from django.db import models
@@ -1739,7 +1740,9 @@ class PlantProfile(models.Model):
             self.sumb = f'объем: {round(bv * 10) / 10} мл, вес: {bm} гр, плотность: {bk} г/мл'
             self.lvolb = f'концентрат Б ({bc}:1) . долить воды: {bw} мл. по {bml} мл на 1л.'
         self.conc_errors()
-
+    
+    
+    
     ca_0 = None
     ca_1 = None
     ca_2 = None
@@ -1778,6 +1781,30 @@ class PlantProfile(models.Model):
     v_2 = None
     v_1 = None
 
+    def profile_npk_data(self):
+        out = "<table class='table'><tr>"
+        for i in PlantProfile.macro:
+            out += f"<td>{i}</td>"
+        out += '</tr>'
+        out += '<tr>'
+        for i in PlantProfile.macro:
+            out += f"<td>{int(getattr(self,i))}</td>"
+        out += '</tr>'
+        out += "</table>"
+    
+        out += "<table class='table'><tr>"
+    
+        for i in PlantProfile.micro:
+            out += f"<td>{i}</td>"
+        out += '</tr>'
+        out += '<tr>'
+        for i in PlantProfile.micro:
+            out += f"<td>{int(getattr(self,i))}</td>"
+        out += '</tr>'
+    
+        out += "</table>"
+        return out
+
 
 class PlantTemplate(models.Model):
     def __str__(self):
@@ -1803,8 +1830,40 @@ class PlantProfileHistory(models.Model):
     profile = models.ForeignKey(PlantProfile, on_delete=models.CASCADE)
     profile_data = models.JSONField(default=dict, null=True, blank=True)
     changed_data = models.JSONField(default=dict, null=True, blank=True)
+    history_text = models.TextField( null=True, blank=True)
+    history_image = models.ImageField(upload_to='images/',null=True, blank=True)
+    
+    def profile_npk_data(self):
+        d = simplejson.loads(self.profile_data)
+        out = "<table class='table'><tr>"
+ 
+  
+
+        for i in PlantProfile.macro:
+            out+=f"<td>{i}</td>"
+        out+='</tr>'
+        out += '<tr>'
+        for i in PlantProfile.macro:
+            out += f"<td>{int(d.get(i))}</td>"
+        out += '</tr>'
+        out += "</table>"
+        
+        out += "<table class='table'><tr>"
+        
+        for i in PlantProfile.micro:
+            out += f"<td>{i}</td>"
+        out += '</tr>'
+        out += '<tr>'
+        for i in PlantProfile.micro:
+            out += f"<td>{int(d.get(i))}</td>"
+        out += '</tr>'
+        
+        out+="</table>"
+        return out
 
 
 class Price(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=1024)
+
+ 

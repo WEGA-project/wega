@@ -5,7 +5,23 @@ $(document).ready(function () {
         $('.nav-tabs a[data-hash-target="#' + hash + '"]').tab('show');
     }
 
+    $('#edit-btn-modal').click(function (e) {
+        e.preventDefault();
+        let form = $('#' +$(this).attr('form'));
+        let fdata = new FormData(form[0]);
+        fdata.append("history_text", $('#id_history_text').val());
+        fdata.append("history_image", $('#photo')[0].files[0]);
 
+
+        $.ajax({ url: form.action,  type: 'post',  method: 'POST',  data: fdata,
+                processData: false,
+                contentType: false,
+                success: function(data) {alert('успешно');},
+                error : function(data) {alert('ошибка');},
+            }
+            );
+
+    });
     $('a.corr').click(function (e) {
               e.preventDefault()
         let n = $(this).data('n');

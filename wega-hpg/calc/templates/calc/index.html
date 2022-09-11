@@ -7,14 +7,18 @@
         <div class="col-12">
               <form    method="get" class="login-form m-auto w-100 " id="form-filter">
                   <input type="hidden" value="on" name="filter">
+              <input type="hidden" value="on" name="hide_salt">
+              <input type="hidden" value="on" name="show_gramms">
                     <div class="row w-100">
 
                     {% for f in filter %}
+                        {% if f.name != 'hide_salt' and f.name != 'show_gramms'%}
                         <div class="mb-3 {% if f.name == 'name' %}col-12{% else %}col-4{% endif %}">
                             <label for="{{ f.id_for_label }}" class="form-label">{{ f.label }}</label>
                             {{ f }}
                             <div class="error">{{ f.errors }}</div>
                         </div>
+                        {% endif %}
                     {% endfor %}
                     </div>
                 </form>

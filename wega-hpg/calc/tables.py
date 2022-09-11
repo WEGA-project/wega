@@ -34,15 +34,35 @@ class CalcColumn(tables.Column):
     def render(self, value, record):
         if isinstance(value, str):
             return mark_safe(value)
-
+        
         if isinstance(value, datetime.datetime):
             return value.strftime("%d.%m.%Y %H:%M:%S")
         
         if isinstance(value, float):
             return "{:.1f}".format(value)
         
-         
         return value
+
+
+class PColumn(tables.Column):
+    def render(self, value, record):
+     
+        return mark_safe(value())
+        
+   
+        
+  
+        
+     
+
+
+
+
+
+class ImageColumn(tables.Column):
+    def render(self, value, record):
+        t = f'<a class="fancybox" href="/media/{value}"><img src="/media/{value}" style="height:100px;width:100px;" class="img-thumbnail"></a>'
+        return mark_safe(t)
     
 class HistoryColumn(tables.Column):
     def render(self, value, record):
@@ -50,7 +70,7 @@ class HistoryColumn(tables.Column):
             return mark_safe(value)
         
         if isinstance(value, datetime.datetime):
-            return value.strftime("%d.%m.%Y %H:%M:%S")
+            return value.strftime("%d.%m.%Y")
         
         if value['mark-danger']:
             return mark_safe(f'<span class="text-danger">{value["val"]}</span>')

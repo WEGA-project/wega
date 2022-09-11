@@ -11,7 +11,7 @@ from django_tables2 import RequestConfig
 from calc.forms import DelForm, FilterForm, PlantProfileAddForm, PlantProfileEditForm, \
     PlantProfileUploadForm
 from calc.models import PlantProfile, PlantProfileHistory
-from calc.tables import CalcColumn, HistoryColumn, ModalBtn, PlatProfileTable
+from calc.tables import CalcColumn, HistoryColumn, ModalBtn, PColumn, PlatProfileTable, ImageColumn
 from project.utils import DataMixin
 import simplejson
 from django.shortcuts import Http404
@@ -26,8 +26,10 @@ def plant_profiles(request):
     context['form'] = PlantProfileAddForm
     context['upload_form'] = PlantProfileUploadForm
     context['filter'] = FilterForm(request.GET)
-    extra_columns = []
-    extra_columns.append(('name', django_tables2.Column()))
+    extra_columns = [('name', django_tables2.Column(verbose_name="Название")),
+                         # ('profile_npk_data', PColumn()),
+                         ('ec', django_tables2.Column()),]
+    
     columns = ['name']
     filter_form = context['filter']
     if request.GET.get('filter') and filter_form.is_valid():
@@ -71,7 +73,8 @@ def plant_profiles(request):
     for pp in query:
         cols = {}
         cols['action'] = pp.pk
-        pp.recalc()
+        cols['ec'] = f"{pp.ec:.2f}"
+        # cols['profile_npk_data'] = pp.profile_npk_data
         for col in columns:
             cols[col] = getattr(pp, col)
         data.append(cols)
@@ -93,14 +96,12 @@ def plant_profile_history(request, pk):
     context['filter'] = FilterForm(request.GET)
     extra_columns = []
     history_column = HistoryColumn()
-    extra_columns.append(('pk', django_tables2.Column()))
-    extra_columns.append(('date', HistoryColumn()))
-    
-    extra_columns.append(('calc_mode', history_column))
-    extra_columns.append(('name', history_column))
-    
+    # extra_columns.append(('pk', django_tables2.Column()))
+    extra_columns.append(('date', HistoryColumn(verbose_name='Дата')))
+    extra_columns.append(('history_text', django_tables2.Column(verbose_name='Описание')))
+    extra_columns.append(('history_image', ImageColumn(verbose_name='Фото')))
+    extra_columns.append(('profile_npk_data', PColumn(verbose_name='Описание')))
     columns = ['pk,''name', ]
-    
     filter_form = context['filter']
     if request.GET.get('filter') and filter_form.is_valid():
         request.session['show_macro'] = not filter_form.cleaned_data.get('hide_macro')
@@ -141,7 +142,7 @@ def plant_profile_history(request, pk):
     else:
         filter_form.fields['show_gramms'].widget.attrs['checked'] = ''
     
-    extra_columns.append(('action', ModalBtn(verbose_name='', )))
+    # extra_columns.append(('action', ModalBtn(verbose_name='', )))
     history_data = PlantProfileHistory.objects.filter(profile_id=pk).order_by('-date')
     data = []
     
@@ -167,8 +168,11 @@ def plant_profile_history(request, pk):
             mark_danger = col in changes
             vals[col] = {'mark-danger': mark_danger, 'val': p.get(col)}
         for col in extra_columns:
-            mark_danger = col[0] in changes
-            vals[col[0]] = {'mark-danger': mark_danger, 'val': p.get(col[0])}
+            if col[0] not in ['history_text', 'history_image', 'profile_npk_data']:
+                mark_danger = col[0] in changes
+                vals[col[0]] = {'mark-danger': mark_danger, 'val': p.get(col[0])}
+            else:
+                vals[col[0]] = getattr(history, col[0])
         
         vals['action'] = p.get('id')
         vals['pk'] = p.get('id')
@@ -179,7 +183,7 @@ def plant_profile_history(request, pk):
     my_table = PlatProfileTable(data, extra_columns=extra_columns)
     RequestConfig(request, paginate={'per_page': 10}).configure(my_table)
     context['table'] = my_table
-    return render(request, 'calc/index.html', context=context)
+    return render(request, 'calc/history.html', context=context)
 
 
 @login_required
@@ -336,9 +340,15 @@ def edit_plant_profile(request, pk, micro=False):
         
                     
             new.save()
+            history_text = request.POST.get('history_text')
+            history_image = request.FILES.get('history_image')
+            
+            
             ph = PlantProfileHistory(profile=new,
                                      profile_data=simplejson.dumps(model_to_dict(new)),
                                      changed_data = simplejson.dumps(changes),
+                                     history_image=history_image,
+                                     history_text=history_text
                                    )
             ph.save()
             return redirect('profile_index')
