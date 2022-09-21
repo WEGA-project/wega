@@ -7,7 +7,7 @@ from django.utils.safestring import mark_safe
 from django_tables2 import TemplateColumn
 
 from calc.models import PlantProfile
-
+from wagtail.images.models import Image, Rendition
 class ModalBtn(tables.Column):
     def render(self, value):
         t = render_to_string('calc/modal_button.html', {'pk':value} )
@@ -61,8 +61,18 @@ class PColumn(tables.Column):
 
 class ImageColumn(tables.Column):
     def render(self, value, record):
-        t = f'<a class="fancybox" href="/media/{value}"><img src="/media/{value}" style="height:100px;width:100px;" class="img-thumbnail"></a>'
-        return mark_safe(t)
+        t = ''
+        # record
+        # Image, Rendition
+        val = '-'
+        if value:
+            val = render_to_string('project/carousel.html', context={'images':value})
+        # for i in value:
+        #     thumb_url = i.get_rendition('fill-100x100|jpegquality-60').url
+        #     t += f'<a class="fancybox" ' \
+        #          f'href="/media/{i}">' \
+        #          f'<img src="/media/{thumb_url}" style="height:100px;width:100px;" class="img-thumbnail"></a>'
+        return mark_safe(val)
     
 class HistoryColumn(tables.Column):
     def render(self, value, record):

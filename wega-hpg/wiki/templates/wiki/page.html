@@ -1,0 +1,41 @@
+{% extends 'project/base.html' %}
+{% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
+
+{% block content %}
+<div class="container">
+
+<article>
+    {% for block in page.body %}
+        {% if block.block_type == 'heading' %}
+            <h1>{{ block.value }}</h1>
+        {% elif block.block_type == 'paragraph' %}
+             <p>{{ block.value }}</p>
+        {% elif block.block_type == 'image' %}
+             <p>{{ block.value }}</p>
+        {% elif block.block_type == 'gallery' %}
+            {% for i in block.value  %}
+                 {% image i fill-300x300 as tmp_photo %}
+                {% image i original as original %}
+
+                <a class="fancybox" href="{{ original.full_url }}">
+                    <img src="{{ tmp_photo.full_url }}"   class="img-thumbnail">
+                </a>
+
+            {% endfor %}
+             <p>{{ block.value }}</p>
+        {% else %}
+
+
+            <section class="block-{{ block.block_type }}">
+                {% include_block block %}
+            </section>
+        {% endif %}
+    {% endfor %}
+</article>
+
+</div>
+
+
+</div>
+{% endblock %}

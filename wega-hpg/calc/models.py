@@ -1,4 +1,5 @@
 import math
+import uuid
 
 import simplejson
 from django.contrib.auth.models import User
@@ -18,6 +19,8 @@ class MM:
     Mg = 24.305
     S = 32.065
     Cl = 35.453
+    O = 15.999
+    H = 1.00784
 
 
 # Create your models here.
@@ -30,6 +33,10 @@ class PlantProfile(models.Model):
         U = 'u', _('Все микро соли')
         B = 'b', _('Комплекс по бору')
     
+    def __str__(self):
+        return f'{self.name} by {self.user}'
+
+   
     macro = ['n', 'no3', 'nh4', 'p', 'k', 'ca', 'mg', 's', 'cl', ]
     macro_matrix = ['n', 'p', 'k', 'ca', 'mg', 's', ]
     micro = ['fe', 'mn', 'b', 'zn', 'cu', 'mo', 'co', 'si', ]
@@ -1830,18 +1837,25 @@ class PlantProfileHistory(models.Model):
     profile = models.ForeignKey(PlantProfile, on_delete=models.CASCADE)
     profile_data = models.JSONField(default=dict, null=True, blank=True)
     changed_data = models.JSONField(default=dict, null=True, blank=True)
-    history_text = models.TextField( null=True, blank=True)
-    history_image = models.ImageField(upload_to='images/',null=True, blank=True)
+    history_text = models.TextField(null=True, blank=True)
+    history_image =  models.ForeignKey('wagtailimages.Image', on_delete=models.CASCADE, related_name='+', null=True, blank=True,)
+    history_image2 = models.ForeignKey(
+                            'wagtailimages.Image', on_delete=models.CASCADE, related_name='+', null=True, blank=True,
+                        )
+    history_image3 = models.ForeignKey(
+                            'wagtailimages.Image', on_delete=models.CASCADE, related_name='+', null=True, blank=True,
+                        )
+    history_image4 = models.ForeignKey(
+        'wagtailimages.Image', on_delete=models.CASCADE, related_name='+', null=True, blank=True,
+    )
     
     def profile_npk_data(self):
         d = simplejson.loads(self.profile_data)
         out = "<table class='table'><tr>"
- 
-  
-
+        
         for i in PlantProfile.macro:
-            out+=f"<td>{i}</td>"
-        out+='</tr>'
+            out += f"<td>{i}</td>"
+        out += '</tr>'
         out += '<tr>'
         for i in PlantProfile.macro:
             out += f"<td>{int(d.get(i))}</td>"
@@ -1858,8 +1872,30 @@ class PlantProfileHistory(models.Model):
             out += f"<td>{int(d.get(i))}</td>"
         out += '</tr>'
         
-        out+="</table>"
+        out += "</table>"
         return out
+
+class PlantProfileShares(models.Model):
+    profile = models.ForeignKey(PlantProfile, on_delete=models.CASCADE, verbose_name="Профиль")
+    link_name = models.CharField(max_length=100, default=uuid.uuid4, unique=True, verbose_name='Имя ссылки')
+    enabled = models.BooleanField(default=True, verbose_name="Включен/активен")
+    
+# class PlantProfileDesc(models.Model):
+#     class Meta:
+#         ordering = ['pk', 'date']
+#
+#     class PSystem(models.TextChoices):
+#         nft = 'nft', _('NFT')
+#         dwt = 'dwt', _('DWT')
+#         cocos = 'cocos', _('Кокосовый субстрат')
+#
+#     profile = models.ForeignKey(PlantProfile, on_delete=models.CASCADE)
+#     system =  models.CharField(max_length=2, choices=PSystem.choices, default=PSystem.cocos, verbose_name='Микро метод расчета')
+#     """кококс/двт/гидропоника место:гроубокс, подоконник, улица, балкон  свет:досветка, естественное температура: подогрев, комнатная, уличная комментарий: тут че в фильтры не поместилось писать"""
+#
+    
+    
+
 
 
 class Price(models.Model):

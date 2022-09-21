@@ -23,6 +23,21 @@ CSRF_TRUSTED_ORIGINS=get_ipaddress()
 LOGIN_URL = '/auth/login/'
 
 INSTALLED_APPS = [
+        'wagtail.contrib.forms',
+        'wagtail.contrib.redirects',
+        'wagtail.embeds',
+        'wagtail.sites',
+        'wagtail.users',
+        'wagtail.snippets',
+        'wagtail.documents',
+        'wagtail.images',
+        'wagtail.search',
+        'wagtail.admin',
+        'wagtail',
+        
+        'modelcluster',
+        'taggit',
+        
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -38,7 +53,8 @@ INSTALLED_APPS = [
     
     'wega_auth',
     'calc',
-    'home'
+    'home',
+    'wiki',
 ]
 
 MIDDLEWARE = [
@@ -193,8 +209,13 @@ LOGGING = {
 }
 LANGUAGE_CODE = 'ru'
 LANGUAGES = ( ( 'en', "English", ), ( 'ru', "Russian", ), )
-
+HOSTNAME='/'
 SHORT_DATETIME_FORMAT="%Y-%m-%d"
 # CACHES={'default':{'BACKEND': 'django.core.cache.backends.dummy.DummyCache',}}
+
+
+MIDDLEWARE+=['wagtail.contrib.redirects.middleware.RedirectMiddleware',]
+WAGTAIL_SITE_NAME = 'calc'
+
 
 from .default_user import *

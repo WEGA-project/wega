@@ -316,3 +316,4 @@ wega-slim/cache/**
 /venv/
 /wega-hpg/examples/
 /wega-hpg/utils/
+/wega-hpg/media/

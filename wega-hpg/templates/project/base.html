@@ -50,6 +50,17 @@
                                        aria-current="page" href="{{ current_url }}">{{ m.title }}</a>
                                 </li>
                             {% endfor %}
+                        {% else %}
+
+                            {% for m in menu_all %}
+                                <li class="nav-item">
+                                    {% url m.url_name as current_url %}
+                                    <a class="nav-link {% if request.path == current_url %}active{% endif %}"
+                                       aria-current="page" href="{{ current_url }}">{{ m.title }}</a>
+                                </li>
+                            {% endfor %}
+
+
                         {% endif %}
 
                         {% if request.user.is_authenticated %}

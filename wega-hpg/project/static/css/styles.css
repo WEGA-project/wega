@@ -4,6 +4,9 @@
 .login-form{
     max-width: 600px;
 }
+#carouselExampleIndicators{
+	max-width: 168px;
+}
 .logo {
 	background: url('/static/images/logo.png') no-repeat 10px 5px;
 	width: 70px;
@@ -136,7 +139,7 @@ input.w-115[type='number']{
 		width:150px;
 	}
 	input.precalc[type='number']{
-	width: 70px;
+	width: 80px;
 	height: 25px;
 	}
 	.macro-salt > input.precalc[type='number']{
@@ -185,7 +188,7 @@ input.w-115[type='number']{
 	.w-16{
 		    width: 16%;
 	}
-	.micro-w-100{width: 100px!important;}
+	/*.micro-w-100{width: 100px!important;}*/
 }
 
 

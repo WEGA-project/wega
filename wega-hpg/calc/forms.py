@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django import forms
 from django.forms import CheckboxInput
 
-from calc.models import PlantProfile, PlantProfileHistory
+from calc.models import PlantProfile, PlantProfileHistory, PlantProfileShares
 
 
 class PlantProfileAddForm(forms.ModelForm):
@@ -58,10 +58,26 @@ class PlantProfileEditForm(forms.ModelForm):
                 visible.field.widget.attrs['step'] = '0.5'
 
     
-                
-                
 class DelForm(forms.Form):
     pass
+
+                
+class PlantProfileSharesForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
+        for visible in self.visible_fields():
+            if visible.name!='enabled':
+                visible.field.widget.attrs['class'] = 'form-control '
+                
+            if visible.name=='link_name':
+                visible.field.widget.attrs['pattern'] = '[A-z0-9_-]{3,100}'
+                visible.field.widget.attrs['placeholder'] = 'ponicsru_lemon'
+                
+    class Meta:
+        model = PlantProfileShares
+        fields=[ 'link_name', 'enabled']
+    
 
 
 

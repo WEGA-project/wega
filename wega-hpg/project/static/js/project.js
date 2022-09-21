@@ -5,12 +5,27 @@ $(document).ready(function () {
         $('.nav-tabs a[data-hash-target="#' + hash + '"]').tab('show');
     }
 
+
+    $("input[type='submit']").click(function(e){
+        var $fileUpload = $("input[type='file']");
+        if (parseInt($fileUpload.get(0).files.length)>4){
+             e.preventDefault();
+            alert("максимум 4 файла");
+
+        }
+    });
+
+
     $('#edit-btn-modal').click(function (e) {
         e.preventDefault();
         let form = $('#' +$(this).attr('form'));
         let fdata = new FormData(form[0]);
         fdata.append("history_text", $('#id_history_text').val());
         fdata.append("history_image", $('#photo')[0].files[0]);
+        fdata.append("history_image", $('#photo')[0].files[1]);
+        fdata.append("history_image", $('#photo')[0].files[2]);
+        fdata.append("history_image", $('#photo')[0].files[3]);
+
 
 
         $.ajax({ url: form.action,  type: 'post',  method: 'POST',  data: fdata,

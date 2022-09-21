@@ -7,13 +7,16 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render, HttpResponse
 from django.http import JsonResponse, Http404
 from django.views.decorators.csrf import csrf_exempt
-from django_tables2 import RequestConfig
+from django_tables2 import A, RequestConfig
+from wagtail.images.models import Image
+
 from calc.forms import DelForm, FilterForm, PlantProfileAddForm, PlantProfileEditForm, \
-    PlantProfileUploadForm
-from calc.models import PlantProfile, PlantProfileHistory
+    PlantProfileSharesForm, PlantProfileUploadForm
+from calc.models import PlantProfile, PlantProfileHistory, PlantProfileShares
 from calc.tables import CalcColumn, HistoryColumn, ModalBtn, PColumn, PlatProfileTable, ImageColumn
 from project.utils import DataMixin
 import simplejson
+from django.conf import settings as django_settings
 from django.shortcuts import Http404
 
 def is_ajax(request):
@@ -87,9 +90,44 @@ def plant_profiles(request):
 
 from django.forms.models import model_to_dict
 
-
 @login_required
-def plant_profile_history(request, pk):
+def plant_profile_share(request, pk):
+    context = DataMixin.get_user_context(title="Поделиться профилем", btn_name="")
+    try:
+        pp_share = PlantProfileShares.objects.get(profile__pk=pk)
+    except PlantProfileShares.DoesNotExist:
+        pp_share = None
+    
+    if request.method == 'GET':
+        form = PlantProfileSharesForm(instance=pp_share)
+        if pp_share:
+            context['link'] = f"{django_settings.HOSTNAME}calc/share/{pp_share.link_name}/"
+        
+    if request.method == 'POST':
+        form = PlantProfileSharesForm(request.POST, instance=pp_share)
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.profile = PlantProfile.objects.get(pk=pk)
+            obj.save()
+ 
+            
+            context['link'] = f"{django_settings.HOSTNAME}calc/share/{obj.link_name}/"
+    
+    context['form'] = form
+    context['instance_pk'] = pk
+
+    return render(request, 'calc/share.html', context=context)
+
+def plant_profile_share_get_history(request, name):
+
+    try:
+        pp_share = PlantProfileShares.objects.get(link_name=name, enabled=True)
+    except PlantProfileShares.DoesNotExist:
+        raise Http404
+    return get_history(request, pk=pp_share.profile.pk)
+
+
+def get_history(request, pk):
     context = DataMixin.get_user_context(title="История изменений профиля питания", btn_name="Вернуть")
     context['form'] = None
     context['upload_form'] = None
@@ -100,7 +138,10 @@ def plant_profile_history(request, pk):
     extra_columns.append(('date', HistoryColumn(verbose_name='Дата')))
     extra_columns.append(('history_text', django_tables2.Column(verbose_name='Описание')))
     extra_columns.append(('history_image', ImageColumn(verbose_name='Фото')))
-    extra_columns.append(('profile_npk_data', PColumn(verbose_name='Описание')))
+    if request.user.is_staff or request.user == PlantProfile.objects.get(pk=pk).user:
+        extra_columns.append(('delete', django_tables2.LinkColumn('plant_profile_history_del', text="Удалить",
+                                                                  args=[A('pk'),], verbose_name='Удалить')  ))
+    # extra_columns.append(('profile_npk_data', PColumn(verbose_name='Описание')))
     columns = ['pk,''name', ]
     filter_form = context['filter']
     if request.GET.get('filter') and filter_form.is_valid():
@@ -124,6 +165,8 @@ def plant_profile_history(request, pk):
     else:
         filter_form.fields['hide_micro'].widget.attrs['checked'] = ''
     
+    
+    
     if request.session.get('show_salt'):
         columns += PlantProfile.salt
         for item in PlantProfile.salt:
@@ -133,7 +176,7 @@ def plant_profile_history(request, pk):
     
     if request.session.get('show_gramms'):
         columns += PlantProfile.salt_gramms
-        columns+= PlantProfile.salt_micro_gramm
+        columns += PlantProfile.salt_micro_gramm
         for item in PlantProfile.salt_gramms:
             extra_columns.append((item, history_column))
         for item in PlantProfile.salt_micro_gramm:
@@ -151,10 +194,10 @@ def plant_profile_history(request, pk):
         p['user_id'] = p['user']
         del p['user']
         pp = PlantProfile(**p)
-        changes= []
+        changes = []
         if history.changed_data:
             changes = simplejson.loads(history.changed_data)
-
+        
         for salt_gramm_name, calc in PlantProfile.salt_gramms.items():
             p[salt_gramm_name] = "{:.2f}".format(getattr(pp, calc)())
         
@@ -168,14 +211,29 @@ def plant_profile_history(request, pk):
             mark_danger = col in changes
             vals[col] = {'mark-danger': mark_danger, 'val': p.get(col)}
         for col in extra_columns:
-            if col[0] not in ['history_text', 'history_image', 'profile_npk_data']:
-                mark_danger = col[0] in changes
-                vals[col[0]] = {'mark-danger': mark_danger, 'val': p.get(col[0])}
-            else:
-                vals[col[0]] = getattr(history, col[0])
+            if col[0] not in ['delete']:
+                if col[0] not in ['history_text', 'history_image', 'profile_npk_data' ]:
+                    mark_danger = col[0] in changes
+                    vals[col[0]] = {'mark-danger': mark_danger, 'val': p.get(col[0])}
+                elif col[0]=='history_image':
+                    t = []
+                    if history.history_image:
+                        t.append(history.history_image)
+                    if history.history_image2:
+                        t.append(history.history_image2)
+                    if history.history_image3:
+                        t.append(history.history_image3)
+                    if history.history_image4:
+                        t.append(history.history_image4)
+
+ 
+                    
+                    vals[col[0]] = t
+                else:
+                    vals[col[0]] = getattr(history, col[0])
         
         vals['action'] = p.get('id')
-        vals['pk'] = p.get('id')
+        vals['pk'] = history.pk
         
         vals['date'] = history.date
         
@@ -183,7 +241,15 @@ def plant_profile_history(request, pk):
     my_table = PlatProfileTable(data, extra_columns=extra_columns)
     RequestConfig(request, paginate={'per_page': 10}).configure(my_table)
     context['table'] = my_table
+    context['instance_pk'] = pk
     return render(request, 'calc/history.html', context=context)
+
+
+@login_required
+def plant_profile_history(request, pk):
+    t = get_history(request, pk)
+    
+    return t
 
 
 @login_required
@@ -197,13 +263,61 @@ def upload_plant_profile(request):
             create_kw = {'name': str(f)}
             key_list =  PlantProfile.model_create_fields
             for item in data.splitlines():
-                key, value = item.split('=', 1)
-                if key.lower() in  key_list :
-                    create_kw[key.lower()] = "{:.2f}".format(float(value))
+                if not item or item and item.startswith('date=') or item.find(' ;') >= 0:
+                    continue
+                try:
+                    key, value = item.split('=')
+        
+                    if key == "V":
+                        create_kw['litres'] = float(value)
+                        continue
+        
+                    if key == 'chkComplex':
+            
+                        if value == 'TRUE':
+                            create_kw['micro_calc_mode'] = "b"
+                        else:
+                            create_kw['micro_calc_mode'] = "u"
+                        continue
+        
+                    if key == 'chK2SO4':
+                        if value == 'TRUE':
+                            create_kw['calc_mode'] = 'K'
+                            continue
+        
+                    if key == 'chMgNO3':
+                        if value == 'TRUE':
+                            create_kw['calc_mode'] = 'Mg'
+                            continue
+        
+                    for i in ['gml_fe', 'gml_mn', 'gml_b', 'gml_zn', 'gml_cu', 'gml_mo', 'gml_co',
+                              'gml_si', 'gml_cano3', 'gml_kno3', 'gml_nh4no3', 'gml_mgno3', 'gml_mgso4', 'gml_k2so4',
+                              'gml_kh2po4', 'gml_cacl2', 'gml_cmplx', 'gl_fe', 'gl_mn', 'gl_b', 'gl_zn',
+                              'gl_cu', 'gl_mo', 'gl_co', 'gl_si', 'gl_cano3', 'gl_kno3', 'gl_nh4no3', 'gl_mgno3',
+                              'gl_mgso4', 'gl_k2so4', 'gl_kh2po4', 'gl_cacl2', 'gl_cmplx', 'ml_cano3', 'gg_cano3',
+                              'ml_kno3', 'gg_kno3', 'ml_nh4no3', 'gg_nh4no3', 'ml_mgno3', 'gg_mgno3', 'ml_cacl2',
+                              'gg_cacl2',
+                              'ml_mgso4', 'ml_kh2po4', 'ml_k2so4', 'ml_fe', 'ml_mn', 'ml_b', 'ml_zn', 'ml_cu', 'ml_mo',
+                              'ml_co', 'ml_si', 'ml_cmplx',
+                              'gg_mgso4', 'gg_kh2po4', 'gg_k2so4', 'gg_fe', 'gg_mn', 'gg_b', 'gg_zn', 'gg_cu', 'gg_mo',
+                              'gg_co', 'gg_si', 'gg_cmplx']:
+            
+                        if i.replace('_', '') == key.lower():
+                            key = i
+                            break
+        
+                    if key.lower() in PlantProfile.model_create_fields:
+                        create_kw[key.lower()] = float(value)
+                except Exception as e:
+                    logging.exception(e)
+                    pass
+            create_kw['ec'] = 0
+            create_kw['ppm'] = 0
             
             try:
                 pp = PlantProfile(**create_kw)
                 pp.ec = 0
+             
                 pp.ppm = 0
                 pp.user = request.user
                 pp.save()
@@ -295,12 +409,57 @@ def plant_profile_precalc(request, pk):
         raise Http404
 
     return JsonResponse(data)
-
-
-
- 
+@login_required
+def plant_profile_history_del(request, pk):
+    context = DataMixin.get_user_context(title="Удаляем историческую запись", btn_name="Подтвердить")
+    if request.user.is_staff:
+        object = PlantProfileHistory.objects.get(pk=pk)
+    else:
+        object = PlantProfileHistory.objects.get(pk=pk, profile__user=request.user)
+    form = DelForm()
+    context['instance'] = object
+    if request.method == 'POST':
+        form = DelForm(data=request.POST)
+        if form.is_valid():
+            p_pk = object.profile.pk
+            print('p_pk' , p_pk)
+            object.delete()
+            return redirect('plant_profile_history', p_pk)
+    context['form'] = form
+    return render(request, 'calc/history_del.html', context=context)
     
-    
+
+
+@login_required
+def plant_profile_history_add(request, pk):
+    if request.method == 'POST':
+        if request.user.is_staff:
+            new = PlantProfile.objects.get(pk=pk)
+        else:
+            new = PlantProfile.objects.get(pk=pk, user = request.user)
+        history_text = request.POST.get('history_text')
+        files = request.FILES.getlist('history_image')
+
+        
+        
+        history_image = Image.objects.create(file=files[0], title=f'image profile-history {pk}') if files else None
+        history_image2 = Image.objects.create(file=files[1], title=f'image profile-history {pk}') if len(files)>1 else None
+        history_image3 = Image.objects.create(file=files[2], title=f'image profile-history {pk}') if len(files)>2 else None
+        history_image4 = Image.objects.create(file=files[3], title=f'image profile-history {pk}') if len(files)>3 else None
+        
+        
+        ph = PlantProfileHistory(profile=new,
+                                 profile_data=simplejson.dumps(model_to_dict(new)),
+                                 changed_data=simplejson.dumps([]),
+                                    history_image=history_image,
+                                    history_image2 = history_image2,
+                                    history_image3 = history_image3,
+                                    history_image4 = history_image4,
+                                 
+                                 history_text=history_text
+                                 )
+        ph.save()
+    return  redirect('plant_profile_history', pk)
 @login_required
 def edit_plant_profile(request, pk, micro=False):
  
@@ -341,13 +500,19 @@ def edit_plant_profile(request, pk, micro=False):
                     
             new.save()
             history_text = request.POST.get('history_text')
-            history_image = request.FILES.get('history_image')
-            
-            
+            files = request.FILES.getlist('history_image')
+            history_image = Image.objects.create(file=files[0], title=f'image profile-history {pk}') if len(files)>0 else None
+            history_image2 = Image.objects.create(file=files[1], title=f'image profile-history {pk}') if len(files)>1 else None
+            history_image3 = Image.objects.create(file=files[2], title=f'image profile-history {pk}') if len(files)>2 else None
+            history_image4 = Image.objects.create(file=files[3], title=f'image profile-history {pk}') if len(files)>3 else None
+
             ph = PlantProfileHistory(profile=new,
                                      profile_data=simplejson.dumps(model_to_dict(new)),
                                      changed_data = simplejson.dumps(changes),
-                                     history_image=history_image,
+                                        history_image=history_image,
+                                        history_image2 = history_image2,
+                                        history_image3 = history_image3,
+                                        history_image4 = history_image4,
                                      history_text=history_text
                                    )
             ph.save()

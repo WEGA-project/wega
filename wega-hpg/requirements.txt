@@ -17,3 +17,5 @@ simplejson
 django-fancybox
 Pillow
 django-cleanup
+wagtail
+django-redis

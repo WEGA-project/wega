@@ -16,13 +16,20 @@
                             <div class="error">{{ f.errors }}</div>
                         </div>
                     {% endfor %}
+
+
                     </div>
                 </form>
 
         </div>
     </div>
-
-
+        {%  if request.user.is_authenticated %}
+            <div class="row">
+                       <button class="btn btn-primary m-auto w-25" data-bs-toggle="modal"  data-bs-target="#save_history" >
+                            Внести запись
+                        </button>
+            </div>
+        {% endif %}
 
         <div class="row">
             <div class="col-12">
@@ -30,6 +37,43 @@
             </div>
         </div>
 
+    {%  if request.user.is_authenticated %}
+    <div class="modal fade" id="save_history" tabindex="-1" aria-labelledby="save_historyLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="save_historyLabel">Добавление комментария и фото(необязательно)</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="{% url "plant_profile_history_add" instance_pk %}" method="post"
+                                  id="history-add" enctype="multipart/form-data">
+                                {% csrf_token %}
+                            <div class="row" id="r_history_text">
+                                  <textarea class="form-control" id="id_history_text" name="history_text" rows="3"
+                                            placeholder="добавил азот т.к. на листьях начали..."></textarea>
+
+                            </div>
+                            <div class="row mt-2 " id="r_history_image">
+                            <input class="form-control" type="file"  multiple  id="photo" name="history_image"
+                                   accept="image/png, image/jpeg" >
+                            </div>
+                            </form>
+                            </div>
+                        <div class="modal-footer">
+                              <button class="btn btn-primary d-block m-auto" id="history-btn-modal" type="submit"
+                                      form="history-add"
+                                      name="from" value=""
+                                    >
+                                Сохранить
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    {% endif %}
+
     </div>
+
 
 {% endblock %}

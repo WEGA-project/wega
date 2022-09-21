@@ -47,29 +47,32 @@
 
 
         <div class="row">
-            <div class="col-lg-2"></div>
-            <div class="col-lg-1 micro-w-100">
-                <label for="">доля (%)</label>
+            <div class="col-3 col-lg-2"></div>
+            <div class="mb-1 text-center col-8  col-lg-6 p-1 d-flex align-items-center justify-content-start ">
+            <div class="col-sm-2 col-4">
+                <label for="" >доля (%)</label>
             </div>
-            <div class="col-lg-1 micro-w-100 ps-0 text-left">
-                <label id='grams_micro_up' class="{% if instance.micro_calc_mode == 'b' %}d-none{% endif %}" for="">граммы</label>
+            <div class="col-4">
+                <label id='grams_micro_up' class=" {% if instance.micro_calc_mode == 'b' %}d-none{% endif %}" for="">граммы</label>
+            </div>
             </div>
         </div>
         {% for salt, salt_data in instance.salt_micro_dict.items %}
+
             <div class="row salt-row">
-                <div class="col-2 col-lg-2 d-sm-flex pt-2 justify-content-start  ">
-                                        <span id="id_name-{{ salt_data.name }}"
-                                              class="salt-name-formula">{{ salt_data.name }} </span>
+                <div class="col-3 col-lg-2 d-sm-flex pt-2 justify-content-start  ">
+                    <span id="id_name-{{ salt_data.name }}" class="salt-name-formula">{{ salt_data.name }} </span>
                     <span class="ml-2 salt-formula">{{ salt|title }}</span>
                 </div>
-                <div class="mb-1 text-center col-lg-6 p-1 d-flex align-items-center justify-content-start">
-
-                    <input type="number" name="d{{ salt }}"
-                           value="{{ instance|getattribute:salt_data.d|hpg_float_format }}"
-                           step="0.01" class="form-control d-inline-block micro-w-100 w-115 precalc"
-                           required=""
-                           id="id_d{{ salt }}">
-
+                <div class="mb-1 text-center col-8  col-lg-6 p-1 d-flex align-items-center justify-content-start">
+                    <div class="col-sm-2 col-4">
+                        <input type="number" name="d{{ salt }}"
+                               value="{{ instance|getattribute:salt_data.d|hpg_float_format }}"
+                               step="0.01" class="form-control d-inline-block micro-w-100 w-115 precalc"
+                               required=""
+                               id="id_d{{ salt }}">
+                    </div>
+                    <div class="col-4">
                     <input type="number" name="g{{ salt }}"
 
                            value="{{ instance|getattribute:salt_data.g|hpg_float_format:3 }}"
@@ -77,6 +80,7 @@
                            step="0.01"
                            class="{% if instance.micro_calc_mode == 'b' %}d-none{% endif %} form-control w-115 micro-w-100 d-inline-block precalc" required=""
                            id="id_g{{ salt }}">
+                </div>
                 </div>
             </div>
 

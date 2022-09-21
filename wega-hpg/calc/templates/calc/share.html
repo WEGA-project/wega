@@ -1,0 +1,50 @@
+{% extends 'project/base.html' %}
+{% load render_table from django_tables2 %}
+{% block content %}
+
+
+
+    <h1 class="text-center">{{ title }}</h1>
+    <div class="row text-center">
+    <p>Ссылка формата: англ буквы, цифры, _- от 3 до 100 знаков. Ссылка должна быть уникальная в системе</p>
+    <p>Выключение ссылки делают ее недоступной извне</p>
+    </div>
+    <div class="container">
+
+        <div class="row">
+            <form action="{% url "plant_profile_share" instance_pk %}"
+                  method="post"
+                  class="m-auto login-form"
+                  id="shareform">
+
+                    {% csrf_token %}
+                    {% for f in form %}
+                        <div class="mb-3 col-12 col-md-10 col-lg-8">
+                            <label for="{{ f.id_for_label }}" class="form-label">{{ f.label }}</label>
+                            {{ f }}
+
+                        </div>
+                        <div class="error">{{ f.errors }}</div>
+                    {% endfor %}
+
+                 <div class="row">
+                <div class="col-6  ">
+                    <button class="btn btn-primary  m-auto" type="submit"
+                            form="shareform">Сохранить</button>
+                </div>
+            </div>
+
+            </form>
+
+
+        </div>
+    <div class="row text-center mt-5">
+        {% if link %}
+            <a href="{{ link }}">Текущая ссылка общего доступа к истории</a>
+        {% endif %}
+    </div>
+
+
+    </div>
+
+{% endblock %}

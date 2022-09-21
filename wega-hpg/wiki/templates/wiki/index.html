@@ -1,0 +1,31 @@
+{% extends 'project/base.html' %}
+{% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
+
+{% block content %}
+<div class="container">
+
+<div class="row row-cols-1 row-cols-md-3 g-4">
+
+        {% for item in pages %}
+            <div class="col">
+                <div class="card h-100">
+                    {% image item.main_image fill-300x300 as tmp_photo %}
+
+                  <img {{ tmp_photo.attrs }}  class="card-img-top" >
+                  <div class="card-body">
+                    <h5 class="card-title">{{ item.title }}</h5>
+                  </div>
+                  <div class="card-footer">
+                      <a class="link-primary" href="{% url 'wiki_page' item.slug %}">Подробнее</a>
+                  </div>
+                </div>
+              </div>
+        {% endfor %}
+
+
+</div>
+
+
+</div>
+{% endblock %}
