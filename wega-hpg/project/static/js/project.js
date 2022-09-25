@@ -1,5 +1,10 @@
 $(document).ready(function () {
 
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+      return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+
     var hash = location.hash.replace(/^#/, '');  // ^ means starting, meaning only match the first hash
     if (hash) {
         $('.nav-tabs a[data-hash-target="#' + hash + '"]').tab('show');
@@ -112,6 +117,7 @@ $(document).ready(function () {
                     'ca_2', 'cl_2', 'ec_2', 'k_2', 'mg_2', 'n_2', 'nh4_2', 'no3_2', 'p_2', 's_2', 'v_2',
                     'ca_k', 'cl_k', 'ec_k', 'k_k', 'mg_k', 'n_k', 'nh4_k', 'no3_k', 'p_k', 's_k', 'v_k', 'mixer_ip',
             'mixer_system_number',
+            'p_cano3', 'p_kno3', 'p_nh4no3', 'p_mgso4', 'p_kh2po4', 'p_k2so4', 'p_mgno3', 'p_cacl2', 'p_fe', 'p_mn', 'p_b', 'p_zn', 'p_cu', 'p_mo', 'p_co', 'p_si', 'p_cmplx',
                     ];
 
         var i;
@@ -319,6 +325,19 @@ $(document).ready(function () {
                  $("#id_"+i).removeClass('text-danger');
              }
         }
+
+        for (i in data.pp.warnings) {
+
+
+             if (data.pp.warnings[i]==true){
+
+                 $("#id_"+i).addClass('text-warning');
+             } else {
+                 $("#id_"+i).removeClass('text-warning');
+             }
+        }
+
+
 
         $("#id_litres2").text( data.pp.litres);
 

@@ -19,3 +19,4 @@ Pillow
 django-cleanup
 wagtail
 django-redis
+django-allauth

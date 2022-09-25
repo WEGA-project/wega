@@ -6,7 +6,7 @@ SECRET_KEY = 'django-insecure-t(7-hv3y)0zp^i)q(40kc^06zd8_%x2d)@og*mf0k!=c6d&$x!
 DEBUG = True
 
 def get_ipaddress():
-    adr = []
+    adr = ['https://hpg.wega.ponics.ru', 'http://hpg.wega.ponics.ru', ]
     for interface in netifaces.interfaces():
         if netifaces.ifaddresses(interface):
             # print('netifaces.ifaddresses(interface)', netifaces.ifaddresses(interface))
@@ -42,8 +42,15 @@ INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
+    'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.telegram',
+    
     
     'django_tables2',
     'compressor',
@@ -58,7 +65,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
+    # 'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -149,7 +156,7 @@ STATICFILES_DIRS = [
     os.path.join(PROJECT_DIR, 'static'),
 ]
 
-AUTHENTICATION_BACKENDS = ['project.backend.EmailBackend']
+AUTHENTICATION_BACKENDS =  ("allauth.account.auth_backends.AuthenticationBackend","project.backend.EmailBackend")
 
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
@@ -212,10 +219,11 @@ LANGUAGES = ( ( 'en', "English", ), ( 'ru', "Russian", ), )
 HOSTNAME='/'
 SHORT_DATETIME_FORMAT="%Y-%m-%d"
 # CACHES={'default':{'BACKEND': 'django.core.cache.backends.dummy.DummyCache',}}
-
-
 MIDDLEWARE+=['wagtail.contrib.redirects.middleware.RedirectMiddleware',]
 WAGTAIL_SITE_NAME = 'calc'
-
+SITE_ID = 1
+ACCOUNT_SIGNUP_REDIRECT_URL = "/"
+LOGIN_REDIRECT_URL = "/"
+SOCIAL_LOGIN_REDIRECT_URL = "/"
 
 from .default_user import *

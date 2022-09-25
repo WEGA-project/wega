@@ -23,7 +23,7 @@ class PlantProfileAddForm(forms.ModelForm):
 class PlantProfileEditForm(forms.ModelForm):
     class Meta:
         model = PlantProfile
-        exclude = ['user', 'ec', 'ppm']
+        exclude = ['user',   ]
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -37,8 +37,8 @@ class PlantProfileEditForm(forms.ModelForm):
                 visible.field.initial = 0
                 visible.field.required = False
                 
-            # if visible.name in PlantProfile.macro:
-            #     visible.field.widget.attrs['step'] = 0.01
+            if visible.name in PlantProfile.price_fields:
+                visible.field.widget.attrs['step'] = 0.0001
             
  
                 

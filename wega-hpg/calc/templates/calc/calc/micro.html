@@ -15,17 +15,15 @@
             {% if f.name in instance.micro %}
 
 
-                <div class="mb-3 col-lg-1 p-1  macro-salt text-center">
-                    <label for="{{ f.id_for_label }}" class="form-label">{{ f.label }}</label>
-
-
-
-                 <input type="number" name="{{ f.name }}"
-                           value="{{ f.value|hpg_float_format }}"
-                            class="form-control d-inline-block micro-w-100 w-115 precalc"
-                            {% if instance.micro_calc_mode == 'b' and f.name  != 'b' %}disabled{% endif %}
-                           required=""
-                           id="id_{{ f.name }}">
+                <div class="mb-3 col-lg-1 p-1  macro-salt text-center"      >
+                    <label for="{{ f.id_for_label }}"    data-bs-toggle="tooltip" data-bs-placement="top" title="{{ instance.texts|get:f.name}}"
+                           class="form-label">{{ f.label }}</label>
+                     <input type="number" name="{{ f.name }}"
+                               value="{{ f.value|hpg_float_format }}"
+                                class="form-control d-inline-block micro-w-100 w-115 precalc"
+                                {% if instance.micro_calc_mode == 'b' and f.name  != 'b' %}disabled{% endif %}
+                               required=""
+                               id="id_{{ f.name }}">
 
                     <div class="error">{{ f.errors }}</div>
                 </div>

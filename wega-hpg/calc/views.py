@@ -137,6 +137,7 @@ def get_history(request, pk):
     # extra_columns.append(('pk', django_tables2.Column()))
     extra_columns.append(('date', HistoryColumn(verbose_name='Дата')))
     extra_columns.append(('history_text', django_tables2.Column(verbose_name='Описание')))
+    
     extra_columns.append(('history_image', ImageColumn(verbose_name='Фото')))
     if request.user.is_staff or request.user == PlantProfile.objects.get(pk=pk).user:
         extra_columns.append(('delete', django_tables2.LinkColumn('plant_profile_history_del', text="Удалить",
@@ -151,6 +152,9 @@ def get_history(request, pk):
         request.session['show_gramms'] = not filter_form.cleaned_data.get('show_gramms')
     
     if request.session.get('show_macro'):
+        
+        extra_columns.append(("litres", history_column))
+        extra_columns.append(('history_text', django_tables2.Column(verbose_name='Описание')))
         columns += PlantProfile.macro
         for item in PlantProfile.macro:
             extra_columns.append((item, history_column))

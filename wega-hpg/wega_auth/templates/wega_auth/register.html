@@ -1,6 +1,8 @@
 {% extends 'project/base.html' %}
+{% load socialaccount %}
 
 {% block content %}
+    {% providers_media_js %}
     <h1 class="text-center">{{title}}</h1>
 
     <form method="post" class="login-form m-auto">
@@ -16,5 +18,13 @@
         <button class="btn btn-primary d-block m-auto" type="submit">{% if btn_name %}{{ btn_name }}{% else %}Регистрация{% endif %}</button>
 
     </form>
+
+    <div class="row text-center">
+    <div class="m-auto">
+           <script async src="https://telegram.org/js/telegram-widget.js?19" data-telegram-login="calc_hpg_bot" data-size="large" data-auth-url="https://calc.progl.su/accounts/telegram/login/"></script>
+
+    </div>
+
+    </div>
 
 {% endblock %}

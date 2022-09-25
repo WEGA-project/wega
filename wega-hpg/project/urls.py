@@ -17,6 +17,7 @@ urlpatterns = [
     path('auth/',include('wega_auth.urls')),
     path('calc/', include('calc.urls')),
     path('wiki/', include('wiki.urls')),
+    path('accounts/', include('allauth.urls')),
     path('', include('home.urls')),
 ]
 

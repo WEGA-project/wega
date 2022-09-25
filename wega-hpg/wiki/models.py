@@ -8,6 +8,9 @@ from wagtail.images.blocks import ImageChooserBlock
 from django.contrib.auth.models import User
 
 class Wiki(Page):
+    # class meta:
+    template = 'wiki/page.html'
+    
     author = models.CharField(max_length=255)
     user  = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL)
     date = models.DateField("Post date")

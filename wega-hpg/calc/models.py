@@ -613,6 +613,17 @@ class PlantProfile(models.Model):
     gmlcacl2_error = False
     
     errors = {}
+    warnings={}
+    texts = {
+            'cu':"Медь при избытке вызвает сушку краёв листа в виде пятен с последующим пожелтением и скручиванием внутрь. Поэтому если есть возможность снизить медь то её не желательно тоже более 50",
+            'mo':"Молибден вообще более 130 (0,13) задирать опасно. Ввиду того что он начнёт сушить растения при избытке. А те культуры которые выносят это будут накапливать его до опасной для человека дозы. Поэтому на нём всегда останавливаются на средних и менее средних дозах. Достаточная доза для него  50 (0,05)",
+            'b':"Бор - желательно не более 700 (вполне достаточно 500). При дозе выше этого значения начинает сушить края листьев и крутить их особенно молодые. Выглядит при этом растение как покурёженное. Если нужно в период цветения томатов и перцев лучше давать внекорневую  подкормку им по листу чем задирать дозу.",
+            'mn':"Марганец - Один из выскопотрепляемых микроэлементов у растений. Его доза может доходить до дозы железа, но следует учесть что его высокая доза в микроэлементах заблокирует другие микроэлементы. Поэтому тоже его смотрят чтобы он был не слишком высок. Но как важный элемент для листьев он необходим. Растению достаточно дозы в  500. Но его может содержаться и более 1000 мкг.",
+            'fe':"Железо - самый потребляемый микроэлемент у растений. Его достаточно растению  в зависимости от культуры от 2000 до 4000. Доза в 2000 достаточна для маленьких растений. Для растений по больше этого уже мало будет. Его максимальная доза может быть 8000.Избыток железа проявляется на листьях в виде ржавых листьев с последующим высыханием. Встречается избыток железа очень редко.",
+            'zn':"Цинк вполне достаточно как и меди для растения - 50 (0,05). Его тоже лучше не ставить особо выше 150 если нет нужды. Так как при избытке у растений он делает кривыми листья не только между жилок но и вздутые междужилья. Листья становятся кривыми при сильном избытке и гнутся так как на подобии где вздумалось. Даже вдоль листа перегнёт (не по главной жилке). При достаточной же дозе цинка от 50 до 100 листья у растений ровные и на моём опыте всё равно зелёные. Доза же даже в 300 может по коробатить ваш лист. Ели доза ещё  будет сильнее превышена лист высыхает.",
+            'co': "Кобальта растение потребляет тоже очень мало и его вполне достаточно давать в дозе 50 мкг.  Он у многих растений вообще роли мало играет. Только у некоторых.",
+            'si': "Кремний (Si) - Считается на сегодня одним важных микроэлементов в гидропонике. Доза же его при этом потребления растениями довольно высока от 2 000 до 15 000 мкг. Этот элемент как выяснилось способствует усвоению микроэлементов даже если доза мала их в составе. Также способствует устойчивости к внешней среде.  Укрепляет скелет растения и Способствует фотосинтезу.  Добавляют всегда перед растворением удобрения.",
+            }
 
     @float_exception
     def get_mixer_link(self):
@@ -1267,7 +1278,6 @@ class PlantProfile(models.Model):
                 'get_profile_str': self.get_profile_str(),
                 'mixer_system_number': self.mixer_system_number,
                 'mixer_btn_link': self.get_mixer_link(),
-                
                 'weight_micro': "{:.2f}".format(self.weight_micro()),
                 'npk': self.npk,
                 'npk_formula': self.npk_formula,
@@ -1279,6 +1289,7 @@ class PlantProfile(models.Model):
                 'micro_text': self.micro_text,
                 'micro_sostav': self.micro_sostav,
                 'errors': self.errors,
+                'warnings': self.warnings,
                 'suma': self.suma,
                 'lvola': self.lvola,
                 'sumb': self.sumb,
@@ -1328,7 +1339,7 @@ class PlantProfile(models.Model):
             t = 'calc_' + i
             a = getattr(self, t)()
             setattr(self, i, a)
-            data[t] = "{:.3f}".format(a)
+            data[t] = "{:.5f}".format(a)
         
         for k, ii in self.correction_fields.items():
             for i in ii:
@@ -1603,6 +1614,8 @@ class PlantProfile(models.Model):
     @float_exception
     def conc_errors(self):
         errors = {}
+        warnings={}
+
         if self.gml_cano3 > 1.4212:
             errors['gml_cano3'] = True
         else:
@@ -1635,7 +1648,78 @@ class PlantProfile(models.Model):
             errors['gml_cacl2'] = True
         else:
             errors['gml_cacl2'] = False
+
+        if self.cu > 200:
+            errors['cu'] = True
+        elif self.cu>50:
+            warnings['cu'] = True
+        else:
+            warnings['cu'] = False
+            errors['cu'] = False
+       
+
+        if self.fe > 8000:
+            errors['fe'] = True
+        elif self.fe > 6000:
+            warnings['fe'] = True
+        else:
+            warnings['fe'] = False
+            errors['fe'] = False
+
+        if self.mo > 130:
+            errors['mo'] = True
+        elif self.mo > 50:
+            warnings['mo'] = True
+        else:
+            warnings['mo'] = False
+            errors['mo'] = False
+
+
+        if self.b > 700:
+            errors['b'] = True
+        elif self.b >500:
+            warnings['b'] = True
+        
+        else:
+            warnings['b'] = False
+            errors['b'] = False
+
+        if self.mn > 1000:
+            errors['mn'] = True
+        elif self.mn > 500:
+            warnings['mn'] = True
+        else:
+            warnings['mn'] = False
+            errors['mn'] = False
+
+        if self.zn > 200:
+            errors['zn'] = True
+        elif self.zn > 100:
+            warnings['zn'] = True
+        else:
+            warnings['zn'] = False
+            errors['zn'] = False
+
+        if self.co > 150:
+            errors['co'] = True
+        elif self.co > 50:
+            warnings['co'] = True
+        else:
+            warnings['co'] = False
+            errors['co'] = False
+        
+        if self.si > 20000:
+            errors['si'] = True
+        elif self.si > 6000:
+            warnings['si'] = True
+        else:
+            warnings['si'] = False
+            errors['si'] = False
+            
+            
         self.errors = errors
+        self.warnings = warnings
+    
 
     @float_exception
     def calc_prices(self, pushed_element=None, val=None):
@@ -1830,6 +1914,8 @@ class PlantTemplate(models.Model):
 
 
 class PlantProfileHistory(models.Model):
+    def __str__(self):
+        return f"PP History {self.pk} from {self.profile.pk}"
     class Meta:
         ordering = ['pk', 'date']
     

@@ -12,10 +12,14 @@
         {% elif block.block_type == 'paragraph' %}
              <p>{{ block.value }}</p>
         {% elif block.block_type == 'image' %}
-             <p>{{ block.value }}</p>
+            {% image block.value fill-300x300 as tmp_photo %}
+            {% image block.value original as original %}
+                <a class="fancybox" href="{{ original.full_url }}">
+                    <img src="{{ tmp_photo.full_url }}"   class="img-thumbnail">
+                </a>
         {% elif block.block_type == 'gallery' %}
             {% for i in block.value  %}
-                 {% image i fill-300x300 as tmp_photo %}
+                {% image i fill-100x100 as tmp_photo %}
                 {% image i original as original %}
 
                 <a class="fancybox" href="{{ original.full_url }}">
@@ -23,7 +27,7 @@
                 </a>
 
             {% endfor %}
-             <p>{{ block.value }}</p>
+
         {% else %}
 
 
