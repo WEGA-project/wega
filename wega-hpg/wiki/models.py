@@ -1,4 +1,7 @@
+
+
 from django.db import models
+from django.utils import timezone
 
 from wagtail.models import Page
 from wagtail.fields import StreamField
@@ -32,3 +35,13 @@ class Wiki(Page):
         FieldPanel('date'),
         FieldPanel('body'),
     ]
+
+class WikiStatistic(models.Model):
+    
+
+    page = models.ForeignKey(Wiki, on_delete=models.CASCADE, related_name='statistics')  # внешний ключ на статью
+    date = models.DateField('Дата', default=timezone.now)  # дата
+    views = models.IntegerField('Просмотры', default=0)  # количество просмотров в эту дату
+
+    def __str__(self):
+        return self.page

@@ -4,7 +4,11 @@
 
 {% block content %}
 <div class="container">
+<div class="d-flex flex-row-reverse bd-highlight">
+  <div class="p-2 bd-highlight"> Просмотров {{ views }} </div>
 
+</div>
+</div>
 <article>
     {% for block in page.body %}
         {% if block.block_type == 'heading' %}
