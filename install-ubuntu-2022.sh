@@ -19,7 +19,15 @@ echo "#############################"
 printf "\n"
 sleep 5
 
-apt install lamp-server^ php-curl gnuplot-nox git curl syslog-ng libdbd-mysql -y
+echo "#############################"
+echo "### Switching to 7.4 php ####"
+echo "#############################"
+apt install lamp-server^ gnuplot-nox git curl syslog-ng libdbd-mysql -y
+apt install software-properties-common apt-transport-https -y
+add-apt-repository ppa:ondrej/php -y
+apt install php7.4 php7.4-common libapache2-mod-php7.4 php7.4-cli php7.4-curl php7.4-mysql
+a2dismod php8.1
+a2enmod php7.4
 
 echo "##############################"
 echo "######## MySQL config ########"
